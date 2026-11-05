@@ -276,7 +276,7 @@ export function ContactForm() {
             required
             aria-invalid={errors.consent ? true : undefined}
             aria-describedby={describedBy("consent")}
-            className="mt-0.5 size-6 shrink-0 cursor-pointer accent-[var(--brand-green)]"
+            className="mt-0.5 size-6 shrink-0 cursor-pointer accent-[var(--color-accent)]"
           />
           <label htmlFor="consent" className="cursor-pointer text-[0.98rem] leading-relaxed">
             Li e concordo com a{" "}

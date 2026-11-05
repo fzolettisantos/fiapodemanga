@@ -20,7 +20,7 @@ export function ProcessSteps({ steps }: { steps: readonly Step[] }) {
           <p className="index-number mt-8 flex items-center gap-3 text-sm">
             <span
               aria-hidden="true"
-              className="process-dot size-2.5 rounded-full border border-accent bg-accent"
+              className="process-dot size-2.5 rounded-full border border-accent bg-accent-fill"
               style={{ "--i": index } as React.CSSProperties}
             />
             {step.number}/

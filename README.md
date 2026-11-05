@@ -87,10 +87,15 @@ vem das classes `type-display`, `type-title`, `type-heading`, `type-subheading`,
 | Títulos         | `#CFCFCF` | `#252525` |
 | Texto           | `#FFFFFF` | `#252525` |
 | Texto secundário| `#DCDCDC` | `#454545` |
-| Verde           | `#CCFF7B` | `#52751E` |
+| Verde / destaque | `#CCFF7B` (texto e preenchimento) | `#E1FF00` só como preenchimento (marcador, botões, hover, indicadores); texto de destaque em `#212121` |
 | Amarelo         | `#FFF04A` | `#786800` |
-| Botão primário  | `#CCFF7B` / texto `#222222` | idem, com borda escura |
+| Botão primário  | `#CCFF7B` / texto `#222222` | `#E1FF00` / texto `#222222`, com borda escura |
 | Botão secundário| `#FFF04A` / texto `#222222` | idem |
+
+No tema claro, `#E1FF00` não é usado como cor de texto: sobre fundo claro o contraste seria de ~1,1:1
+(WCAG AA exige 4,5:1). Os destaques usam o token `--color-mark` (marcador nos eyebrows e no título do hero).
+Header (`#212121`) e rodapé (`#000000`) são sempre escuros e mantêm o verde `#CCFF7B`. A seção de Projetos
+da Home e de `/projetos` tem fundo branco nos dois temas.
 
 Tema: segue a preferência do sistema, salva a escolha manual (`localStorage: fm-theme`) e é aplicado por
 um script inline antes da primeira pintura (sem flash). Sem JavaScript, o tema principal (dark) é usado.

@@ -14,7 +14,7 @@ type BrandLogoProps = {
  * Logo oficial da Fiapo de Manga (SVG vetorial).
  *
  * O SVG é aplicado como máscara CSS e preenchido com a cor de destaque do
- * tema (`bg-accent`): #CCFF7B no dark e #52751E no light. Assim há um único
+ * tema (`bg-accent`): #CCFF7B no dark e grafite no light. Assim há um único
  * arquivo em cache, sem troca de imagem nem fundo retangular.
  * Em tamanhos pequenos é usada a versão de tamanho óptico (traço reforçado).
  */

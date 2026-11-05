@@ -27,7 +27,7 @@ export function WordReveal({ parts, as: Tag = "h1", id, className, delay = 0 }: 
       {list.map((part, p) => {
         const words = part.text.trim().split(/\s+/);
         return (
-          <span key={p} className={part.accent ? "text-accent" : undefined}>
+          <span key={p} className={part.accent ? "accent-mark text-accent" : undefined}>
             {words.map((word, w) => {
               const i = index++;
               return (

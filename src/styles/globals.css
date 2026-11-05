@@ -15,6 +15,7 @@
   --brand-green: #ccff7b;
   --brand-yellow: #fff04a;
   --brand-ink: #222222;
+  --brand-lime: #e1ff00; /* destaque da versão light (preenchimentos e marcadores) */
 
   /* Tema light (padrão sem JS) */
   --color-bg: #f7f7f3;
@@ -22,19 +23,24 @@
   --color-heading: #252525;
   --color-text: #252525;
   --color-text-muted: #454545;
-  --color-accent: #52751e;
+  /* Texto de destaque: grafite. O #E1FF00 não tem contraste como texto sobre fundo claro
+     (~1,1:1), então entra como preenchimento: marcador, botões, hover e indicadores. */
+  --color-accent: #212121;
+  --color-accent-fill: var(--brand-lime);
+  --color-mark: var(--brand-lime);
+  --sweep-opacity: 1;
   --color-accent-2: #786800;
   --color-line: rgb(37 37 37 / 0.14);
   --color-line-strong: rgb(37 37 37 / 0.32);
-  --color-btn-primary-bg: var(--brand-green);
+  --color-btn-primary-bg: var(--brand-lime);
   --color-btn-primary-fg: var(--brand-ink);
   --color-btn-primary-border: rgb(37 37 37 / 0.85);
   --color-btn-secondary-bg: var(--brand-yellow);
   --color-btn-secondary-fg: var(--brand-ink);
-  --color-highlight: var(--brand-green);
+  --color-highlight: var(--brand-lime);
   --color-focus: #252525;
   --color-danger: #a1260d;
-  --color-success: #3c5a12;
+  --color-success: #212121;
 
   color-scheme: light;
 }
@@ -46,9 +52,13 @@
   --color-text: #ffffff;
   --color-text-muted: #dcdcdc;
   --color-accent: var(--brand-green);
+  --color-accent-fill: var(--brand-green);
+  --color-mark: transparent;
+  --sweep-opacity: 0.1;
   --color-accent-2: var(--brand-yellow);
   --color-line: rgb(255 255 255 / 0.16);
   --color-line-strong: rgb(255 255 255 / 0.36);
+  --color-btn-primary-bg: var(--brand-green);
   --color-btn-primary-border: var(--brand-green);
   --color-highlight: var(--brand-green);
   --color-focus: var(--brand-yellow);
@@ -66,6 +76,7 @@
   --color-muted: var(--color-text-muted);
   --color-accent: var(--color-accent);
   --color-accent-2: var(--color-accent-2);
+  --color-accent-fill: var(--color-accent-fill);
   --color-line: var(--color-line);
   --color-line-strong: var(--color-line-strong);
   --color-ink: var(--brand-ink);
@@ -104,7 +115,7 @@
   }
 
   ::selection {
-    background: var(--brand-green);
+    background: var(--color-accent-fill);
     color: var(--brand-ink);
   }
 
@@ -468,8 +479,8 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: var(--color-accent);
-  opacity: 0.1;
+  background: var(--color-accent-fill);
+  opacity: var(--sweep-opacity);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 600ms var(--ease-out-expo);
@@ -527,8 +538,8 @@
       position: fixed;
       inset: 0 0 auto;
       z-index: 70;
-      height: 2px;
-      background: var(--brand-green);
+      height: 3px;
+      background: var(--color-accent-fill);
       transform-origin: left;
       animation: grow-x linear both;
       animation-timeline: scroll(root block);
@@ -637,7 +648,7 @@
     scale: 0.6;
   }
   to {
-    background-color: var(--color-accent);
+    background-color: var(--color-accent-fill);
     scale: 1;
   }
 }
@@ -1008,9 +1019,13 @@ html.vt-theme::view-transition-new(root) {
   --color-text: #ffffff;
   --color-text-muted: #dcdcdc;
   --color-accent: var(--brand-green);
+  --color-accent-fill: var(--brand-green);
+  --color-mark: transparent;
+  --sweep-opacity: 0.1;
   --color-accent-2: var(--brand-yellow);
   --color-line: rgb(255 255 255 / 0.16);
   --color-line-strong: rgb(255 255 255 / 0.36);
+  --color-btn-primary-bg: var(--brand-green);
   --color-btn-primary-border: var(--brand-green);
   --color-focus: var(--brand-yellow);
   color-scheme: dark;
@@ -1025,9 +1040,13 @@ html.vt-theme::view-transition-new(root) {
   --color-text: #ffffff;
   --color-text-muted: #dcdcdc;
   --color-accent: var(--brand-green);
+  --color-accent-fill: var(--brand-green);
+  --color-mark: transparent;
+  --sweep-opacity: 0.1;
   --color-accent-2: var(--brand-yellow);
   --color-line: rgb(255 255 255 / 0.14);
   --color-line-strong: rgb(255 255 255 / 0.34);
+  --color-btn-primary-bg: var(--brand-green);
   --color-btn-primary-border: var(--brand-green);
   --color-focus: var(--brand-yellow);
   color-scheme: dark;
@@ -1044,26 +1063,30 @@ html.vt-theme::view-transition-new(root) {
   color: #e1ff00;
 }
 
-/* Seção de destaque (#C7C7C7) — tokens claros com contraste AA, iguais nos dois temas */
+/* Seção de destaque (Projetos): fundo branco nos dois temas, destaque #E1FF00 */
 .section-highlight {
-  --color-bg: #c7c7c7;
-  --color-surface: #c7c7c7;
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
   --color-heading: #212121;
   --color-text: #212121;
-  --color-text-muted: #333333;
-  --color-accent: #3d5a12; /* verde da marca escurecido: 4,6:1 sobre #C7C7C7 */
+  --color-text-muted: #3d3d3d;
+  --color-accent: #212121;
+  --color-accent-fill: var(--brand-lime);
+  --color-mark: var(--brand-lime);
+  --sweep-opacity: 1;
   --color-accent-2: #5c4f00;
-  --color-line: rgb(33 33 33 / 0.16);
+  --color-line: rgb(33 33 33 / 0.14);
   --color-line-strong: rgb(33 33 33 / 0.45);
+  --color-btn-primary-bg: var(--brand-lime);
   --color-btn-primary-border: #212121;
   --color-focus: #212121;
-  --color-fill-dim: #555555;
+  --color-fill-dim: #6b6b6b;
   color-scheme: light;
   color: var(--color-text);
 }
 .section-highlight ::selection {
-  background: #212121;
-  color: #c7c7c7;
+  background: var(--brand-lime);
+  color: #212121;
 }
 
 /* --- Slider de projetos --- */
@@ -1080,5 +1103,37 @@ html.vt-theme::view-transition-new(root) {
   }
   .project-slide:hover .project-slide__media img {
     scale: 1.035;
+  }
+}
+
+/* --- Marcador #E1FF00 (versão light e seção de Projetos) ---
+   --color-mark é transparente no tema escuro, no header e no rodapé. */
+p.eyebrow,
+h2.eyebrow,
+h3.eyebrow {
+  width: fit-content;
+  background-color: var(--color-mark);
+  box-shadow:
+    -0.45em 0 0 var(--color-mark),
+    0.45em 0 0 var(--color-mark);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.accent-mark {
+  background-image: linear-gradient(var(--color-mark), var(--color-mark));
+  background-repeat: no-repeat;
+  background-position: 0 88%;
+  background-size: 100% 0.3em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .accent-mark {
+    animation: mark-grow 900ms var(--ease-out-expo) 700ms both;
+  }
+}
+@keyframes mark-grow {
+  from {
+    background-size: 0% 0.3em;
   }
 }

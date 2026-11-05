@@ -13,7 +13,7 @@ const variants: Record<Variant, string> = {
   primary:
     "rounded-full border bg-[var(--color-btn-primary-bg)] text-[var(--color-btn-primary-fg)] border-[var(--color-btn-primary-border)] hover:bg-brand-yellow hover:border-brand-yellow active:scale-[0.98]",
   secondary:
-    "rounded-full border bg-[var(--color-btn-secondary-bg)] text-[var(--color-btn-secondary-fg)] border-[var(--color-btn-secondary-bg)] hover:bg-brand-green hover:border-brand-green active:scale-[0.98]",
+    "rounded-full border bg-[var(--color-btn-secondary-bg)] text-[var(--color-btn-secondary-fg)] border-[var(--color-btn-secondary-bg)] hover:bg-accent-fill hover:border-accent-fill active:scale-[0.98]",
   outline:
     "rounded-full border border-line-strong text-heading hover:border-accent hover:text-accent active:scale-[0.98]",
   link: "text-accent link-underline px-0 py-1",

@@ -95,6 +95,30 @@ vem das classes `type-display`, `type-title`, `type-heading`, `type-subheading`,
 Tema: segue a preferência do sistema, salva a escolha manual (`localStorage: fm-theme`) e é aplicado por
 um script inline antes da primeira pintura (sem flash). Sem JavaScript, o tema principal (dark) é usado.
 
+## Animações
+
+Feitas com recursos nativos da plataforma (CSS scroll-driven animations e View Transitions API),
+com JavaScript mínimo e só `transform`, `opacity`, `clip-path` e `color`, para não prejudicar a performance.
+Tudo é progressive enhancement: sem suporte do navegador o conteúdo aparece normalmente, e com
+`prefers-reduced-motion: reduce` as animações são desligadas.
+
+| Efeito                                   | Onde                                   | Como                                   |
+| ---------------------------------------- | -------------------------------------- | -------------------------------------- |
+| Título palavra por palavra (máscara)     | Hero da Home e das páginas internas    | `motion/WordReveal` + CSS keyframes    |
+| Faixa tipográfica infinita (marquee)     | Home (especialidades), Serviços        | `motion/Marquee`, CSS puro, pausa no hover |
+| Frase que acende com a rolagem           | Destaques (callouts)                   | `motion/ScrollFillText`, `view-timeline` |
+| Revelação de blocos ligada à rolagem     | Seções com `data-reveal`               | `animation-timeline: view()` (fallback IntersectionObserver) |
+| Linha de progresso das etapas            | Nossa abordagem                        | `view-timeline` nomeada                |
+| Fiapo desenhado pela rolagem e parallax  | Chamada final de contato               | `stroke-dashoffset` + `view()`         |
+| Barra de progresso de leitura            | Todas as páginas                       | `animation-timeline: scroll(root)`     |
+| Transição entre páginas (blur + slide)   | Navegação interna                      | React `<ViewTransition>` (`motion/PageTransition`) |
+| Nome do serviço que "viaja" até a página | Lista da Home → página da especialidade | `<ViewTransition name share="morph">` |
+| Troca de tema com revelação circular     | Botão dark/light                       | `document.startViewTransition` + `clip-path` |
+| Header que recolhe ao rolar              | Todas as páginas                       | `motion/Interactions` + CSS `translate` |
+| Botões magnéticos                        | CTAs primário e secundário             | `motion/Interactions` (só ponteiro fino) |
+| Varredura no hover das listas            | Especialidades                         | CSS `::before` + `scaleX`              |
+| Luli que inclina / balança               | Sobre (hover) e 404                    | CSS                                    |
+
 ## Conteúdo
 
 - **Copy**: `src/content/*.ts`. Os textos aprovados no briefing estão reproduzidos literalmente.

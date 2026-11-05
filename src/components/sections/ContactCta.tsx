@@ -14,10 +14,12 @@ export function ContactCta({ eyebrow, title, description, cta }: ContactCtaProps
     <section aria-labelledby="cta-contato-title" className="relative overflow-hidden border-t border-line">
       <div className="container-site py-20 md:py-32">
         <p className="eyebrow">{eyebrow}</p>
-        <h2 id="cta-contato-title" className="type-display mt-8 max-w-[16ch]" data-reveal>
-          {title}
-        </h2>
-        <FiberLine variant="b" className="mt-12 w-full md:mt-16" />
+        <div data-reveal>
+          <h2 id="cta-contato-title" className="type-display mt-8 max-w-[16ch]" data-parallax>
+            {title}
+          </h2>
+        </div>
+        <FiberLine variant="b" className="fiber-scroll mt-12 w-full md:mt-16" />
         <div className="mt-12 grid gap-10 lg:grid-cols-12">
           <p className="type-lead max-w-xl lg:col-span-6 lg:col-start-6">{description}</p>
           <div className="lg:col-span-6 lg:col-start-6">

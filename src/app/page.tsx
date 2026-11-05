@@ -10,6 +10,10 @@ import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { CasePreview } from "@/components/sections/CasePreview";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { FiberLine } from "@/components/brand/FiberLine";
+import { WordReveal } from "@/components/motion/WordReveal";
+import { ScrollFillText } from "@/components/motion/ScrollFillText";
+import { Marquee } from "@/components/motion/Marquee";
+import { ViewTransition } from "react";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = buildMetadata({
@@ -30,13 +34,15 @@ export default function HomePage() {
       <section aria-labelledby="hero-title" className="relative overflow-hidden">
         <div className="container-site pt-16 pb-20 md:pt-28 md:pb-32">
           <p className="eyebrow">{c.hero.eyebrow}</p>
-          <h1 id="hero-title" className="type-display mt-8 max-w-[14ch] md:mt-10">
-            Boas experiências começam com <span className="text-accent">boas perguntas.</span>
-          </h1>
+          <WordReveal
+            id="hero-title"
+            className="type-display mt-8 max-w-[14ch] md:mt-10"
+            parts={[{ text: "Boas experiências começam com" }, { text: "boas perguntas.", accent: true }]}
+          />
 
           <FiberLine className="mt-12 -mr-[10vw] w-[110%] max-w-none md:mt-16" />
 
-          <div className="mt-12 grid gap-10 md:mt-16 lg:grid-cols-12">
+          <div className="hero-enter mt-12 grid gap-10 md:mt-16 lg:grid-cols-12">
             <p className="type-lead max-w-xl lg:col-span-6 lg:col-start-6">{c.hero.description}</p>
             <div className="flex flex-wrap items-start gap-3 lg:col-span-6 lg:col-start-6">
               <ButtonLink href={c.hero.primaryCta.href} variant="primary" size="lg">
@@ -49,6 +55,12 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <Marquee
+        label="Especialidades"
+        items={services.map((s) => s.name)}
+        className="type-heading border-t border-line py-8 md:py-10"
+      />
 
       {/* SOBRE */}
       <section aria-labelledby="sobre-title" className="border-t border-line">
@@ -67,9 +79,10 @@ export default function HomePage() {
                 </p>
               ))}
             </div>
-            <p className="callout mt-14 max-w-3xl border-l-2 border-accent pl-6 md:mt-20 md:pl-8">
-              {c.about.highlight}
-            </p>
+            <ScrollFillText
+              text={c.about.highlight}
+              className="callout mt-14 max-w-3xl border-l-2 border-accent pl-6 md:mt-20 md:pl-8"
+            />
             <div className="mt-12">
               <ButtonLink href={c.about.cta.href} variant="outline">
                 {c.about.cta.label}
@@ -104,18 +117,18 @@ export default function HomePage() {
               <li key={service.slug} className="border-b border-line">
                 <Link
                   href={`/servicos/${service.slug}`}
-                  className="group grid grid-cols-[3rem_1fr_auto] items-center gap-4 py-6 md:grid-cols-[5rem_1fr_1fr_auto] md:gap-8 md:py-8"
+                  className="sweep-row group grid grid-cols-[3rem_1fr_auto] items-center gap-4 py-6 md:grid-cols-[5rem_1fr_1fr_auto] md:gap-8 md:py-8"
                 >
                   <span className="index-number text-sm">{service.number}/</span>
-                  <span className="type-subheading transition-colors duration-200 group-hover:text-accent">
-                    {service.name}
+                  <span className="sweep-shift">
+                    <ViewTransition name={`servico-${service.slug}`} share="morph" default="none">
+                      <span className="type-subheading inline-block transition-colors duration-200 group-hover:text-accent">
+                        {service.name}
+                      </span>
+                    </ViewTransition>
                   </span>
                   <span className="hidden text-[0.98rem] text-muted md:block">{service.headline}</span>
-                  <ArrowUpRight
-                    aria-hidden="true"
-                    className="size-6 text-accent transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-                    strokeWidth={1.5}
-                  />
+                  <ArrowUpRight aria-hidden="true" className="sweep-arrow size-6 text-accent" strokeWidth={1.5} />
                 </Link>
               </li>
             ))}
@@ -151,9 +164,10 @@ export default function HomePage() {
           <div className="mt-16 md:mt-24">
             <ProcessSteps steps={c.process.steps} />
           </div>
-          <p className="callout mt-16 max-w-3xl md:mt-24 lg:ml-[calc(100%/12*5)]" data-reveal>
-            {c.process.highlight}
-          </p>
+          <ScrollFillText
+            text={c.process.highlight}
+            className="callout mt-16 max-w-3xl md:mt-24 lg:ml-[calc(100%/12*5)]"
+          />
         </div>
       </section>
 
@@ -183,9 +197,7 @@ export default function HomePage() {
               </ul>
             </div>
           </div>
-          <p className="callout mt-16 max-w-4xl text-accent-2 md:mt-24" data-reveal>
-            {c.ai.highlight}
-          </p>
+          <ScrollFillText text={c.ai.highlight} tone="accent-2" className="callout mt-16 max-w-4xl text-accent-2 md:mt-24" />
           <div className="mt-10">
             <ButtonLink href="/servicos/design-tecnologia-ia" variant="link">
               Design, Tecnologia e IA

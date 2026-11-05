@@ -10,7 +10,9 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <section aria-labelledby="page-title" className="container-site py-24 md:py-40">
-      <BrandLogo variant="symbol" height={96} className="mb-10" />
+      <div className="luli-bob mb-10 w-fit">
+        <BrandLogo variant="symbol" height={96} />
+      </div>
       <p className="eyebrow">Erro 404</p>
       <h1 id="page-title" className="type-display mt-8 max-w-[14ch]">
         Essa pergunta ficou sem resposta.

@@ -8,7 +8,7 @@ import { ThemeToggle } from "@/components/navigation/ThemeToggle";
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-bg transition-colors duration-300">
+    <header className="site-header sticky top-0 z-40 border-b border-line bg-bg">
       <div className="container-site flex h-20 items-center justify-between gap-6 lg:grid lg:grid-cols-[1fr_auto_1fr]">
         <Link
           href="/"

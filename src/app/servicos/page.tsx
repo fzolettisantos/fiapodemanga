@@ -8,6 +8,8 @@ import { ServiceBlock } from "@/components/sections/ServiceBlock";
 import { ServiceTags } from "@/components/sections/ServiceTags";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { buildMetadata } from "@/lib/seo/metadata";
+import { ScrollFillText } from "@/components/motion/ScrollFillText";
+import { Marquee } from "@/components/motion/Marquee";
 
 export const metadata: Metadata = buildMetadata({
   title: "O que fazemos — Pesquisa, Product Design, UX/UI e Sites",
@@ -26,6 +28,14 @@ export default function ServicesPage() {
         ]}
       />
       <PageHero eyebrow={c.intro.eyebrow} title={c.intro.title} paragraphs={c.intro.paragraphs} />
+
+      <Marquee
+        label="Competências"
+        items={[...new Set(services.flatMap((s) => s.skills))].slice(0, 18)}
+        duration={70}
+        reverse
+        className="type-subheading border-t border-line py-6 text-muted"
+      />
 
       {/* COMO ATUAMOS */}
       <section aria-labelledby="como-atuamos-title" className="border-t border-line">
@@ -94,9 +104,7 @@ export default function ServicesPage() {
               </p>
             ))}
           </div>
-          <p className="callout text-accent-2 lg:col-span-10" data-reveal>
-            {c.aiHighlight.highlight}
-          </p>
+          <ScrollFillText text={c.aiHighlight.highlight} tone="accent-2" className="callout text-accent-2 lg:col-span-10" />
         </div>
       </section>
 

@@ -7,6 +7,8 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SkipLink } from "@/components/layout/SkipLink";
 import { RevealObserver } from "@/components/layout/RevealObserver";
+import { Interactions } from "@/components/motion/Interactions";
+import { PageTransition } from "@/components/motion/PageTransition";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/jsonld";
 import { DEFAULT_OG_IMAGE } from "@/lib/seo/metadata";
@@ -59,12 +61,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body className="min-h-dvh">
         <SkipLink />
+        <div aria-hidden="true" className="scroll-progress" />
         <Header />
         <main id="conteudo" tabIndex={-1} className="outline-none">
-          {children}
+          <PageTransition>{children}</PageTransition>
         </main>
         <Footer />
         <RevealObserver />
+        <Interactions />
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
       </body>
     </html>

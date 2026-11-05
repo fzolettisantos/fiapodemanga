@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
+import { ViewTransition } from "react";
+import { WordReveal } from "@/components/motion/WordReveal";
 import { getService, services } from "@/content/services";
 import { homeContent } from "@/content/home";
 import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
@@ -54,12 +56,13 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
       <JsonLd data={serviceJsonLd(service)} />
 
       <section aria-labelledby="page-title" className="container-site pt-10 pb-16 md:pt-16 md:pb-24">
-        <p className="eyebrow">
-          {service.number}/ {service.name}
+        <p className="eyebrow flex items-baseline gap-2">
+          <span>{service.number}/</span>
+          <ViewTransition name={`servico-${service.slug}`} share="morph" default="none">
+            <span className="inline-block">{service.name}</span>
+          </ViewTransition>
         </p>
-        <h1 id="page-title" className="type-title mt-8 max-w-6xl">
-          {service.page.h1}
-        </h1>
+        <WordReveal id="page-title" className="type-title mt-8 max-w-6xl" parts={service.page.h1} delay={150} />
         <div className="mt-14 grid gap-10 lg:grid-cols-12">
           <p className="type-heading text-accent lg:col-span-5">{service.headline}</p>
           <div className="space-y-5 lg:col-span-6 lg:col-start-7">
@@ -145,11 +148,11 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
               <li key={s.slug} className="border-b border-line">
                 <Link
                   href={`/servicos/${s.slug}`}
-                  className="group grid grid-cols-[3rem_1fr_auto] items-center gap-4 py-6"
+                  className="sweep-row group grid grid-cols-[3rem_1fr_auto] items-center gap-4 py-6"
                 >
                   <span className="index-number text-sm">{s.number}/</span>
-                  <span className="type-subheading transition-colors group-hover:text-accent">{s.name}</span>
-                  <ArrowUpRight aria-hidden="true" className="size-6 text-accent" strokeWidth={1.5} />
+                  <span className="sweep-shift type-subheading transition-colors group-hover:text-accent">{s.name}</span>
+                  <ArrowUpRight aria-hidden="true" className="sweep-arrow size-6 text-accent" strokeWidth={1.5} />
                 </Link>
               </li>
             ))}

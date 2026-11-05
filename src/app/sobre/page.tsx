@@ -8,6 +8,7 @@ import { ContactCta } from "@/components/sections/ContactCta";
 import { ButtonLink } from "@/components/ui/Button";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { buildMetadata } from "@/lib/seo/metadata";
+import { ScrollFillText } from "@/components/motion/ScrollFillText";
 
 export const metadata: Metadata = buildMetadata({
   title: "Sobre nós — Consultoria de design e experiência digital",
@@ -31,7 +32,7 @@ export default function AboutPage() {
         <div className="container-site grid gap-10 py-20 md:py-32 lg:grid-cols-12 lg:gap-12">
           <div className="flex flex-col justify-between gap-10 lg:col-span-3">
             <p className="eyebrow">{c.vision.eyebrow}</p>
-            <div className="hidden lg:block">
+            <div className="luli-tilt hidden w-fit lg:block">
               <BrandLogo variant="symbol" height={120} />
             </div>
           </div>
@@ -78,9 +79,7 @@ export default function AboutPage() {
         <div className="container-site grid gap-12 py-20 md:py-32 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <p className="eyebrow">O que nos orienta</p>
-            <h2 id="diferenciais-title" className="type-heading mt-6">
-              {homeContent.about.highlight}
-            </h2>
+            <ScrollFillText as="h2" id="diferenciais-title" text={homeContent.about.highlight} className="type-heading mt-6" />
           </div>
           <ul className="border-t border-line lg:col-span-6 lg:col-start-7">
             {c.differentials.map((item) => (

@@ -37,12 +37,39 @@ function subscribe(callback: () => void) {
 export function ThemeToggle({ className }: { className?: string }) {
   const theme = useSyncExternalStore<Theme | null>(subscribe, readTheme, () => null);
 
-  function toggle() {
+  function toggle(event: React.MouseEvent<HTMLButtonElement>) {
+    const root = document.documentElement;
     const next: Theme = readTheme() === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, next);
-    } catch {}
+    const apply = () => {
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, next);
+      } catch {}
+    };
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced || typeof document.startViewTransition !== "function") {
+      apply();
+      return;
+    }
+
+    // Revelação circular a partir do botão (View Transitions API).
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+
+    root.classList.add("vt-theme");
+    const transition = document.startViewTransition(apply);
+    transition.ready
+      .then(() => {
+        root.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+          { duration: 650, easing: "cubic-bezier(0.65, 0, 0.35, 1)", pseudoElement: "::view-transition-new(root)" },
+        );
+      })
+      .catch(() => {});
+    transition.finished.finally(() => root.classList.remove("vt-theme"));
   }
 
   const label =

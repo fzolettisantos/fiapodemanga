@@ -7,7 +7,7 @@ type Variant = "primary" | "secondary" | "outline" | "link";
 type Size = "md" | "lg";
 
 const base =
-  "group inline-flex items-center justify-center gap-2 font-medium tracking-[-0.01em] transition-[background-color,color,transform,border-color] duration-200 ease-out disabled:cursor-not-allowed disabled:opacity-60";
+  "group inline-flex items-center justify-center gap-2 font-medium tracking-[-0.01em] transition-[background-color,color,transform,border-color,translate] duration-200 ease-out disabled:cursor-not-allowed disabled:opacity-60";
 
 const variants: Record<Variant, string> = {
   primary:
@@ -59,6 +59,7 @@ export function ButtonLink({
   return (
     <Link
       href={href}
+      data-magnetic={variant === "primary" || variant === "secondary" ? "" : undefined}
       className={cn(base, variants[variant], variant !== "link" && sizes[size], className)}
       {...rest}
     >

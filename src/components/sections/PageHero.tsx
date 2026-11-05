@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { WordReveal } from "@/components/motion/WordReveal";
 
 type PageHeroProps = {
   eyebrow: string;
@@ -12,11 +13,15 @@ export function PageHero({ eyebrow, title, paragraphs = [], children }: PageHero
   return (
     <section aria-labelledby="page-title" className="container-site pt-10 pb-16 md:pt-16 md:pb-28">
       <p className="eyebrow">{eyebrow}</p>
-      <h1 id="page-title" className="type-title mt-8 max-w-6xl">
-        {title}
-      </h1>
+      {typeof title === "string" ? (
+        <WordReveal id="page-title" className="type-title mt-8 max-w-6xl" parts={title} />
+      ) : (
+        <h1 id="page-title" className="type-title mt-8 max-w-6xl">
+          {title}
+        </h1>
+      )}
       {paragraphs.length || children ? (
-        <div className="mt-12 grid gap-8 lg:grid-cols-12">
+        <div className="hero-enter mt-12 grid gap-8 lg:grid-cols-12">
           <div className="space-y-5 lg:col-span-7 lg:col-start-6">
             {paragraphs.map((p) => (
               <p key={p} className="type-lead">

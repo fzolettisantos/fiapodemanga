@@ -3,9 +3,17 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Loader2 } from "lucide-react";
-import { projectTypes } from "@/content/contact";
-import { LIMITS, validateContact, type ContactErrors, type ContactField } from "@/lib/contact/validation";
-import { Button } from "@/components/ui/Button";
+import {
+  LIMITS,
+  validateContact,
+  type ContactErrors,
+  type ContactField,
+  type ValidationMessages,
+} from "@/lib/contact/validation";
+import type { SiteContent } from "@/content/locales/types";
+import type { Locale } from "@/i18n/config";
+import { format } from "@/i18n/format";
+import { Button } from "@/components/ui/ButtonBase";
 import { cn } from "@/lib/utils/cn";
 
 type Status =
@@ -28,7 +36,15 @@ function FieldError({ id, message }: { id: string; message?: string }) {
   );
 }
 
-export function ContactForm() {
+type ContactFormProps = {
+  locale: Locale;
+  labels: SiteContent["form"];
+  messages: ValidationMessages;
+  projectTypes: { value: string; label: string }[];
+  privacyHref: string;
+};
+
+export function ContactForm({ locale, labels: L, messages, projectTypes, privacyHref }: ContactFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
@@ -41,7 +57,7 @@ export function ContactForm() {
     // Pré-seleciona o tipo de projeto a partir de ?tipo=...
     const tipo = new URLSearchParams(window.location.search).get("tipo");
     const select = formRef.current?.elements.namedItem("projectType");
-    if (tipo && select instanceof HTMLSelectElement && projectTypes.some((t) => t.value === tipo)) {
+    if (tipo && select instanceof HTMLSelectElement && Array.from(select.options).some((o) => o.value === tipo)) {
       select.value = tipo;
     }
   }, []);
@@ -67,7 +83,7 @@ export function ContactForm() {
       startedAt: startedAt.current,
     };
 
-    const result = validateContact(payload);
+    const result = validateContact(payload, messages);
     if (!result.success) {
       setErrors(result.errors);
       setStatus({ state: "idle" });
@@ -82,7 +98,7 @@ export function ContactForm() {
     try {
       const response = await fetch("/api/contato", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-Locale": locale },
         body: JSON.stringify(payload),
       });
       const body = (await response.json().catch(() => null)) as
@@ -100,12 +116,12 @@ export function ContactForm() {
         state: "error",
         message:
           (body && !body.ok && body.message) ||
-          "Não conseguimos enviar sua mensagem agora. Tente novamente em instantes.",
+          L.genericError,
       });
     } catch {
       setStatus({
         state: "error",
-        message: "Não foi possível conectar. Verifique sua conexão e tente novamente.",
+        message: L.networkError,
       });
     }
   }
@@ -118,13 +134,13 @@ export function ContactForm() {
         role="status"
         className="border-t-2 border-accent pt-8 outline-none"
       >
-        <p className="eyebrow">Mensagem enviada</p>
-        <p className="type-heading mt-5">Obrigado! Recebemos sua mensagem.</p>
+        <p className="eyebrow">{L.successEyebrow}</p>
+        <p className="type-heading mt-5">{L.successTitle}</p>
         <p className="type-lead mt-6 max-w-xl">
-          Vamos ler com atenção e responder pelo e-mail informado.
+          {L.successText}
         </p>
         <Button variant="outline" className="mt-10" onClick={() => setStatus({ state: "idle" })}>
-          Enviar outra mensagem
+          {L.sendAnother}
         </Button>
       </div>
     );
@@ -145,20 +161,22 @@ export function ContactForm() {
           </div>
         ) : errorCount > 0 ? (
           <p role="alert" className="border-l-2 border-danger pl-5 text-danger">
-            {errorCount === 1 ? "Há 1 campo para revisar." : `Há ${errorCount} campos para revisar.`}
+            {errorCount === 1 ? L.oneError : format(L.manyErrors, { n: errorCount })}
           </p>
         ) : null}
       </div>
 
       <p className="text-sm text-muted">
-        Campos marcados com <span aria-hidden="true">*</span>
-        <span className="sr-only">asterisco</span> são obrigatórios.
+        {L.required.split("{mark}")[0]}
+        <span aria-hidden="true">*</span>
+        <span className="sr-only">{L.requiredSr}</span>
+        {L.required.split("{mark}")[1]}
       </p>
 
       <div className="grid gap-10 md:grid-cols-2">
         <div>
           <label htmlFor="name" className="eyebrow block">
-            Nome <span aria-hidden="true">*</span>
+            {L.name} <span aria-hidden="true">*</span>
           </label>
           <input
             id="name"
@@ -176,7 +194,7 @@ export function ContactForm() {
 
         <div>
           <label htmlFor="email" className="eyebrow block">
-            E-mail <span aria-hidden="true">*</span>
+            {L.email} <span aria-hidden="true">*</span>
           </label>
           <input
             id="email"
@@ -195,7 +213,7 @@ export function ContactForm() {
 
         <div>
           <label htmlFor="company" className="eyebrow block">
-            Empresa <span className="normal-case tracking-normal text-muted">(opcional)</span>
+            {L.company} <span className="normal-case tracking-normal text-muted">{L.optional}</span>
           </label>
           <input
             id="company"
@@ -212,7 +230,7 @@ export function ContactForm() {
 
         <div>
           <label htmlFor="projectType" className="eyebrow block">
-            Tipo de projeto <span aria-hidden="true">*</span>
+            {L.projectType} <span aria-hidden="true">*</span>
           </label>
           <select
             id="projectType"
@@ -228,7 +246,7 @@ export function ContactForm() {
             }}
           >
             <option value="" disabled>
-              Selecione
+              {L.select}
             </option>
             {projectTypes.map((type) => (
               <option key={type.value} value={type.value} className="bg-bg text-text">
@@ -242,10 +260,10 @@ export function ContactForm() {
 
       <div>
         <label htmlFor="message" className="eyebrow block">
-          Mensagem <span aria-hidden="true">*</span>
+          {L.message} <span aria-hidden="true">*</span>
         </label>
         <p id="message-hint" className="mt-2 text-sm text-muted">
-          Conte o contexto, o desafio e o que você espera resolver.
+          {L.messageHint}
         </p>
         <textarea
           id="message"
@@ -263,7 +281,7 @@ export function ContactForm() {
 
       {/* Honeypot antispam: invisível para pessoas, ignorado por leitores de tela */}
       <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
-        <label htmlFor="website">Não preencha este campo</label>
+        <label htmlFor="website">{L.honeypot}</label>
         <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
@@ -279,11 +297,11 @@ export function ContactForm() {
             className="mt-0.5 size-6 shrink-0 cursor-pointer accent-[var(--color-accent)]"
           />
           <label htmlFor="consent" className="cursor-pointer text-[0.98rem] leading-relaxed">
-            Li e concordo com a{" "}
-            <Link href="/politica-de-privacidade" className="text-accent underline underline-offset-4">
-              Política de Privacidade
+            {L.consentBefore}{" "}
+            <Link href={privacyHref} className="text-accent underline underline-offset-4">
+              {L.consentLink}
             </Link>{" "}
-            e autorizo o uso dos meus dados para receber um retorno sobre este contato.{" "}
+            {L.consentAfter}{" "}
             <span aria-hidden="true">*</span>
           </label>
         </div>
@@ -295,14 +313,14 @@ export function ContactForm() {
           {submitting ? (
             <span className="inline-flex items-center gap-2">
               <Loader2 aria-hidden="true" className="size-5 motion-safe:animate-spin" />
-              Enviando…
+              {L.sending}
             </span>
           ) : (
-            "Enviar mensagem"
+            L.submit
           )}
         </Button>
         <p aria-live="polite" className="sr-only">
-          {submitting ? "Enviando mensagem…" : ""}
+          {submitting ? L.sendingSr : ""}
         </p>
       </div>
     </form>

@@ -1,23 +1,18 @@
 import Link from "next/link";
-import { contactNavItem, mainNavigation, siteConfig } from "@/config/site";
-import { services } from "@/content/services";
+import { siteConfig } from "@/config/site";
+import { getI18n } from "@/i18n/server";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { ButtonLink } from "@/components/ui/Button";
 
-const institutional = [
-  { label: "Insights", href: "/insights" },
-  { label: contactNavItem.label, href: contactNavItem.href },
-  { label: "Política de privacidade", href: "/politica-de-privacidade" },
-];
-
 function FooterColumn({
+  id,
   title,
   links,
 }: {
+  id: string;
   title: string;
   links: { label: string; href: string }[];
 }) {
-  const id = `footer-${title.toLowerCase().replace(/\s+/g, "-")}`;
   return (
     <nav aria-labelledby={id}>
       <h2 id={id} className="eyebrow mb-5">
@@ -39,21 +34,29 @@ function FooterColumn({
   );
 }
 
-export function Footer() {
+export async function Footer() {
+  const { t, href } = await getI18n();
   const year = new Date().getFullYear();
+  const local = (links: { label: string; href: string }[]) =>
+    links.map((l) => ({ label: l.label, href: href(l.href) }));
+  const institutional = local([
+    { label: t.ui.footer.insights, href: "/insights" },
+    { label: t.nav.contact.label, href: t.nav.contact.href },
+    { label: t.ui.footer.privacy, href: "/politica-de-privacidade" },
+  ]);
 
   return (
     <footer className="site-footer border-t border-line bg-bg">
       <div className="container-site py-16 md:py-24">
         <div className="grid gap-14 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <Link href="/" aria-label={`${siteConfig.name} — página inicial`} className="luli-tilt inline-flex">
+            <Link href={href("/")} aria-label={t.ui.homeAria} className="luli-tilt inline-flex">
               <BrandLogo variant="luli" height={56} />
             </Link>
-            <p className="type-subheading mt-8 max-w-md">{siteConfig.centralMessage}</p>
+            <p className="type-subheading mt-8 max-w-md">{t.site.centralMessage}</p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <ButtonLink href="/contato" variant="primary">
-                {contactNavItem.label}
+              <ButtonLink href={t.nav.contact.href} variant="primary">
+                {t.nav.contact.label}
               </ButtonLink>
               {siteConfig.contactEmail ? (
                 <a
@@ -67,13 +70,15 @@ export function Footer() {
           </div>
 
           <div className="grid gap-10 sm:grid-cols-3 lg:col-span-7">
-            <FooterColumn title="Navegação" links={mainNavigation} />
+            <FooterColumn id="footer-navegacao" title={t.ui.footer.navigation} links={local(t.nav.items)} />
             <FooterColumn
-              title="Especialidades"
-              links={services.map((s) => ({ label: s.name, href: `/servicos/${s.slug}` }))}
+              id="footer-especialidades"
+              title={t.ui.footer.specialties}
+              links={local(t.services.map((s) => ({ label: s.name, href: `/servicos/${s.slug}` })))}
             />
             <FooterColumn
-              title="Institucional"
+              id="footer-institucional"
+              title={t.ui.footer.institutional}
               links={[...institutional, ...siteConfig.social]}
             />
           </div>
@@ -81,9 +86,9 @@ export function Footer() {
 
         <div className="mt-16 flex flex-col gap-3 border-t border-line pt-8 text-sm text-muted md:flex-row md:items-center md:justify-between">
           <p>
-            © {year} {siteConfig.name}. Todos os direitos reservados.
+            © {year} {siteConfig.name}. {t.ui.footer.rights}
           </p>
-          <p>{siteConfig.tagline}</p>
+          <p>{t.site.tagline}</p>
         </div>
       </div>
     </footer>

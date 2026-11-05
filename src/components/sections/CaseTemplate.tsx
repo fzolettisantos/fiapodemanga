@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/ui/LocaleLink";
+import { getI18n } from "@/i18n/server";
 import type { Project } from "@/types/content";
-import { getService } from "@/content/services";
 
 type SectionProps = { number: string; title: string; children: React.ReactNode };
 
@@ -34,13 +34,15 @@ function Paragraphs({ items }: { items: string[] }) {
  * Hipóteses → Processo → Solução → Resultados → Aprendizados → Imagens.
  * Seções sem conteúdo não são exibidas.
  */
-export function CaseTemplate({ project }: { project: Project }) {
+export async function CaseTemplate({ project }: { project: Project }) {
+  const { t } = await getI18n();
+  const L = t.ui.projects.sections;
   const textSections: { title: string; items: string[] }[] = [
-    { title: "Contexto", items: project.context },
-    { title: "Problema", items: project.problem },
-    { title: "Objetivo", items: project.objective },
-    { title: "Pesquisa", items: project.research },
-    { title: "Hipóteses", items: project.hypotheses },
+    { title: L.context, items: project.context },
+    { title: L.problem, items: project.problem },
+    { title: L.objective, items: project.objective },
+    { title: L.research, items: project.research },
+    { title: L.hypotheses, items: project.hypotheses },
   ];
 
   const blocks: { title: string; node: React.ReactNode }[] = [
@@ -51,7 +53,7 @@ export function CaseTemplate({ project }: { project: Project }) {
 
   if (project.process.length) {
     blocks.push({
-      title: "Processo",
+      title: L.process,
       node: (
         <ol className="border-t border-line">
           {project.process.map((step, i) => (
@@ -67,10 +69,10 @@ export function CaseTemplate({ project }: { project: Project }) {
       ),
     });
   }
-  if (project.solution.length) blocks.push({ title: "Solução", node: <Paragraphs items={project.solution} /> });
+  if (project.solution.length) blocks.push({ title: L.solution, node: <Paragraphs items={project.solution} /> });
   if (project.results.length) {
     blocks.push({
-      title: "Resultados",
+      title: L.results,
       node: (
         <dl className="grid gap-px border-t border-line sm:grid-cols-2">
           {project.results.map((r) => (
@@ -84,9 +86,9 @@ export function CaseTemplate({ project }: { project: Project }) {
       ),
     });
   }
-  if (project.learnings.length) blocks.push({ title: "Aprendizados", node: <Paragraphs items={project.learnings} /> });
+  if (project.learnings.length) blocks.push({ title: L.learnings, node: <Paragraphs items={project.learnings} /> });
 
-  const relatedServices = project.services.map(getService).filter((s) => s !== undefined);
+  const relatedServices = project.services.map((slug) => t.services.find((s) => s.slug === slug)).filter((s) => s !== undefined);
 
   return (
     <>
@@ -97,19 +99,19 @@ export function CaseTemplate({ project }: { project: Project }) {
         <dl className="mt-12 grid gap-6 border-t border-line pt-8 text-sm sm:grid-cols-3">
           {project.client ? (
             <div>
-              <dt className="eyebrow text-muted">Cliente</dt>
+              <dt className="eyebrow text-muted">{t.ui.projects.client}</dt>
               <dd className="mt-2 text-text">{project.client}</dd>
             </div>
           ) : null}
           {project.year ? (
             <div>
-              <dt className="eyebrow text-muted">Ano</dt>
+              <dt className="eyebrow text-muted">{t.ui.projects.year}</dt>
               <dd className="mt-2 text-text">{project.year}</dd>
             </div>
           ) : null}
           {relatedServices.length ? (
             <div>
-              <dt className="eyebrow text-muted">Especialidades</dt>
+              <dt className="eyebrow text-muted">{t.ui.projects.specialties}</dt>
               <dd className="mt-2">
                 <ul className="space-y-1">
                   {relatedServices.map((s) => (
@@ -148,7 +150,7 @@ export function CaseTemplate({ project }: { project: Project }) {
         ))}
 
         {project.images.length ? (
-          <section aria-label="Imagens do projeto" className="grid gap-8 border-t border-line py-14 md:grid-cols-2">
+          <section aria-label={t.ui.projects.images} className="grid gap-8 border-t border-line py-14 md:grid-cols-2">
             {project.images.map((img) => (
               <figure key={img.src} className="md:even:mt-24">
                 <Image

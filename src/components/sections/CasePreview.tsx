@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/ui/LocaleLink";
 import { ArrowUpRight } from "lucide-react";
 import type { Project } from "@/types/content";
 

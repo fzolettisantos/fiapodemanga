@@ -1,16 +1,19 @@
 import { ButtonLink } from "@/components/ui/Button";
 import { FiberLine } from "@/components/brand/FiberLine";
 import { ConversationBadge } from "@/components/brand/ConversationBadge";
+import { getI18n } from "@/i18n/server";
 
 type ContactCtaProps = {
-  eyebrow: string;
-  title: string;
-  description: string;
-  cta: { label: string; href: string };
+  /** Sobrescreve o destino do botão (ex.: /contato?tipo=site) */
+  ctaHref?: string;
 };
 
 /** Chamada final para contato, reutilizada em várias páginas. */
-export function ContactCta({ eyebrow, title, description, cta }: ContactCtaProps) {
+/** Chamada final "Vamos conversar?" — textos do idioma atual. */
+export async function ContactCta({ ctaHref }: ContactCtaProps = {}) {
+  const { t, href } = await getI18n();
+  const { eyebrow, title, description } = t.home.contact;
+  const cta = { label: t.home.contact.cta.label, href: ctaHref ?? t.home.contact.cta.href };
   return (
     <section aria-labelledby="cta-contato-title" className="relative overflow-hidden border-t border-line">
       <div className="container-site py-20 md:py-32">
@@ -28,7 +31,7 @@ export function ContactCta({ eyebrow, title, description, cta }: ContactCtaProps
               {cta.label}
             </ButtonLink>
           </div>
-          <ConversationBadge className="w-full max-w-[16rem] sm:max-w-[19rem] lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:-mt-16 lg:max-w-[22rem]" />
+          <ConversationBadge label={t.ui.badgeAria} href={href("/contato")} className="w-full max-w-[16rem] sm:max-w-[19rem] lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:-mt-16 lg:max-w-[22rem]" />
         </div>
       </div>
     </section>

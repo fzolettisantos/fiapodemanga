@@ -1,9 +1,11 @@
 import type { Service } from "@/types/content";
 import { ButtonLink } from "@/components/ui/Button";
 import { ServiceTags } from "./ServiceTags";
+import { format, getI18n } from "@/i18n/server";
 
 /** Grande bloco editorial de especialidade (página O que fazemos). */
-export function ServiceBlock({ service }: { service: Service }) {
+export async function ServiceBlock({ service }: { service: Service }) {
+  const { t } = await getI18n();
   const headingId = `especialidade-${service.slug}`;
   return (
     <article
@@ -30,7 +32,7 @@ export function ServiceBlock({ service }: { service: Service }) {
                 </p>
               ))}
             </div>
-            <ServiceTags items={service.skills} label="Especialidades" />
+            <ServiceTags items={service.skills} label={t.ui.servicesPage.skillsLabel} />
           </div>
           <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
             {service.cta ? (
@@ -39,7 +41,7 @@ export function ServiceBlock({ service }: { service: Service }) {
               </ButtonLink>
             ) : null}
             <ButtonLink href={`/servicos/${service.slug}`} variant="link">
-              {`Saiba mais sobre ${service.name}`}
+              {format(t.ui.servicesPage.learnMore, { name: service.name })}
             </ButtonLink>
           </div>
         </div>

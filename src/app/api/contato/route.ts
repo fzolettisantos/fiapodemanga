@@ -2,6 +2,8 @@ import { NextResponse, type NextRequest } from "next/server";
 import { isLikelySpam, validateContact } from "@/lib/contact/validation";
 import { rateLimit } from "@/lib/contact/rate-limit";
 import { getMailConfig, sendContactEmail } from "@/lib/contact/send";
+import { content } from "@/content/locales";
+import { defaultLocale, isLocale } from "@/i18n/config";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -33,12 +35,16 @@ function isSameOrigin(request: NextRequest): boolean {
 }
 
 export async function POST(request: NextRequest) {
+  // Idioma das mensagens: cabeçalho enviado pelo formulário (padrão: português)
+  const headerLocale = request.headers.get("x-locale");
+  const t = content[isLocale(headerLocale) ? headerLocale : defaultLocale];
+
   if (!isSameOrigin(request)) {
-    return reply({ ok: false, code: "forbidden", message: "Origem não permitida." }, 403);
+    return reply({ ok: false, code: "forbidden", message: t.api.forbidden }, 403);
   }
 
   if (!request.headers.get("content-type")?.includes("application/json")) {
-    return reply({ ok: false, code: "bad_request", message: "Formato de requisição inválido." }, 415);
+    return reply({ ok: false, code: "bad_request", message: t.api.badFormat }, 415);
   }
 
   const limit = rateLimit(clientIp(request));
@@ -47,7 +53,7 @@ export async function POST(request: NextRequest) {
       {
         ok: false,
         code: "rate_limited",
-        message: "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.",
+        message: t.api.rateLimited,
       },
       429,
       { "Retry-After": String(limit.retryAfter) },
@@ -58,13 +64,13 @@ export async function POST(request: NextRequest) {
   try {
     const text = await request.text();
     if (text.length > MAX_BODY_BYTES) {
-      return reply({ ok: false, code: "too_large", message: "A mensagem é muito longa." }, 413);
+      return reply({ ok: false, code: "too_large", message: t.api.tooLarge }, 413);
     }
     const parsed: unknown = JSON.parse(text);
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error("invalid");
     raw = parsed as Record<string, unknown>;
   } catch {
-    return reply({ ok: false, code: "bad_request", message: "Não foi possível ler os dados enviados." }, 400);
+    return reply({ ok: false, code: "bad_request", message: t.api.unreadable }, 400);
   }
 
   if (isLikelySpam(raw)) {
@@ -72,16 +78,16 @@ export async function POST(request: NextRequest) {
       {
         ok: false,
         code: "spam_suspected",
-        message: "Não foi possível validar o envio. Aguarde alguns segundos e tente novamente.",
+        message: t.api.spam,
       },
       400,
     );
   }
 
-  const result = validateContact(raw);
+  const result = validateContact(raw, t.validation);
   if (!result.success) {
     return reply(
-      { ok: false, code: "validation_error", message: "Revise os campos destacados.", errors: result.errors },
+      { ok: false, code: "validation_error", message: t.api.validation, errors: result.errors },
       422,
     );
   }
@@ -91,8 +97,7 @@ export async function POST(request: NextRequest) {
       {
         ok: false,
         code: "not_configured",
-        message:
-          "O envio de mensagens pelo site ainda não está disponível. Sua mensagem não foi enviada.",
+        message: t.api.notConfigured,
       },
       503,
     );
@@ -104,7 +109,7 @@ export async function POST(request: NextRequest) {
       {
         ok: false,
         code: "send_failed",
-        message: "Não conseguimos enviar sua mensagem agora. Tente novamente em instantes.",
+        message: t.api.sendFailed,
       },
       502,
     );

@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/ui/LocaleLink";
+import { getI18n } from "@/i18n/server";
 import { notFound } from "next/navigation";
 import { getArticle, getArticlesSorted } from "@/content/articles";
-import { getService } from "@/content/services";
-import { homeContent } from "@/content/home";
 import type { ArticleBlock } from "@/types/content";
 import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
 import { ArticleCard } from "@/components/sections/ArticleCard";
@@ -16,8 +15,6 @@ import { formatDate } from "@/lib/utils/date";
 
 type Params = { slug: string };
 
-export const dynamicParams = false;
-
 export function generateStaticParams(): Params[] {
   return getArticlesSorted().map((a) => ({ slug: a.slug }));
 }
@@ -26,7 +23,9 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { slug } = await params;
   const article = getArticle(slug);
   if (!article) return {};
+  const { locale } = await getI18n();
   return buildMetadata({
+    locale,
     title: article.seo.title,
     description: article.seo.description,
     path: `/insights/${article.slug}`,
@@ -90,30 +89,30 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
   const { slug } = await params;
   const article = getArticle(slug);
   if (!article) notFound();
+  const { locale, t } = await getI18n();
 
   const related = (article.related ?? []).map(getArticle).filter((a) => a !== undefined);
-  const relatedServices = (article.relatedServices ?? []).map(getService).filter((s) => s !== undefined);
+  const relatedServices = (article.relatedServices ?? []).map((r) => t.services.find((s) => s.slug === r)).filter((s) => s !== undefined);
 
   return (
     <>
       <Breadcrumbs
         items={[
-          { name: "Início", path: "/" },
-          { name: "Insights", path: "/insights" },
+          { name: t.ui.footer.insights, path: "/insights" },
           { name: article.title, path: `/insights/${article.slug}` },
         ]}
       />
-      <JsonLd data={articleJsonLd(article)} />
+      <JsonLd data={articleJsonLd(article, locale)} />
 
       <article className="container-site pt-10 pb-20 md:pt-16">
         <header className="max-w-5xl">
-          <p className="eyebrow">{article.category}</p>
+          <p className="eyebrow">{t.articleCategories[article.category]}</p>
           <h1 className="type-title mt-8">{article.title}</h1>
           <p className="type-lead mt-8 max-w-3xl">{article.summary}</p>
           <p className="mt-8 font-mono text-xs tracking-[0.04em] text-muted uppercase">
             {article.author.name}
             {article.author.role ? `, ${article.author.role}` : ""} ·{" "}
-            <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time>
+            <time dateTime={article.publishedAt}>{formatDate(article.publishedAt, locale)}</time>
           </p>
         </header>
 
@@ -138,7 +137,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
         {relatedServices.length ? (
           <aside aria-labelledby="servicos-relacionados" className="mx-auto mt-20 max-w-[44rem] border-t border-line pt-8">
             <h2 id="servicos-relacionados" className="eyebrow">
-              Especialidades relacionadas
+              {t.ui.insights.relatedServices}
             </h2>
             <ul className="mt-4 space-y-2">
               {relatedServices.map((s) => (
@@ -157,7 +156,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
         <section aria-labelledby="leia-tambem" className="border-t border-line">
           <div className="container-site py-16">
             <h2 id="leia-tambem" className="type-heading">
-              Leia também
+              {t.ui.insights.readAlso}
             </h2>
             <div className="mt-10 grid gap-x-12 md:grid-cols-3">
               {related.map((a) => (
@@ -168,12 +167,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
         </section>
       ) : null}
 
-      <ContactCta
-        eyebrow={homeContent.contact.eyebrow}
-        title={homeContent.contact.title}
-        description={homeContent.contact.description}
-        cta={homeContent.contact.cta}
-      />
+      <ContactCta />
     </>
   );
 }

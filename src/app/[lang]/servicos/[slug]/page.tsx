@@ -1,46 +1,52 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 import { ViewTransition } from "react";
-import { WordReveal } from "@/components/motion/WordReveal";
-import { getService, services } from "@/content/services";
-import { homeContent } from "@/content/home";
+import { services as baseServices } from "@/content/services";
+import { format, getI18n } from "@/i18n/server";
+import { LocaleLink as Link } from "@/components/ui/LocaleLink";
 import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
 import { ServiceTags } from "@/components/sections/ServiceTags";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { ButtonLink } from "@/components/ui/Button";
 import { JsonLd } from "@/components/ui/JsonLd";
+import { WordReveal } from "@/components/motion/WordReveal";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { serviceJsonLd } from "@/lib/seo/jsonld";
 
 type Params = { slug: string };
 
-export const dynamicParams = false;
-
 export function generateStaticParams(): Params[] {
-  return services.map((s) => ({ slug: s.slug }));
+  return baseServices.map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { slug } = await params;
-  const service = getService(slug);
+  const { locale, t } = await getI18n();
+  const service = t.services.find((s) => s.slug === slug);
   if (!service) return {};
   return buildMetadata({
+    locale,
     title: service.seo.title,
     description: service.seo.description,
     keywords: service.seo.keywords,
     path: `/servicos/${service.slug}`,
+    ogAlt: t.site.ogAlt,
   });
 }
 
 export default async function ServicePage({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-  const service = getService(slug);
+  const { locale, t } = await getI18n();
+  const services = t.services;
+  const service = services.find((s) => s.slug === slug);
   if (!service) notFound();
 
-  const related = service.page.related.map(getService).filter((s) => s !== undefined);
+  const L = t.ui.serviceDetail;
+  const related = service.page.related
+    .map((r) => services.find((s) => s.slug === r))
+    .filter((s) => s !== undefined);
   const index = services.findIndex((s) => s.slug === service.slug);
   const next = services[(index + 1) % services.length]!;
 
@@ -48,12 +54,11 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
     <>
       <Breadcrumbs
         items={[
-          { name: "Início", path: "/" },
-          { name: "O que fazemos", path: "/servicos" },
+          { name: t.nav.items[1]!.label, path: "/servicos" },
           { name: service.name, path: `/servicos/${service.slug}` },
         ]}
       />
-      <JsonLd data={serviceJsonLd(service)} />
+      <JsonLd data={serviceJsonLd(service, locale)} />
 
       <section aria-labelledby="page-title" className="container-site pt-10 pb-16 md:pt-16 md:pb-24">
         <p className="eyebrow flex items-baseline gap-2">
@@ -73,7 +78,7 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
             ))}
             <div className="flex flex-wrap gap-3 pt-6">
               <ButtonLink href={service.cta?.href ?? "/contato"} variant="primary" size="lg">
-                {service.cta?.label ?? "Vamos conversar"}
+                {service.cta?.label ?? L.ctaDefault}
               </ButtonLink>
             </div>
           </div>
@@ -83,7 +88,7 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
       <section aria-labelledby="competencias-title" className="border-t border-line">
         <div className="container-site grid gap-12 py-20 md:py-28 lg:grid-cols-12">
           <h2 id="competencias-title" className="type-heading lg:col-span-4">
-            Especialidades
+            {L.skills}
           </h2>
           <ServiceTags items={service.skills} className="lg:col-span-8" />
         </div>
@@ -92,7 +97,7 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
       <section aria-labelledby="quando-title" className="border-t border-line">
         <div className="container-site grid gap-12 py-20 md:py-28 lg:grid-cols-12">
           <h2 id="quando-title" className="type-heading lg:col-span-4">
-            Quando faz sentido
+            {L.whenItHelps}
           </h2>
           <ol className="border-t border-line lg:col-span-8">
             {service.page.whenItHelps.map((item, i) => (
@@ -109,11 +114,9 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
         <div className="container-site grid gap-12 py-20 md:py-28 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <h2 id="entregas-title" className="type-heading">
-              O que pode ser entregue
+              {L.deliverables}
             </h2>
-            <p className="type-body mt-6 text-muted">
-              Cada escopo é definido a partir do contexto e dos objetivos do projeto.
-            </p>
+            <p className="type-body mt-6 text-muted">{L.deliverablesNote}</p>
           </div>
           <ul className="border-t border-line lg:col-span-8">
             {service.page.deliverables.map((item) => (
@@ -128,12 +131,12 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
 
       <section aria-labelledby="processo-title" className="border-t border-line">
         <div className="container-site py-20 md:py-28">
-          <p className="eyebrow">{homeContent.process.eyebrow}</p>
+          <p className="eyebrow">{t.home.process.eyebrow}</p>
           <h2 id="processo-title" className="type-heading mt-6 max-w-3xl">
-            {homeContent.process.title}
+            {t.home.process.title}
           </h2>
           <div className="mt-14">
-            <ProcessSteps steps={homeContent.process.steps} />
+            <ProcessSteps steps={t.home.process.steps} />
           </div>
         </div>
       </section>
@@ -141,7 +144,7 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
       <section aria-labelledby="relacionadas-title" className="border-t border-line">
         <div className="container-site py-20 md:py-28">
           <h2 id="relacionadas-title" className="type-heading">
-            Especialidades relacionadas
+            {L.related}
           </h2>
           <ul className="mt-12 border-t border-line">
             {related.map((s) => (
@@ -159,21 +162,16 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
           </ul>
           <div className="mt-10 flex flex-wrap gap-x-8 gap-y-4">
             <ButtonLink href="/servicos" variant="link">
-              Todas as especialidades
+              {L.all}
             </ButtonLink>
             <ButtonLink href={`/servicos/${next.slug}`} variant="link">
-              {`Próxima: ${next.name}`}
+              {format(L.next, { name: next.name })}
             </ButtonLink>
           </div>
         </div>
       </section>
 
-      <ContactCta
-        eyebrow={homeContent.contact.eyebrow}
-        title={homeContent.contact.title}
-        description={homeContent.contact.description}
-        cta={{ label: homeContent.contact.cta.label, href: service.cta?.href ?? "/contato" }}
-      />
+      <ContactCta ctaHref={service.cta?.href} />
     </>
   );
 }

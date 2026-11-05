@@ -1,31 +1,26 @@
 import type { Metadata } from "next";
-import { aboutPageContent as c } from "@/content/pages";
-import { homeContent } from "@/content/home";
+import { getI18n } from "@/i18n/server";
 import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
 import { PageHero } from "@/components/sections/PageHero";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { ButtonLink } from "@/components/ui/Button";
 import { BrandLogo } from "@/components/brand/BrandLogo";
-import { buildMetadata } from "@/lib/seo/metadata";
 import { ScrollFillText } from "@/components/motion/ScrollFillText";
+import { buildMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Sobre nós — Consultoria de design e experiência digital",
-  description:
-    "Conheça a Fiapo de Manga: uma consultoria que conecta pesquisa, estratégia, design e tecnologia para transformar desafios em produtos e experiências digitais.",
-  path: "/sobre",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale, t } = await getI18n();
+  return buildMetadata({ locale, ...t.meta.about, path: "/sobre", ogAlt: t.site.ogAlt });
+}
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const { t } = await getI18n();
+  const c = t.aboutPage;
+
   return (
     <>
-      <Breadcrumbs
-        items={[
-          { name: "Início", path: "/" },
-          { name: "Sobre nós", path: "/sobre" },
-        ]}
-      />
+      <Breadcrumbs items={[{ name: t.nav.items[3]!.label, path: "/sobre" }]} />
       <PageHero eyebrow={c.hero.eyebrow} title={c.hero.title} paragraphs={c.hero.paragraphs} />
 
       <section aria-labelledby="visao-title" className="border-t border-line">
@@ -53,9 +48,9 @@ export default function AboutPage() {
 
       <section aria-labelledby="principios-title" className="border-t border-line">
         <div className="container-site py-20 md:py-32">
-          <p className="eyebrow">Princípios</p>
+          <p className="eyebrow">{t.ui.about.principles}</p>
           <h2 id="principios-title" className="sr-only">
-            Princípios
+            {t.ui.about.principles}
           </h2>
           <dl className="mt-12 border-t border-line">
             {c.principles.map((principle, i) => (
@@ -78,8 +73,13 @@ export default function AboutPage() {
       <section aria-labelledby="diferenciais-title" className="border-t border-line bg-surface">
         <div className="container-site grid gap-12 py-20 md:py-32 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <p className="eyebrow">O que nos orienta</p>
-            <ScrollFillText as="h2" id="diferenciais-title" text={homeContent.about.highlight} className="type-heading mt-6" />
+            <p className="eyebrow">{t.ui.about.guides}</p>
+            <ScrollFillText
+              as="h2"
+              id="diferenciais-title"
+              text={t.home.about.highlight}
+              className="type-heading mt-6"
+            />
           </div>
           <ul className="border-t border-line lg:col-span-6 lg:col-start-7">
             {c.differentials.map((item) => (
@@ -94,27 +94,22 @@ export default function AboutPage() {
 
       <section aria-labelledby="abordagem-title" className="border-t border-line">
         <div className="container-site py-20 md:py-32">
-          <p className="eyebrow">{homeContent.process.eyebrow}</p>
+          <p className="eyebrow">{t.home.process.eyebrow}</p>
           <h2 id="abordagem-title" className="type-title mt-8 max-w-4xl">
-            {homeContent.process.title}
+            {t.home.process.title}
           </h2>
           <div className="mt-16">
-            <ProcessSteps steps={homeContent.process.steps} />
+            <ProcessSteps steps={t.home.process.steps} />
           </div>
           <div className="mt-12">
             <ButtonLink href="/servicos" variant="outline">
-              {homeContent.services.cta.label}
+              {t.home.services.cta.label}
             </ButtonLink>
           </div>
         </div>
       </section>
 
-      <ContactCta
-        eyebrow={homeContent.contact.eyebrow}
-        title={homeContent.contact.title}
-        description={homeContent.contact.description}
-        cta={homeContent.contact.cta}
-      />
+      <ContactCta />
     </>
   );
 }

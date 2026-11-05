@@ -16,7 +16,7 @@ const SRC = "/brand/vamos-conversar.svg";
  *    sejam animados por CSS (ver "Ilustração Vamos conversar" em globals.css).
  * Sem JavaScript, exibe o mesmo SVG como imagem. O arquivo é estático e do próprio site.
  */
-export function ConversationBadge({ className }: { className?: string }) {
+export function ConversationBadge({ className, label, href }: { className?: string; label: string; href: string }) {
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -64,8 +64,8 @@ export function ConversationBadge({ className }: { className?: string }) {
 
   return (
     <Link
-      href="/contato"
-      aria-label="Vamos conversar — fale com a Fiapo de Manga"
+      href={href}
+      aria-label={label}
       className={cn("conversation-badge block", className)}
     >
       <span ref={ref} className="conversation-badge__art block aspect-square" />

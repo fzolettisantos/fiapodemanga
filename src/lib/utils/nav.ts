@@ -1,5 +1,9 @@
-/** Verifica se um item de navegação corresponde à rota atual. */
+import { splitLocale } from "@/i18n/config";
+
+/** Verifica se um item de navegação corresponde à rota atual (ignora o prefixo de idioma). */
 export function isActivePath(pathname: string, href: string): boolean {
-  if (href === "/") return pathname === "/";
-  return pathname === href || pathname.startsWith(`${href}/`);
+  const current = splitLocale(pathname).path;
+  const target = splitLocale(href.split("?")[0] ?? href).path;
+  if (target === "/") return current === "/";
+  return current === target || current.startsWith(`${target}/`);
 }

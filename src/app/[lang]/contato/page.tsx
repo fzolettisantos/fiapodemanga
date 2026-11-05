@@ -1,26 +1,23 @@
 import type { Metadata } from "next";
-import { contactPageContent as c } from "@/content/pages";
 import { siteConfig } from "@/config/site";
+import { projectTypes } from "@/content/contact";
+import { getI18n } from "@/i18n/server";
 import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { buildMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Contato — Vamos conversar sobre seu projeto",
-  description:
-    "Conte seu desafio para a Fiapo de Manga: pesquisa, estratégia, Product Design, UX/UI, criação de sites, aplicativos, sistemas, e-commerce ou inteligência artificial.",
-  path: "/contato",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale, t } = await getI18n();
+  return buildMetadata({ locale, ...t.meta.contact, path: "/contato", ogAlt: t.site.ogAlt });
+}
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const { locale, t, href } = await getI18n();
+  const c = t.contactPage;
+
   return (
     <>
-      <Breadcrumbs
-        items={[
-          { name: "Início", path: "/" },
-          { name: "Contato", path: "/contato" },
-        ]}
-      />
+      <Breadcrumbs items={[{ name: c.eyebrow, path: "/contato" }]} />
       <div className="container-site grid gap-16 pt-10 pb-24 md:pt-16 md:pb-32 lg:grid-cols-12 lg:gap-12">
         <section aria-labelledby="page-title" className="lg:col-span-5">
           <p className="eyebrow">{c.eyebrow}</p>
@@ -36,7 +33,7 @@ export default function ContactPage() {
           </div>
           {siteConfig.contactEmail ? (
             <p className="mt-10 text-[0.98rem]">
-              Se preferir, escreva para{" "}
+              {t.ui.contact.orWrite}{" "}
               <a href={`mailto:${siteConfig.contactEmail}`} className="text-accent underline underline-offset-4">
                 {siteConfig.contactEmail}
               </a>
@@ -45,8 +42,14 @@ export default function ContactPage() {
           ) : null}
         </section>
 
-        <section aria-label="Formulário de contato" className="lg:col-span-6 lg:col-start-7 lg:pt-4">
-          <ContactForm />
+        <section aria-label={t.ui.contact.formRegion} className="lg:col-span-6 lg:col-start-7 lg:pt-4">
+          <ContactForm
+            locale={locale}
+            labels={t.form}
+            messages={t.validation}
+            projectTypes={projectTypes.map((p) => ({ value: p.value, label: t.projectTypes[p.value] }))}
+            privacyHref={href("/politica-de-privacidade")}
+          />
         </section>
       </div>
     </>

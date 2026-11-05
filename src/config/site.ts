@@ -34,16 +34,7 @@ export const siteConfig = {
   social: [] as { label: string; href: string }[],
 } as const;
 
-export type NavItem = { label: string; href: string };
-
-export const mainNavigation: NavItem[] = [
-  { label: "Início", href: "/" },
-  { label: "O que fazemos", href: "/servicos" },
-  { label: "Cases", href: "/projetos" },
-  { label: "Sobre nós", href: "/sobre" },
-];
-
-export const contactNavItem: NavItem = { label: "Vamos conversar", href: "/contato" };
+/** Navegação e textos por idioma: src/content/locales/{pt,en,es}.ts */
 
 export function absoluteUrl(path = "/"): string {
   if (/^https?:\/\//.test(path)) return path;

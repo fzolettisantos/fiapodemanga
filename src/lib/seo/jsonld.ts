@@ -1,5 +1,7 @@
 import { absoluteUrl, siteConfig } from "@/config/site";
 import { brandAssets } from "@/config/brand";
+import { localeInfo, localizePath, type Locale } from "@/i18n/config";
+import type { SiteContent } from "@/content/locales/types";
 import type { Article, Service } from "@/types/content";
 
 /**
@@ -13,14 +15,12 @@ const siteId = () => `${absoluteUrl("/")}#website`;
 function areaServed() {
   if (!siteConfig.location) return undefined;
   const { city, region, country, remote } = siteConfig.location;
-  const areas: Record<string, unknown>[] = [
-    { "@type": "City", name: `${city}, ${region}` },
-  ];
+  const areas: Record<string, unknown>[] = [{ "@type": "City", name: `${city}, ${region}` }];
   if (remote) areas.push({ "@type": "Country", name: country === "BR" ? "Brasil" : country });
   return areas;
 }
 
-export function organizationJsonLd() {
+export function organizationJsonLd(t: SiteContent) {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -35,44 +35,36 @@ export function organizationJsonLd() {
       height: brandAssets.logoPng.height,
     },
     image: absoluteUrl(brandAssets.ogImage.src),
-    description: siteConfig.description,
-    slogan: siteConfig.tagline,
+    description: t.site.description,
+    slogan: t.site.tagline,
     ...(siteConfig.contactEmail ? { email: siteConfig.contactEmail } : {}),
     ...(siteConfig.social.length ? { sameAs: siteConfig.social.map((s) => s.href) } : {}),
     ...(areaServed() ? { areaServed: areaServed() } : {}),
-    knowsAbout: [
-      "UX Research",
-      "Product Design",
-      "UX/UI Design",
-      "Estratégia de Produto",
-      "Criação de Sites",
-      "Design de Aplicativos",
-      "E-commerce",
-      "Inteligência Artificial aplicada ao Design",
-    ],
+    knowsAbout: t.site.knowsAbout,
   };
 }
 
-export function websiteJsonLd() {
+export function websiteJsonLd(locale: Locale) {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": siteId(),
-    url: absoluteUrl("/"),
+    url: absoluteUrl(localizePath(locale, "/")),
     name: siteConfig.name,
-    inLanguage: siteConfig.language,
+    inLanguage: localeInfo[locale].htmlLang,
     publisher: { "@id": orgId() },
   };
 }
 
-export function serviceJsonLd(service: Service) {
+export function serviceJsonLd(service: Service, locale: Locale) {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
     name: service.name,
     serviceType: service.seo.title,
     description: service.seo.description,
-    url: absoluteUrl(`/servicos/${service.slug}`),
+    url: absoluteUrl(localizePath(locale, `/servicos/${service.slug}`)),
+    inLanguage: localeInfo[locale].htmlLang,
     provider: { "@id": orgId() },
     ...(areaServed() ? { areaServed: areaServed() } : {}),
     hasOfferCatalog: {
@@ -86,6 +78,7 @@ export function serviceJsonLd(service: Service) {
   };
 }
 
+/** `path` já deve estar localizado. */
 export type Crumb = { name: string; path: string };
 
 export function breadcrumbJsonLd(items: Crumb[]) {
@@ -101,7 +94,7 @@ export function breadcrumbJsonLd(items: Crumb[]) {
   };
 }
 
-export function articleJsonLd(article: Article) {
+export function articleJsonLd(article: Article, locale: Locale) {
   return {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -111,9 +104,9 @@ export function articleJsonLd(article: Article) {
     dateModified: article.updatedAt ?? article.publishedAt,
     author: { "@type": "Person", name: article.author.name },
     publisher: { "@id": orgId() },
-    mainEntityOfPage: absoluteUrl(`/insights/${article.slug}`),
+    mainEntityOfPage: absoluteUrl(localizePath(locale, `/insights/${article.slug}`)),
     articleSection: article.category,
-    inLanguage: siteConfig.language,
+    inLanguage: localeInfo[locale].htmlLang,
     ...(article.image ? { image: absoluteUrl(article.image.src) } : {}),
   };
 }

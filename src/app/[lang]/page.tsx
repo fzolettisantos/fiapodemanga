@@ -1,15 +1,14 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowUpRight } from "lucide-react";
-import { homeContent as c } from "@/content/home";
-import { services } from "@/content/services";
+import { LocaleLink as Link } from "@/components/ui/LocaleLink";
+import { getI18n } from "@/i18n/server";
 import { getProjectsSorted } from "@/content/projects";
 import { ButtonLink } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { CasePreview } from "@/components/sections/CasePreview";
 import { ProjectSlider } from "@/components/sections/ProjectSlider";
-import { showcase } from "@/content/projects/showcase";
+import { localizeShowcase, showcase } from "@/content/projects/showcase";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { FiberLine } from "@/components/brand/FiberLine";
 import { WordReveal } from "@/components/motion/WordReveal";
@@ -18,16 +17,28 @@ import { Marquee } from "@/components/motion/Marquee";
 import { ViewTransition } from "react";
 import { buildMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Fiapo de Manga — Consultoria de Design, Pesquisa e UX/UI",
-  absoluteTitle: true,
-  description:
-    "Consultoria de design e UX/UI que une pesquisa, estratégia de produto e tecnologia para criar sites, aplicativos, sistemas e produtos digitais que fazem sentido.",
-  path: "/",
-  keywords: ["consultoria de design", "UX/UI", "Product Design", "pesquisa UX", "criação de sites"],
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale, t } = await getI18n();
+  return buildMetadata({
+    locale,
+    title: t.meta.home.title,
+    absoluteTitle: true,
+    description: t.meta.home.description,
+    path: "/",
+    ogAlt: t.site.ogAlt,
+  });
+}
 
-export default function HomePage() {
+/** Separa as duas últimas palavras do título para o destaque ("boas perguntas."). */
+function splitAccent(title: string): { text: string; accent?: boolean }[] {
+  const words = title.trim().split(/\s+/);
+  return [{ text: words.slice(0, -2).join(" ") }, { text: words.slice(-2).join(" "), accent: true }];
+}
+
+export default async function HomePage() {
+  const { t } = await getI18n();
+  const c = t.home;
+  const services = t.services;
   const projects = getProjectsSorted().slice(0, 3);
 
   return (
@@ -39,7 +50,7 @@ export default function HomePage() {
           <WordReveal
             id="hero-title"
             className="type-display mt-8 max-w-[14ch] md:mt-10"
-            parts={[{ text: "Boas experiências começam com" }, { text: "boas perguntas.", accent: true }]}
+            parts={splitAccent(c.hero.title)}
           />
 
           <FiberLine className="mt-12 -mr-[10vw] w-[110%] max-w-none md:mt-16" />
@@ -60,7 +71,7 @@ export default function HomePage() {
 
       <div className="bg-[#E1FF00]">
         <Marquee
-          label="Especialidades"
+          label={t.ui.marquee.specialties}
           items={services.map((s) => s.name)}
           className="marquee--highlight type-heading py-8 md:py-10"
         />
@@ -190,7 +201,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="lg:col-span-5 lg:pt-24" data-reveal>
-              <h3 className="eyebrow mb-5">Aplicações</h3>
+              <h3 className="eyebrow mb-5">{t.ui.home.aiApplications}</h3>
               <ul className="border-t border-line">
                 {c.ai.applications.map((item, i) => (
                   <li key={item} className="flex gap-4 border-b border-line py-4 text-[1.02rem]">
@@ -204,7 +215,7 @@ export default function HomePage() {
           <ScrollFillText text={c.ai.highlight} tone="accent-2" className="callout mt-16 max-w-4xl text-accent-2 md:mt-24" />
           <div className="mt-10">
             <ButtonLink href="/servicos/design-tecnologia-ia" variant="link">
-              Design, Tecnologia e IA
+              {t.ui.home.aiLink}
             </ButtonLink>
           </div>
         </div>
@@ -230,7 +241,11 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-          <ProjectSlider projects={showcase} className="mt-16 md:mt-24" />
+          <ProjectSlider
+            projects={localizeShowcase(showcase, t.showcase)}
+            labels={t.ui.slider}
+            className="mt-16 md:mt-24"
+          />
           {projects.length > 0 ? (
             <ol className="mt-16 border-t border-line">
               {projects.map((project, index) => (
@@ -241,12 +256,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ContactCta
-        eyebrow={c.contact.eyebrow}
-        title={c.contact.title}
-        description={c.contact.description}
-        cta={c.contact.cta}
-      />
+      <ContactCta />
     </>
   );
 }

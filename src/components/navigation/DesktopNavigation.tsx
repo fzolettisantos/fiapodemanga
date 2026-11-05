@@ -2,17 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { mainNavigation } from "@/config/site";
 import { isActivePath } from "@/lib/utils/nav";
 import { cn } from "@/lib/utils/cn";
 
-export function DesktopNavigation() {
+export function DesktopNavigation({ items, label }: { items: { label: string; href: string }[]; label: string }) {
   const pathname = usePathname();
 
   return (
-    <nav aria-label="Navegação principal" className="hidden lg:block">
+    <nav aria-label={label} className="hidden lg:block">
       <ul className="flex items-center gap-1">
-        {mainNavigation.map((item) => {
+        {items.map((item) => {
           const active = isActivePath(pathname, item.href);
           return (
             <li key={item.href}>

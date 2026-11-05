@@ -319,14 +319,6 @@ export const services: Service[] = [
   },
 ];
 
-export function getService(slug: string): Service | undefined {
-  return services.find((service) => service.slug === slug);
-}
-
-export function getServicePath(slug: string): string {
-  return `/servicos/${slug}`;
-}
-
 /** Formas de atuação (página O que fazemos) */
 export const practices = [
   {

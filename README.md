@@ -7,6 +7,28 @@ Site da **Fiapo de Manga**, consultoria de design, pesquisa e experiência digit
 Stack: **Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Geist · Lucide**.
 Todas as páginas são geradas estaticamente (SSG); apenas `/api/contato` roda no servidor.
 
+## Idiomas
+
+O site está em **português do Brasil** (padrão), **inglês** e **espanhol**.
+
+| Idioma | URL | `lang` |
+| ------ | --- | ------ |
+| Português (padrão) | `/servicos` | `pt-BR` |
+| Inglês | `/en/servicos` | `en` |
+| Espanhol | `/es/servicos` | `es` |
+
+- Rotas em `src/app/[lang]/…`, todas geradas estaticamente para os três idiomas. O `src/proxy.ts`
+  reescreve as URLs sem prefixo para o português, redireciona `/pt/...` para a URL sem prefixo (308)
+  e não redireciona automaticamente pelo idioma do navegador, para não atrapalhar os buscadores.
+- O idioma atual é lido com `next/root-params` (`getI18n()` em `src/i18n/server.ts`). Links internos usam
+  `LocaleLink`/`ButtonLink`, que acrescentam o prefixo do idioma sozinhos.
+- Todo o texto fica em `src/content/locales/{pt,en,es}.ts`, tipado por `SiteContent`
+  (`src/content/locales/types.ts`). Se faltar um texto em EN ou ES, o build falha.
+- SEO: `canonical` por idioma, `hreflang` (pt-BR, en, es e x-default), `og:locale`, sitemap com as três versões
+  de cada página e `inLanguage` nos dados estruturados.
+- O seletor de idioma (PT · EN · ES) fica no topo e no menu mobile e mantém a página atual.
+- Os slugs das páginas são os mesmos nos três idiomas.
+
 ## Começando
 
 ```bash
@@ -127,7 +149,8 @@ Tudo é progressive enhancement: sem suporte do navegador o conteúdo aparece no
 
 ## Conteúdo
 
-- **Copy**: `src/content/*.ts`. Os textos aprovados no briefing estão reproduzidos literalmente.
+- **Copy**: `src/content/locales/{pt,en,es}.ts`. O português reaproveita `src/content/*.ts`, onde estão
+  os textos aprovados no briefing, reproduzidos literalmente.
 - **Especialidades**: `src/content/services/index.ts`. Cada uma tem copy aprovado + bloco `page`
   com conteúdo próprio da página individual e metadados de SEO únicos.
 - **Vitrine de projetos (slider)**: `src/content/projects/showcase.ts` — título, cliente, categoria e imagem
@@ -165,7 +188,7 @@ Tudo é progressive enhancement: sem suporte do navegador o conteúdo aparece no
 
 Verificado nesta versão:
 
-- `npm run typecheck`, `npm run lint`, `npm run test` (20 testes) e `npm run build` sem erros (inclui teste que garante que os SVGs da marca são vetores reais).
+- `npm run typecheck`, `npm run lint`, `npm run test` (26 testes) e `npm run build` sem erros (inclui teste que garante que os SVGs da marca são vetores reais).
 - axe-core (WCAG 2.0/2.1/2.2 A/AA + best practices): 0 violações em 11 páginas, temas dark e light,
   desktop (1440px) e mobile (390px); 1 `h1` por página; sem rolagem horizontal.
 - Testes de interação (Playwright): menu mobile (teclado, foco preso, Esc, item ativo), alternância

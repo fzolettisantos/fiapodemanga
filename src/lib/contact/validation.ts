@@ -1,4 +1,26 @@
 import { projectTypeValues, type ProjectTypeValue } from "@/content/contact";
+import { format } from "@/i18n/format";
+
+/** Mensagens de validação (vêm do dicionário do idioma; padrão em português). */
+export type ValidationMessages = {
+  nameRequired: string;
+  tooLong: string;
+  emailRequired: string;
+  emailInvalid: string;
+  projectType: string;
+  messageShort: string;
+  consent: string;
+};
+
+const defaultMessages: ValidationMessages = {
+  nameRequired: "Informe seu nome.",
+  tooLong: "Use até {max} caracteres.",
+  emailRequired: "Informe seu e-mail.",
+  emailInvalid: "Informe um e-mail válido, como nome@empresa.com.br.",
+  projectType: "Selecione o tipo de projeto.",
+  messageShort: "Conte um pouco mais sobre o desafio (mínimo de {min} caracteres).",
+  consent: "É preciso concordar com a Política de Privacidade para enviar.",
+};
 
 /**
  * Validação e sanitização do formulário de contato.
@@ -57,7 +79,10 @@ export function isValidEmail(email: string): boolean {
   return email.length <= LIMITS.email.max && EMAIL_RE.test(email);
 }
 
-export function validateContact(raw: Record<string, unknown>): ValidationResult {
+export function validateContact(
+  raw: Record<string, unknown>,
+  m: ValidationMessages = defaultMessages,
+): ValidationResult {
   const name = sanitizeLine(raw.name);
   const email = sanitizeLine(raw.email).toLowerCase();
   const company = sanitizeLine(raw.company);
@@ -67,23 +92,20 @@ export function validateContact(raw: Record<string, unknown>): ValidationResult 
 
   const errors: ContactErrors = {};
 
-  if (name.length < LIMITS.name.min) errors.name = "Informe seu nome.";
-  else if (name.length > LIMITS.name.max) errors.name = `Use até ${LIMITS.name.max} caracteres.`;
+  if (name.length < LIMITS.name.min) errors.name = m.nameRequired;
+  else if (name.length > LIMITS.name.max) errors.name = format(m.tooLong, { max: LIMITS.name.max });
 
-  if (!email) errors.email = "Informe seu e-mail.";
-  else if (!isValidEmail(email)) errors.email = "Informe um e-mail válido, como nome@empresa.com.br.";
+  if (!email) errors.email = m.emailRequired;
+  else if (!isValidEmail(email)) errors.email = m.emailInvalid;
 
-  if (company.length > LIMITS.company.max) errors.company = `Use até ${LIMITS.company.max} caracteres.`;
+  if (company.length > LIMITS.company.max) errors.company = format(m.tooLong, { max: LIMITS.company.max });
 
-  if (!projectTypeValues.includes(projectType as ProjectTypeValue))
-    errors.projectType = "Selecione o tipo de projeto.";
+  if (!projectTypeValues.includes(projectType as ProjectTypeValue)) errors.projectType = m.projectType;
 
-  if (message.length < LIMITS.message.min)
-    errors.message = `Conte um pouco mais sobre o desafio (mínimo de ${LIMITS.message.min} caracteres).`;
-  else if (message.length > LIMITS.message.max)
-    errors.message = `Use até ${LIMITS.message.max} caracteres.`;
+  if (message.length < LIMITS.message.min) errors.message = format(m.messageShort, { min: LIMITS.message.min });
+  else if (message.length > LIMITS.message.max) errors.message = format(m.tooLong, { max: LIMITS.message.max });
 
-  if (!consent) errors.consent = "É preciso concordar com a Política de Privacidade para enviar.";
+  if (!consent) errors.consent = m.consent;
 
   if (Object.keys(errors).length > 0) return { success: false, errors };
 

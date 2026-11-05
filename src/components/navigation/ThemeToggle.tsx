@@ -34,7 +34,9 @@ function subscribe(callback: () => void) {
   };
 }
 
-export function ThemeToggle({ className }: { className?: string }) {
+export type ThemeLabels = { toggle: string; toLight: string; toDark: string };
+
+export function ThemeToggle({ className, labels }: { className?: string; labels: ThemeLabels }) {
   const theme = useSyncExternalStore<Theme | null>(subscribe, readTheme, () => null);
 
   function toggle(event: React.MouseEvent<HTMLButtonElement>) {
@@ -72,8 +74,7 @@ export function ThemeToggle({ className }: { className?: string }) {
     transition.finished.finally(() => root.classList.remove("vt-theme"));
   }
 
-  const label =
-    theme === null ? "Alternar tema" : theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro";
+  const label = theme === null ? labels.toggle : theme === "dark" ? labels.toLight : labels.toDark;
 
   return (
     <button

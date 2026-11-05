@@ -1,0 +1,357 @@
+import { homeContent } from "@/content/home";
+import {
+  aboutPageContent,
+  contactPageContent,
+  insightsPageContent,
+  projectsPageContent,
+  servicesPageContent,
+} from "@/content/pages";
+import { practices, services } from "@/content/services";
+import type { SiteContent } from "./types";
+
+/** Português do Brasil — idioma original (copy aprovado no briefing). */
+export const pt: SiteContent = {
+  site: {
+    name: "Fiapo de Manga",
+    tagline: "Boas experiências começam com boas perguntas.",
+    centralMessage: "Entendemos problemas, desenhamos experiências e ajudamos negócios a evoluir.",
+    description:
+      "Consultoria de design, pesquisa e experiência digital. Unimos pesquisa, estratégia e design para criar produtos digitais que fazem sentido para as pessoas e geram valor para os negócios.",
+    ogAlt: "Fiapo de Manga — Boas experiências começam com boas perguntas.",
+    knowsAbout: [
+      "UX Research",
+      "Product Design",
+      "UX/UI Design",
+      "Estratégia de Produto",
+      "Criação de Sites",
+      "Design de Aplicativos",
+      "E-commerce",
+      "Inteligência Artificial aplicada ao Design",
+    ],
+  },
+  nav: {
+    items: [
+      { label: "Início", href: "/" },
+      { label: "O que fazemos", href: "/servicos" },
+      { label: "Cases", href: "/projetos" },
+      { label: "Sobre nós", href: "/sobre" },
+    ],
+    contact: { label: "Vamos conversar", href: "/contato" },
+    home: "Início",
+  },
+  meta: {
+    home: {
+      title: "Fiapo de Manga — Consultoria de Design, Pesquisa e UX/UI",
+      description:
+        "Consultoria de design e UX/UI que une pesquisa, estratégia de produto e tecnologia para criar sites, aplicativos, sistemas e produtos digitais que fazem sentido.",
+    },
+    services: {
+      title: "O que fazemos — Pesquisa, Product Design, UX/UI e Sites",
+      description:
+        "Consultoria e estúdio de produtos digitais: pesquisa UX, estratégia de produto, Product Design, UX/UI, criação de sites, aplicativos, sistemas, e-commerce e IA aplicada ao design.",
+    },
+    about: {
+      title: "Sobre nós — Consultoria de design e experiência digital",
+      description:
+        "Conheça a Fiapo de Manga: uma consultoria que conecta pesquisa, estratégia, design e tecnologia para transformar desafios em produtos e experiências digitais.",
+    },
+    projects: {
+      title: "Cases — Projetos de pesquisa, UX/UI e produtos digitais",
+      description:
+        "Projetos da Fiapo de Manga: como pesquisa, estratégia e design se conectam para transformar problemas reais em experiências digitais mais claras e funcionais.",
+    },
+    insights: {
+      title: "Insights — UX Research, Product Design e experiências digitais",
+      description:
+        "Ideias, pesquisas e aprendizados sobre UX Research, Product Design, UX/UI, estratégia de produto, desenvolvimento digital, e-commerce e inteligência artificial.",
+    },
+    contact: {
+      title: "Contato — Vamos conversar sobre seu projeto",
+      description:
+        "Conte seu desafio para a Fiapo de Manga: pesquisa, estratégia, Product Design, UX/UI, criação de sites, aplicativos, sistemas, e-commerce ou inteligência artificial.",
+    },
+    privacy: {
+      title: "Política de Privacidade",
+      description:
+        "Como a Fiapo de Manga trata os dados pessoais enviados pelo site, em conformidade com a Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018).",
+    },
+    notFound: { title: "Página não encontrada" },
+  },
+  ui: {
+    skipToContent: "Pular para o conteúdo",
+    homeAria: "Fiapo de Manga — página inicial",
+    mainNavigation: "Navegação principal",
+    menu: "Menu",
+    menuNavigation: "Navegação principal (menu)",
+    close: "Fechar",
+    breadcrumb: "Trilha de navegação",
+    themeToggle: "Alternar tema",
+    themeToLight: "Ativar tema claro",
+    themeToDark: "Ativar tema escuro",
+    language: "Idioma",
+    languageCurrent: "idioma atual",
+    footer: {
+      navigation: "Navegação",
+      specialties: "Especialidades",
+      institutional: "Institucional",
+      insights: "Insights",
+      privacy: "Política de privacidade",
+      rights: "Todos os direitos reservados.",
+    },
+    marquee: { specialties: "Especialidades", skills: "Competências" },
+    servicesPage: {
+      practicesEyebrow: "Como atuamos",
+      practicesItems: "Atuação",
+      specialtiesNav: "Especialidades nesta página",
+      skillsLabel: "Especialidades",
+      learnMore: "Saiba mais sobre {name}",
+    },
+    serviceDetail: {
+      skills: "Especialidades",
+      whenItHelps: "Quando faz sentido",
+      deliverables: "O que pode ser entregue",
+      deliverablesNote: "Cada escopo é definido a partir do contexto e dos objetivos do projeto.",
+      related: "Especialidades relacionadas",
+      all: "Todas as especialidades",
+      next: "Próxima: {name}",
+      ctaDefault: "Vamos conversar",
+    },
+    home: { aiApplications: "Aplicações", aiLink: "Design, Tecnologia e IA" },
+    about: { principles: "Princípios", guides: "O que nos orienta" },
+    projects: {
+      selected: "Projetos selecionados",
+      list: "Projetos",
+      narrativeEyebrow: "Como contamos cada projeto",
+      narrative: [
+        { title: "Contexto", description: "O negócio, o produto e o momento em que o projeto começa." },
+        { title: "Problema", description: "O desafio que precisava ser compreendido e resolvido." },
+        { title: "Objetivo", description: "O que o projeto buscava alcançar." },
+        { title: "Pesquisa", description: "Como investigamos pessoas, dados e contexto." },
+        { title: "Hipóteses", description: "O que os aprendizados indicaram como caminhos possíveis." },
+        { title: "Processo", description: "As etapas de criação, validação e ajuste." },
+        { title: "Solução", description: "O que foi desenhado e construído." },
+        { title: "Resultados", description: "Somente resultados comprovados e autorizados para divulgação." },
+        { title: "Aprendizados", description: "O que o projeto ensinou para os próximos passos." },
+      ],
+      viewAll: "Ver todos os projetos",
+      client: "Cliente",
+      year: "Ano",
+      specialties: "Especialidades",
+      images: "Imagens do projeto",
+      sections: {
+        context: "Contexto",
+        problem: "Problema",
+        objective: "Objetivo",
+        research: "Pesquisa",
+        hypotheses: "Hipóteses",
+        process: "Processo",
+        solution: "Solução",
+        results: "Resultados",
+        learnings: "Aprendizados",
+      },
+    },
+    slider: {
+      region: "Projetos",
+      roleCarousel: "carrossel",
+      roleSlide: "slide",
+      list: "Lista de projetos (use as setas para rolar)",
+      previous: "Projeto anterior",
+      next: "Próximo projeto",
+      of: "de",
+      item: "Projeto",
+    },
+    insights: {
+      categories: "Categorias",
+      articles: "Artigos",
+      empty: "Ainda não há artigos publicados.",
+      emptyDescription: "Esta área reunirá conteúdos originais sobre pesquisa, design, tecnologia e produtos digitais.",
+      relatedServices: "Especialidades relacionadas",
+      readAlso: "Leia também",
+    },
+    contact: { orWrite: "Se preferir, escreva para", formRegion: "Formulário de contato" },
+    badgeAria: "Vamos conversar — fale com a Fiapo de Manga",
+    notFound: {
+      eyebrow: "Erro 404",
+      title: "Essa pergunta ficou sem resposta.",
+      description: "A página que você procura não existe ou mudou de endereço.",
+      home: "Voltar ao início",
+      services: "O que fazemos",
+    },
+  },
+  form: {
+    required: "Campos marcados com {mark} são obrigatórios.",
+    requiredSr: "asterisco",
+    name: "Nome",
+    email: "E-mail",
+    company: "Empresa",
+    optional: "(opcional)",
+    projectType: "Tipo de projeto",
+    select: "Selecione",
+    message: "Mensagem",
+    messageHint: "Conte o contexto, o desafio e o que você espera resolver.",
+    honeypot: "Não preencha este campo",
+    consentBefore: "Li e concordo com a",
+    consentLink: "Política de Privacidade",
+    consentAfter: "e autorizo o uso dos meus dados para receber um retorno sobre este contato.",
+    submit: "Enviar mensagem",
+    sending: "Enviando…",
+    sendingSr: "Enviando mensagem…",
+    oneError: "Há 1 campo para revisar.",
+    manyErrors: "Há {n} campos para revisar.",
+    successEyebrow: "Mensagem enviada",
+    successTitle: "Obrigado! Recebemos sua mensagem.",
+    successText: "Vamos ler com atenção e responder pelo e-mail informado.",
+    sendAnother: "Enviar outra mensagem",
+    networkError: "Não foi possível conectar. Verifique sua conexão e tente novamente.",
+    genericError: "Não conseguimos enviar sua mensagem agora. Tente novamente em instantes.",
+  },
+  validation: {
+    nameRequired: "Informe seu nome.",
+    tooLong: "Use até {max} caracteres.",
+    emailRequired: "Informe seu e-mail.",
+    emailInvalid: "Informe um e-mail válido, como nome@empresa.com.br.",
+    projectType: "Selecione o tipo de projeto.",
+    messageShort: "Conte um pouco mais sobre o desafio (mínimo de {min} caracteres).",
+    consent: "É preciso concordar com a Política de Privacidade para enviar.",
+  },
+  api: {
+    forbidden: "Origem não permitida.",
+    badFormat: "Formato de requisição inválido.",
+    rateLimited: "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.",
+    tooLarge: "A mensagem é muito longa.",
+    unreadable: "Não foi possível ler os dados enviados.",
+    spam: "Não foi possível validar o envio. Aguarde alguns segundos e tente novamente.",
+    validation: "Revise os campos destacados.",
+    notConfigured: "O envio de mensagens pelo site ainda não está disponível. Sua mensagem não foi enviada.",
+    sendFailed: "Não conseguimos enviar sua mensagem agora. Tente novamente em instantes.",
+  },
+  projectTypes: {
+    pesquisa: "Pesquisa e Discovery",
+    estrategia: "Estratégia de Produto",
+    "product-design": "Product Design e UX/UI",
+    site: "Site ou Landing Page",
+    aplicativo: "Aplicativo",
+    sistema: "Sistema ou Plataforma",
+    ecommerce: "E-commerce",
+    ia: "Inteligência Artificial",
+    outro: "Outro",
+  },
+  articleCategories: {
+    "UX Research": "UX Research",
+    "Product Design": "Product Design",
+    "UX/UI": "UX/UI",
+    "Estratégia de Produto": "Estratégia de Produto",
+    "Desenvolvimento Digital": "Desenvolvimento Digital",
+    "Inteligência Artificial": "Inteligência Artificial",
+    "Sites e Plataformas": "Sites e Plataformas",
+    "E-commerce": "E-commerce",
+  },
+  home: homeContent as unknown as SiteContent["home"],
+  servicesPage: servicesPageContent as unknown as SiteContent["servicesPage"],
+  aboutPage: aboutPageContent as unknown as SiteContent["aboutPage"],
+  projectsPage: projectsPageContent as unknown as SiteContent["projectsPage"],
+  insightsPage: insightsPageContent as unknown as SiteContent["insightsPage"],
+  contactPage: contactPageContent as unknown as SiteContent["contactPage"],
+  services,
+  practices: practices as unknown as SiteContent["practices"],
+  showcase: {
+    "supergasbras-app-revenda": {
+      title: "App de Revenda",
+      category: "Aplicativo",
+      alt: "Duas telas do aplicativo de revenda da Supergasbras: a tela inicial com campanhas de marketing e portal de compras, e a tela de condições comerciais com preços e descontos.",
+    },
+    "prudential-conciliacao-financeira": {
+      title: "Plataforma de Conciliação Financeira",
+      category: "Plataforma web",
+      alt: "Tela da plataforma de conciliação financeira da Prudential, com os totais do dia e a tabela de lançamentos com status de conciliação.",
+    },
+    "grupo-ormac-plataforma": {
+      title: "Plataforma Grupo Ormac",
+      category: "Site e plataforma",
+      alt: "Site do Grupo Ormac em um notebook, com a chamada 54 anos de excelência, e em um celular, com a linha do tempo da empresa.",
+    },
+    "ged-ai": {
+      title: "ged.ai",
+      category: "Plataforma web",
+      alt: "Notebook flutuando sobre fundo azul, exibindo a tela de controle de documentos da plataforma ged.ai.",
+    },
+  },
+  privacy: {
+    eyebrow: "Privacidade e LGPD",
+    title: "Política de Privacidade",
+    updatedLabel: "Última atualização",
+    updated: "5 de novembro de 2026",
+    intro:
+      "Esta política explica como {controller} trata os dados pessoais enviados por meio deste site, de acordo com a Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018 — LGPD).",
+    sections: [
+      {
+        title: "1. Quais dados coletamos",
+        paragraphs: ["Coletamos apenas os dados que você informa voluntariamente no formulário de contato:"],
+        list: ["nome;", "e-mail;", "empresa (opcional);", "tipo de projeto;", "mensagem."],
+        after: [
+          "Pedimos que não inclua na mensagem dados pessoais sensíveis ou informações confidenciais que não sejam necessárias para o primeiro contato.",
+        ],
+      },
+      {
+        title: "2. Para que usamos os dados",
+        paragraphs: [
+          "Os dados são utilizados exclusivamente para responder ao seu contato, entender a sua necessidade e, se houver interesse de ambas as partes, dar continuidade à conversa sobre um possível projeto.",
+          "Não vendemos, alugamos nem compartilhamos seus dados para fins de publicidade.",
+        ],
+      },
+      {
+        title: "3. Base legal",
+        paragraphs: [
+          "O tratamento é realizado com base no seu consentimento (art. 7º, I, da LGPD), registrado ao marcar a caixa de concordância do formulário, e, quando aplicável, para procedimentos preliminares relacionados a um contrato do qual você seja parte (art. 7º, V).",
+        ],
+      },
+      {
+        title: "4. Compartilhamento",
+        paragraphs: [
+          "Para que a mensagem chegue até nós, os dados do formulário são transmitidos por um provedor de envio de e-mails e pela infraestrutura de hospedagem do site, que atuam como operadores e podem processar dados fora do Brasil, observadas as garantias previstas na LGPD. Os dados também podem ser compartilhados quando houver obrigação legal ou ordem de autoridade competente.",
+        ],
+      },
+      {
+        title: "5. Por quanto tempo guardamos",
+        paragraphs: [
+          "Mantemos os dados pelo tempo necessário para responder ao contato e conduzir eventuais tratativas. Depois disso, eles são eliminados, salvo quando a guarda for necessária para cumprimento de obrigação legal ou exercício regular de direitos.",
+        ],
+      },
+      {
+        title: "6. Cookies e armazenamento local",
+        paragraphs: [
+          "Este site não utiliza cookies de publicidade nem ferramentas de rastreamento. Apenas a sua preferência de tema (claro ou escuro) é salva no armazenamento local do seu navegador, sem identificar você.",
+        ],
+      },
+      {
+        title: "7. Segurança",
+        paragraphs: [
+          "Adotamos medidas técnicas razoáveis para proteger os dados, como conexão criptografada (HTTPS), validação das informações enviadas e mecanismos contra envios automatizados.",
+        ],
+      },
+      {
+        title: "8. Seus direitos",
+        paragraphs: ["Nos termos do art. 18 da LGPD, você pode solicitar a qualquer momento:"],
+        list: [
+          "confirmação da existência de tratamento e acesso aos dados;",
+          "correção de dados incompletos, inexatos ou desatualizados;",
+          "anonimização, bloqueio ou eliminação de dados desnecessários;",
+          "eliminação dos dados tratados com base no consentimento;",
+          "informação sobre compartilhamento;",
+          "revogação do consentimento.",
+        ],
+        after: ["Você também pode apresentar reclamação à Autoridade Nacional de Proteção de Dados (ANPD)."],
+      },
+    ],
+    contactTitle: "9. Como falar conosco",
+    contactWithEmail: "Para exercer seus direitos ou tirar dúvidas sobre esta política, escreva para {email}.",
+    contactWithForm: {
+      before: "Para exercer seus direitos ou tirar dúvidas sobre esta política, entre em contato pelo",
+      link: "formulário de contato",
+      after: ".",
+    },
+    changesTitle: "10. Alterações",
+    changes:
+      "Esta política pode ser atualizada para refletir mudanças no site ou na legislação. A data da última atualização está indicada no início da página.",
+  },
+};

@@ -1,53 +1,35 @@
 import type { Metadata } from "next";
+import { getI18n } from "@/i18n/server";
 import { getProjectsSorted } from "@/content/projects";
-import { projectsPageContent as c } from "@/content/pages";
-import { homeContent } from "@/content/home";
+import { localizeShowcase, showcase } from "@/content/projects/showcase";
 import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
 import { PageHero } from "@/components/sections/PageHero";
 import { CasePreview } from "@/components/sections/CasePreview";
 import { ProjectSlider } from "@/components/sections/ProjectSlider";
-import { showcase } from "@/content/projects/showcase";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { buildMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Cases — Projetos de pesquisa, UX/UI e produtos digitais",
-  description:
-    "Projetos da Fiapo de Manga: como pesquisa, estratégia e design se conectam para transformar problemas reais em experiências digitais mais claras e funcionais.",
-  path: "/projetos",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale, t } = await getI18n();
+  return buildMetadata({ locale, ...t.meta.projects, path: "/projetos", ogAlt: t.site.ogAlt });
+}
 
-const narrative = [
-  { title: "Contexto", description: "O negócio, o produto e o momento em que o projeto começa." },
-  { title: "Problema", description: "O desafio que precisava ser compreendido e resolvido." },
-  { title: "Objetivo", description: "O que o projeto buscava alcançar." },
-  { title: "Pesquisa", description: "Como investigamos pessoas, dados e contexto." },
-  { title: "Hipóteses", description: "O que os aprendizados indicaram como caminhos possíveis." },
-  { title: "Processo", description: "As etapas de criação, validação e ajuste." },
-  { title: "Solução", description: "O que foi desenhado e construído." },
-  { title: "Resultados", description: "Somente resultados comprovados e autorizados para divulgação." },
-  { title: "Aprendizados", description: "O que o projeto ensinou para os próximos passos." },
-];
-
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  const { t } = await getI18n();
+  const c = t.projectsPage;
   const projects = getProjectsSorted();
 
   return (
     <>
-      <Breadcrumbs
-        items={[
-          { name: "Início", path: "/" },
-          { name: "Cases", path: "/projetos" },
-        ]}
-      />
+      <Breadcrumbs items={[{ name: t.nav.items[2]!.label, path: "/projetos" }]} />
       <PageHero eyebrow={c.eyebrow} title={c.title} paragraphs={c.paragraphs} />
 
       <section aria-labelledby="vitrine-title" className="section-highlight border-t border-line bg-bg">
         <div className="container-site py-16 md:py-24">
           <h2 id="vitrine-title" className="eyebrow mb-10 md:mb-14">
-            Projetos selecionados
+            {t.ui.projects.selected}
           </h2>
-          <ProjectSlider projects={showcase} />
+          <ProjectSlider projects={localizeShowcase(showcase, t.showcase)} labels={t.ui.slider} />
         </div>
       </section>
 
@@ -55,7 +37,7 @@ export default function ProjectsPage() {
         <section aria-labelledby="lista-projetos-title" className="border-t border-line">
           <div className="container-site py-16 md:py-24">
             <h2 id="lista-projetos-title" className="sr-only">
-              Projetos
+              {t.ui.projects.list}
             </h2>
             <ol className="border-t border-line">
               {projects.map((project, index) => (
@@ -68,12 +50,12 @@ export default function ProjectsPage() {
 
       <section aria-labelledby="narrativa-title" className="border-t border-line">
         <div className="container-site py-20 md:py-28">
-          <p className="eyebrow">Como contamos cada projeto</p>
+          <p className="eyebrow">{t.ui.projects.narrativeEyebrow}</p>
           <h2 id="narrativa-title" className="type-heading mt-6 max-w-3xl">
-            {homeContent.cases.title}
+            {t.home.cases.title}
           </h2>
           <ol className="mt-14 grid border-t border-line sm:grid-cols-2 lg:grid-cols-3">
-            {narrative.map((item, i) => (
+            {t.ui.projects.narrative.map((item, i) => (
               <li key={item.title} className="border-b border-line py-8 sm:pr-8" data-reveal>
                 <p className="index-number text-sm">{String(i + 1).padStart(2, "0")}/</p>
                 <h3 className="type-subheading mt-4">{item.title}</h3>
@@ -84,12 +66,7 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      <ContactCta
-        eyebrow={homeContent.contact.eyebrow}
-        title={homeContent.contact.title}
-        description={homeContent.contact.description}
-        cta={homeContent.contact.cta}
-      />
+      <ContactCta />
     </>
   );
 }

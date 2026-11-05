@@ -70,3 +70,14 @@ export const showcase: ShowcaseProject[] = [
     },
   },
 ];
+
+/** Aplica título, categoria e texto alternativo traduzidos (dicionário do idioma). */
+export function localizeShowcase(
+  items: ShowcaseProject[],
+  texts: Record<string, { title: string; category: string; alt: string }>,
+): ShowcaseProject[] {
+  return items.map((p) => {
+    const tx = texts[p.slug];
+    return tx ? { ...p, title: tx.title, category: tx.category, image: { ...p.image, alt: tx.alt } } : p;
+  });
+}

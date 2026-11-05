@@ -10,7 +10,26 @@ import { cn } from "@/lib/utils/cn";
  * Slider de projetos: rolagem horizontal nativa com scroll-snap (toque, trackpad,
  * teclado) + botões anterior/próximo e contador. Sem autoplay.
  */
-export function ProjectSlider({ projects, className }: { projects: ShowcaseProject[]; className?: string }) {
+export type SliderLabels = {
+  region: string;
+  roleCarousel: string;
+  roleSlide: string;
+  list: string;
+  previous: string;
+  next: string;
+  of: string;
+  item: string;
+};
+
+export function ProjectSlider({
+  projects,
+  labels,
+  className,
+}: {
+  projects: ShowcaseProject[];
+  labels: SliderLabels;
+  className?: string;
+}) {
   const scroller = useRef<HTMLUListElement>(null);
   const [index, setIndex] = useState(0);
   const total = projects.length;
@@ -63,22 +82,22 @@ export function ProjectSlider({ projects, className }: { projects: ShowcaseProje
   return (
     <div
       role="region"
-      aria-roledescription="carrossel"
-      aria-label="Projetos"
+      aria-roledescription={labels.roleCarousel}
+      aria-label={labels.region}
       data-reveal
       className={cn("project-slider", className)}
     >
       <ul
         ref={scroller}
         tabIndex={0}
-        aria-label="Lista de projetos (use as setas para rolar)"
+        aria-label={labels.list}
         className="project-slider__track -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-px-5 px-5 pb-2 md:-mx-10 md:scroll-px-10 md:px-10 xl:-mx-16 xl:scroll-px-16 xl:px-16"
       >
         {projects.map((project, i) => (
           <li
             key={project.slug}
-            aria-roledescription="slide"
-            aria-label={`${i + 1} de ${total}: ${project.title}${project.client ? ` — ${project.client}` : ""}`}
+            aria-roledescription={labels.roleSlide}
+            aria-label={`${i + 1} ${labels.of} ${total}: ${project.title}${project.client ? ` — ${project.client}` : ""}`}
             className="project-slide w-[86%] shrink-0 snap-start sm:w-[72%] lg:w-[58%] xl:w-[54%]"
           >
             <figure>
@@ -114,7 +133,7 @@ export function ProjectSlider({ projects, className }: { projects: ShowcaseProje
             type="button"
             onClick={() => go(index - 1)}
             disabled={atStart}
-            aria-label="Projeto anterior"
+            aria-label={labels.previous}
             className="inline-flex size-12 items-center justify-center rounded-full border border-line-strong text-heading transition-colors hover:border-accent hover:text-accent disabled:opacity-40 disabled:hover:border-line-strong disabled:hover:text-heading"
           >
             <ArrowLeft aria-hidden="true" className="size-5" strokeWidth={1.75} />
@@ -123,7 +142,7 @@ export function ProjectSlider({ projects, className }: { projects: ShowcaseProje
             type="button"
             onClick={() => go(index + 1)}
             disabled={atEnd}
-            aria-label="Próximo projeto"
+            aria-label={labels.next}
             className="inline-flex size-12 items-center justify-center rounded-full border border-line-strong text-heading transition-colors hover:border-accent hover:text-accent disabled:opacity-40 disabled:hover:border-line-strong disabled:hover:text-heading"
           >
             <ArrowRight aria-hidden="true" className="size-5" strokeWidth={1.75} />
@@ -136,9 +155,9 @@ export function ProjectSlider({ projects, className }: { projects: ShowcaseProje
           />
         </div>
         <p className="index-number text-sm" aria-live="polite">
-          <span className="sr-only">Projeto </span>
+          <span className="sr-only">{labels.item} </span>
           {String(index + 1).padStart(2, "0")} <span aria-hidden="true">/</span>
-          <span className="sr-only"> de </span> {String(total).padStart(2, "0")}
+          <span className="sr-only"> {labels.of} </span> {String(total).padStart(2, "0")}
         </p>
       </div>
     </div>

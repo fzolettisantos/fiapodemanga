@@ -1043,3 +1043,25 @@ html.vt-theme::view-transition-new(root) {
   background: var(--brand-ink);
   color: #e1ff00;
 }
+
+/* Seção de destaque (#C7C7C7) — tokens claros com contraste AA, iguais nos dois temas */
+.section-highlight {
+  --color-bg: #c7c7c7;
+  --color-surface: #c7c7c7;
+  --color-heading: #212121;
+  --color-text: #212121;
+  --color-text-muted: #333333;
+  --color-accent: #3d5a12; /* verde da marca escurecido: 4,6:1 sobre #C7C7C7 */
+  --color-accent-2: #5c4f00;
+  --color-line: rgb(33 33 33 / 0.16);
+  --color-line-strong: rgb(33 33 33 / 0.45);
+  --color-btn-primary-border: #212121;
+  --color-focus: #212121;
+  --color-fill-dim: #555555;
+  color-scheme: light;
+  color: var(--color-text);
+}
+.section-highlight ::selection {
+  background: #212121;
+  color: #c7c7c7;
+}

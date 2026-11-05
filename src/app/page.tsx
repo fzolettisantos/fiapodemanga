@@ -209,7 +209,7 @@ export default function HomePage() {
       </section>
 
       {/* CASES */}
-      <section aria-labelledby="cases-title" className="border-t border-line">
+      <section aria-labelledby="cases-title" className="section-highlight border-t border-line bg-bg">
         <div className="container-site py-20 md:py-32">
           <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
             <SectionHeading

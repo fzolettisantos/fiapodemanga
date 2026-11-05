@@ -712,3 +712,145 @@ html.vt-theme::view-transition-new(root) {
     animation: none !important;
   }
 }
+
+/* --- 8. Ilustração "Vamos conversar" --- */
+.conversation-badge {
+  --badge-ink: #161616;
+  --badge-white: #ffffff;
+  --badge-grey: #cfcfcf;
+  border-radius: 50%;
+  transition: scale 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.conversation-badge svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.conversation-badge:hover,
+.conversation-badge:focus-visible {
+  scale: 1.04;
+}
+.badge-ink {
+  fill: var(--badge-ink);
+}
+.badge-white {
+  fill: var(--badge-white);
+}
+.badge-grey {
+  fill: var(--badge-grey);
+}
+.badge-green {
+  fill: var(--brand-green);
+}
+.badge-yellow {
+  fill: var(--brand-yellow);
+}
+.badge-letter {
+  fill: var(--color-text);
+  transition: fill 280ms ease;
+}
+.conversation-badge:hover .badge-letter,
+.conversation-badge:focus-visible .badge-letter {
+  fill: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Lettering: onda que percorre o arco, cada letra se afastando do centro em sequência */
+  .badge-letter {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: badge-letter-wave 3.2s var(--ease-in-out) infinite;
+    animation-delay: calc(var(--i) * 0.16s - 3.2s);
+  }
+  /* Anel inteiro balança suavemente */
+  .badge-ring {
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+    animation: badge-ring-sway 9s var(--ease-in-out) infinite;
+  }
+  /* Vapor subindo da caneca */
+  .badge-steam {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: badge-steam 2.6s ease-in-out infinite;
+  }
+  /* Luli respirando */
+  .badge-dog {
+    transform-box: fill-box;
+    transform-origin: 50% 92%;
+    animation: badge-breathe 4.2s ease-in-out infinite;
+  }
+}
+
+/* Com suporte a scroll-driven animations, o anel gira conforme a rolagem */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .badge-ring {
+      animation: badge-ring-scroll linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+
+@keyframes badge-letter-wave {
+  0%,
+  60%,
+  100% {
+    transform: none;
+  }
+  30% {
+    transform: translate(calc(var(--dx) * 26px), calc(var(--dy) * 26px)) rotate(calc(var(--dx) * 8deg))
+      scale(1.06);
+  }
+}
+@keyframes badge-ring-sway {
+  0%,
+  100% {
+    rotate: -4deg;
+  }
+  50% {
+    rotate: 4deg;
+  }
+}
+@keyframes badge-ring-scroll {
+  from {
+    rotate: -18deg;
+  }
+  to {
+    rotate: 18deg;
+  }
+}
+@keyframes badge-steam {
+  0%,
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-18px) skewX(7deg) scaleY(1.08);
+    opacity: 0.75;
+  }
+}
+@keyframes badge-breathe {
+  0%,
+  100% {
+    transform: none;
+  }
+  50% {
+    transform: scale(1.012, 1.022);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .conversation-badge__art[data-loaded] svg {
+    animation: badge-in 900ms var(--ease-out-expo) both;
+  }
+}
+@keyframes badge-in {
+  from {
+    opacity: 0;
+    scale: 0.92;
+    rotate: -6deg;
+  }
+}

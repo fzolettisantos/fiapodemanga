@@ -39,6 +39,13 @@ Ajustes de ilustração aplicados na vetorização:
 | `apple-touch-icon.png`             | 180×180                                                    |
 | `og-image.png`                     | Open Graph / Twitter, 1200×630                             |
 
+| `vamos-conversar.svg`              | Ilustração "Vamos conversar" (Luli com caneca + lettering em arco), vetorizada por camada de cor e por letra |
+| `vamos-conversar-original.webp`    | Arte original da ilustração                                |
+
+A ilustração é refeita com `scripts/vectorize-badge.py`. Como `/brand/*` é servido com cache de 1 ano,
+**renomeie o arquivo** (ex.: `vamos-conversar-v2.svg`) se a arte mudar, e atualize `SRC` em
+`src/components/brand/ConversationBadge.tsx`.
+
 No app Next.js, `src/app/icon.svg`, `src/app/favicon.ico` e `src/app/apple-icon.png` são cópias dos ícones acima.
 
 ## Uso no site

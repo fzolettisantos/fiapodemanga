@@ -1,3 +1,5 @@
+import { ProcessIcon } from "./ProcessIcon";
+
 type Step = { number: string; title: string; description: string };
 
 export function ProcessSteps({ steps }: { steps: readonly Step[] }) {
@@ -14,7 +16,8 @@ export function ProcessSteps({ steps }: { steps: readonly Step[] }) {
           style={{ "--reveal-delay": `${index * 80}ms` } as React.CSSProperties}
           className="border-b border-line py-8 sm:pr-8 lg:border-b-0 lg:border-l lg:px-6 lg:py-10 lg:first:border-l-0 lg:first:pl-0"
         >
-          <p className="index-number flex items-center gap-3 text-sm">
+          <ProcessIcon index={index} />
+          <p className="index-number mt-8 flex items-center gap-3 text-sm">
             <span
               aria-hidden="true"
               className="process-dot size-2.5 rounded-full border border-accent bg-accent"

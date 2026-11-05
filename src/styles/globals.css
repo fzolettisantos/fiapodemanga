@@ -854,3 +854,148 @@ html.vt-theme::view-transition-new(root) {
     rotate: -6deg;
   }
 }
+
+/* --- 9. Ícones do processo --- */
+:root {
+  --icon-1: #f2d43a;
+  --icon-2: #dcb80d;
+  --icon-3: #b39400;
+  --icon-ink: #252525;
+}
+:root[data-theme="dark"] {
+  --icon-1: #fff6b3;
+  --icon-2: #fff04a;
+  --icon-3: #e8c91c;
+  --icon-ink: #2b2b2b;
+}
+.step-icon .ic-1 {
+  fill: var(--icon-1);
+  stroke: var(--icon-1);
+}
+.step-icon .ic-2 {
+  fill: var(--icon-2);
+  stroke: var(--icon-2);
+}
+.step-icon .ic-3 {
+  fill: var(--icon-3);
+  stroke: var(--icon-3);
+}
+.step-icon circle,
+.step-icon rect,
+.step-icon .ic-half-a,
+.step-icon .ic-half-b {
+  stroke: none;
+}
+.step-icon .ic-check {
+  stroke: var(--icon-ink);
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.step-icon * {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Animação pontual: uma vez, quando a etapa entra na tela */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal]:not(.is-visible) .step-icon * {
+    animation-play-state: paused;
+  }
+  .js [data-reveal] .step-icon * {
+    animation-duration: 900ms;
+    animation-timing-function: var(--ease-out-expo);
+    animation-fill-mode: both;
+    animation-delay: calc(var(--reveal-delay, 0ms) + 150ms);
+  }
+  .js [data-reveal] .ic-venn-a {
+    animation-name: ic-from-left;
+  }
+  .js [data-reveal] .ic-venn-b {
+    animation-name: ic-from-right;
+  }
+  /* a interseção aparece quando os círculos se encontram */
+  .js [data-reveal] .ic-venn-overlap {
+    animation-name: ic-fade;
+    animation-duration: 500ms;
+    animation-delay: calc(var(--reveal-delay, 0ms) + 650ms);
+  }
+  .js [data-reveal] .ic-half-b {
+    animation-name: ic-open;
+  }
+  .js [data-reveal] .ic-layer {
+    animation-name: ic-drop;
+    animation-delay: calc(var(--reveal-delay, 0ms) + 150ms + (2 - var(--k)) * 110ms);
+  }
+  .js [data-reveal] .ic-card-back {
+    animation-name: ic-pop;
+  }
+  .js [data-reveal] .ic-card-front {
+    animation-name: ic-slide-in;
+    animation-delay: calc(var(--reveal-delay, 0ms) + 260ms);
+  }
+  .js [data-reveal] .ic-check {
+    animation-name: ic-draw;
+    animation-duration: 600ms;
+    animation-delay: calc(var(--reveal-delay, 0ms) + 650ms);
+  }
+  .js [data-reveal] .ic-bar {
+    transform-origin: bottom;
+    animation-name: ic-grow;
+    animation-delay: calc(var(--reveal-delay, 0ms) + 150ms + var(--k) * 120ms);
+  }
+  /* Hover: leve elevação, sem repetir a animação */
+  .step-icon {
+    transition: translate 500ms var(--ease-out-expo);
+  }
+  li:hover > .step-icon {
+    translate: 0 -4px;
+  }
+}
+@keyframes ic-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes ic-from-left {
+  from {
+    transform: translateX(-14px);
+  }
+}
+@keyframes ic-from-right {
+  from {
+    transform: translateX(14px);
+  }
+}
+@keyframes ic-open {
+  from {
+    transform: translateX(-18px);
+  }
+}
+@keyframes ic-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+}
+@keyframes ic-pop {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+}
+@keyframes ic-slide-in {
+  from {
+    transform: translate(-10px, 10px);
+    opacity: 0;
+  }
+}
+@keyframes ic-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+@keyframes ic-grow {
+  from {
+    transform: scaleY(0);
+  }
+}

@@ -11,7 +11,8 @@ import type { ImageAsset } from "@/types/content";
 export type ShowcaseProject = {
   slug: string;
   title: string;
-  client: string;
+  /** Cliente — omitir quando não for divulgado */
+  client?: string;
   category: string;
   /** slugs de especialidades relacionadas */
   services: string[];
@@ -54,6 +55,17 @@ export const showcase: ShowcaseProject[] = [
     image: {
       src: "/images/projetos/grupo-ormac-plataforma/capa.webp",
       alt: "Site do Grupo Ormac em um notebook, com a chamada 54 anos de excelência, e em um celular, com a linha do tempo da empresa.",
+      ...size,
+    },
+  },
+  {
+    slug: "ged-ai",
+    title: "ged.ai",
+    category: "Plataforma web",
+    services: ["aplicativos-sistemas-plataformas", "product-design-ux-ui", "design-tecnologia-ia"],
+    image: {
+      src: "/images/projetos/ged-ai/capa.webp",
+      alt: "Notebook flutuando sobre fundo azul, exibindo a tela de controle de documentos da plataforma ged.ai.",
       ...size,
     },
   },

@@ -78,7 +78,7 @@ export function ProjectSlider({ projects, className }: { projects: ShowcaseProje
           <li
             key={project.slug}
             aria-roledescription="slide"
-            aria-label={`${i + 1} de ${total}: ${project.title} — ${project.client}`}
+            aria-label={`${i + 1} de ${total}: ${project.title}${project.client ? ` — ${project.client}` : ""}`}
             className="project-slide w-[86%] shrink-0 snap-start sm:w-[72%] lg:w-[58%] xl:w-[54%]"
           >
             <figure>
@@ -98,7 +98,8 @@ export function ProjectSlider({ projects, className }: { projects: ShowcaseProje
                 <span>
                   <span className="type-subheading block">{project.title}</span>
                   <span className="mt-2 block font-mono text-xs tracking-[0.06em] text-muted uppercase">
-                    {project.client} · {project.category}
+                    {project.client ? `${project.client} · ` : ""}
+                    {project.category}
                   </span>
                 </span>
               </figcaption>

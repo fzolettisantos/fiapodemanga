@@ -10,7 +10,6 @@ import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { CasePreview } from "@/components/sections/CasePreview";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { FiberLine } from "@/components/brand/FiberLine";
-import { ConversationBadge } from "@/components/brand/ConversationBadge";
 import { WordReveal } from "@/components/motion/WordReveal";
 import { ScrollFillText } from "@/components/motion/ScrollFillText";
 import { Marquee } from "@/components/motion/Marquee";
@@ -66,13 +65,10 @@ export default function HomePage() {
       {/* SOBRE */}
       <section aria-labelledby="sobre-title" className="border-t border-line">
         <div className="container-site grid gap-10 py-20 md:py-32 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-4">
-            <div className="lg:sticky lg:top-28">
-              <p className="eyebrow">{c.about.eyebrow}</p>
-              <ConversationBadge className="mt-10 w-full max-w-[17rem] sm:max-w-[20rem] lg:mt-14 lg:max-w-[22rem]" />
-            </div>
+          <div className="lg:col-span-3">
+            <p className="eyebrow lg:sticky lg:top-28">{c.about.eyebrow}</p>
           </div>
-          <div className="lg:col-span-8" data-reveal>
+          <div className="lg:col-span-9" data-reveal>
             <h2 id="sobre-title" className="type-title">
               {c.about.title}
             </h2>

@@ -98,7 +98,7 @@ export function MobileNavigation() {
         <div className="container-site flex min-h-full flex-col pb-10">
           <div className="flex h-20 items-center justify-between gap-4">
             <Link href="/" aria-label={`${siteConfig.name} — página inicial`} onClick={() => setOpen(false)}>
-              <BrandLogo height={30} />
+              <BrandLogo height={36} />
             </Link>
             <div className="flex items-center gap-2">
               <ThemeToggle />

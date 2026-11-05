@@ -52,7 +52,7 @@ src/
     projetos/[slug]/      Cases (gerados a partir do conteúdo)
     insights/[slug]/      Artigos (gerados a partir do conteúdo)
   components/
-    brand/                BrandLogo, FiberLine (elemento gráfico autoral)
+    brand/                BrandLogo (SVG via máscara, cor do tema), FiberLine (elemento gráfico autoral)
     layout/               Header, Footer, SkipLink, RevealObserver
     navigation/           DesktopNavigation, MobileNavigation, ThemeToggle, Breadcrumbs
     sections/             ServiceBlock, ServiceTags, ProcessSteps, CasePreview,
@@ -67,7 +67,8 @@ src/
   lib/                    seo/ (metadata, JSON-LD), contact/ (validação, envio, rate limit), utils/
   styles/globals.css      Design tokens (dark/light), tipografia, animações
   types/content.ts        Tipos de conteúdo
-public/brand/             Arquivos de marca (ver public/brand/README.md)
+public/brand/             Logo vetorizada, ícones e OG (ver public/brand/README.md)
+scripts/vectorize-logo.py Vetorização reproduzível da logo (potrace)
 tests/                    Testes unitários
 ```
 
@@ -131,7 +132,7 @@ um script inline antes da primeira pintura (sem flash). Sem JavaScript, o tema p
 
 Verificado nesta versão:
 
-- `npm run typecheck`, `npm run lint`, `npm run test` (18 testes) e `npm run build` sem erros.
+- `npm run typecheck`, `npm run lint`, `npm run test` (20 testes) e `npm run build` sem erros (inclui teste que garante que os SVGs da marca são vetores reais).
 - axe-core (WCAG 2.0/2.1/2.2 A/AA + best practices): 0 violações em 11 páginas, temas dark e light,
   desktop (1440px) e mobile (390px); 1 `h1` por página; sem rolagem horizontal.
 - Testes de interação (Playwright): menu mobile (teclado, foco preso, Esc, item ativo), alternância
@@ -141,7 +142,6 @@ Verificado nesta versão:
 
 ## Pendências que dependem de informações externas
 
-- [ ] Arquivos oficiais da logo (ver `public/brand/README.md`). Hoje: lettering em texto e favicon provisório "f".
 - [ ] Domínio final (`NEXT_PUBLIC_SITE_URL`).
 - [ ] Conta e domínio verificados no Resend + variáveis de envio.
 - [ ] E-mail público de contato, razão social/CNPJ (política de privacidade) e perfis sociais oficiais.

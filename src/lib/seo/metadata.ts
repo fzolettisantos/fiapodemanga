@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { absoluteUrl, siteConfig } from "@/config/site";
+import { brandAssets } from "@/config/brand";
 
-const DEFAULT_OG_IMAGE = {
-  url: "/opengraph-image",
-  width: 1200,
-  height: 630,
+export const DEFAULT_OG_IMAGE = {
+  url: brandAssets.ogImage.src,
+  width: brandAssets.ogImage.width,
+  height: brandAssets.ogImage.height,
   alt: `${siteConfig.name} — ${siteConfig.tagline}`,
 };
 
@@ -38,7 +39,7 @@ export function buildMetadata({
 }: BuildMetadataInput): Metadata {
   const url = absoluteUrl(path);
   const fullTitle = absoluteTitle ? title : `${title} | ${siteConfig.name}`;
-  // Sem imagem específica, usa a imagem Open Graph padrão (src/app/opengraph-image.tsx).
+  // Sem imagem específica, usa a imagem Open Graph padrão da marca.
   const og = image ?? DEFAULT_OG_IMAGE;
   const images = [{ ...og, url: absoluteUrl(og.url) }];
 

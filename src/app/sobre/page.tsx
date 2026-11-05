@@ -6,6 +6,7 @@ import { PageHero } from "@/components/sections/PageHero";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { ButtonLink } from "@/components/ui/Button";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = buildMetadata({
@@ -28,8 +29,11 @@ export default function AboutPage() {
 
       <section aria-labelledby="visao-title" className="border-t border-line">
         <div className="container-site grid gap-10 py-20 md:py-32 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-3">
+          <div className="flex flex-col justify-between gap-10 lg:col-span-3">
             <p className="eyebrow">{c.vision.eyebrow}</p>
+            <div className="hidden lg:block">
+              <BrandLogo variant="symbol" height={120} />
+            </div>
           </div>
           <div className="lg:col-span-9" data-reveal>
             <h2 id="visao-title" className="type-title">

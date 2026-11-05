@@ -15,7 +15,7 @@ export function Header() {
           aria-label={`${siteConfig.name} — página inicial`}
           className="inline-flex min-h-11 items-center justify-self-start"
         >
-          <BrandLogo height={34} priority />
+          <BrandLogo height={38} />
         </Link>
 
         <DesktopNavigation />

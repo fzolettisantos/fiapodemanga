@@ -9,6 +9,7 @@ import { SkipLink } from "@/components/layout/SkipLink";
 import { RevealObserver } from "@/components/layout/RevealObserver";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/jsonld";
+import { DEFAULT_OG_IMAGE } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -24,8 +25,9 @@ export const metadata: Metadata = {
     locale: siteConfig.locale,
     siteName: siteConfig.name,
     url: absoluteUrl("/"),
+    images: [{ ...DEFAULT_OG_IMAGE, url: absoluteUrl(DEFAULT_OG_IMAGE.url) }],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", images: [absoluteUrl(DEFAULT_OG_IMAGE.url)] },
   formatDetection: { telephone: false, email: false, address: false },
 };
 

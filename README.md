@@ -164,6 +164,10 @@ Verificado nesta versão:
 - Lighthouse (mobile simulado, servidor local): Performance 94–98, Acessibilidade 100,
   Boas práticas 100, SEO 100. Os números reais dependem da hospedagem — meça após o deploy.
 
+## Próximos passos
+
+Veja o [`ROADMAP.md`](./ROADMAP.md), que inclui a futura área administrativa (CMS).
+
 ## Pendências que dependem de informações externas
 
 - [ ] Domínio final (`NEXT_PUBLIC_SITE_URL`).

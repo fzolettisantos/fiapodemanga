@@ -8,6 +8,8 @@ import { ButtonLink } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { CasePreview } from "@/components/sections/CasePreview";
+import { ProjectSlider } from "@/components/sections/ProjectSlider";
+import { showcase } from "@/content/projects/showcase";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { FiberLine } from "@/components/brand/FiberLine";
 import { WordReveal } from "@/components/motion/WordReveal";
@@ -228,6 +230,7 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+          <ProjectSlider projects={showcase} className="mt-16 md:mt-24" />
           {projects.length > 0 ? (
             <ol className="mt-16 border-t border-line">
               {projects.map((project, index) => (

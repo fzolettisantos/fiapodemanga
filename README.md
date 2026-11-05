@@ -125,6 +125,9 @@ Tudo é progressive enhancement: sem suporte do navegador o conteúdo aparece no
 - **Copy**: `src/content/*.ts`. Os textos aprovados no briefing estão reproduzidos literalmente.
 - **Especialidades**: `src/content/services/index.ts`. Cada uma tem copy aprovado + bloco `page`
   com conteúdo próprio da página individual e metadados de SEO únicos.
+- **Vitrine de projetos (slider)**: `src/content/projects/showcase.ts` — título, cliente, categoria e imagem
+  de cada projeto, exibidos em `/projetos` e na Home. Novas imagens: `python3 scripts/prepare-project-images.py
+  <entrada> public/images/projetos/<slug>/capa.webp` (amplia 2x com Lanczos e aplica realce leve de nitidez).
 - **Cases**: copie `src/content/projects/_template.ts`, preencha **somente com dados reais e autorizados**
   e adicione ao array em `src/content/projects/index.ts`. Rotas, sitemap e Home atualizam sozinhos.
 - **Insights**: mesmo processo em `src/content/articles/`. Enquanto não houver artigos, `/insights`

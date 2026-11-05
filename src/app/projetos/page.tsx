@@ -5,6 +5,8 @@ import { homeContent } from "@/content/home";
 import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
 import { PageHero } from "@/components/sections/PageHero";
 import { CasePreview } from "@/components/sections/CasePreview";
+import { ProjectSlider } from "@/components/sections/ProjectSlider";
+import { showcase } from "@/content/projects/showcase";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { buildMetadata } from "@/lib/seo/metadata";
 
@@ -40,6 +42,15 @@ export default function ProjectsPage() {
       />
       <PageHero eyebrow={c.eyebrow} title={c.title} paragraphs={c.paragraphs} />
 
+      <section aria-labelledby="vitrine-title" className="section-highlight border-t border-line bg-bg">
+        <div className="container-site py-16 md:py-24">
+          <h2 id="vitrine-title" className="eyebrow mb-10 md:mb-14">
+            Projetos selecionados
+          </h2>
+          <ProjectSlider projects={showcase} />
+        </div>
+      </section>
+
       {projects.length > 0 ? (
         <section aria-labelledby="lista-projetos-title" className="border-t border-line">
           <div className="container-site py-16 md:py-24">
@@ -53,19 +64,7 @@ export default function ProjectsPage() {
             </ol>
           </div>
         </section>
-      ) : (
-        <section aria-labelledby="em-breve-title" className="border-t border-line">
-          <div className="container-site grid gap-10 py-16 md:py-24 lg:grid-cols-12">
-            <h2 id="em-breve-title" className="type-heading lg:col-span-5">
-              Nenhum case publicado por enquanto.
-            </h2>
-            <p className="type-lead lg:col-span-6 lg:col-start-7">
-              Publicamos apenas projetos reais, com autorização para divulgação. Enquanto isso, conte sobre o seu
-              desafio — podemos apresentar nossa forma de trabalho em uma conversa.
-            </p>
-          </div>
-        </section>
-      )}
+      ) : null}
 
       <section aria-labelledby="narrativa-title" className="border-t border-line">
         <div className="container-site py-20 md:py-28">

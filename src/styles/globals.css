@@ -1065,3 +1065,20 @@ html.vt-theme::view-transition-new(root) {
   background: #212121;
   color: #c7c7c7;
 }
+
+/* --- Slider de projetos --- */
+.project-slider__track {
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.project-slider__track::-webkit-scrollbar {
+  display: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .project-slide__media img {
+    transition: scale 900ms var(--ease-out-expo);
+  }
+  .project-slide:hover .project-slide__media img {
+    scale: 1.035;
+  }
+}

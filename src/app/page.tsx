@@ -56,11 +56,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      <Marquee
-        label="Especialidades"
-        items={services.map((s) => s.name)}
-        className="type-heading border-t border-line py-8 md:py-10"
-      />
+      <div className="bg-[#E1FF00]">
+        <Marquee
+          label="Especialidades"
+          items={services.map((s) => s.name)}
+          className="marquee--highlight type-heading py-8 md:py-10"
+        />
+      </div>
 
       {/* SOBRE */}
       <section aria-labelledby="sobre-title" className="border-t border-line">

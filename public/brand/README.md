@@ -39,6 +39,7 @@ Ajustes de ilustração aplicados na vetorização:
 | `apple-touch-icon.png`             | 180×180                                                    |
 | `og-image.png`                     | Open Graph / Twitter, 1200×630                             |
 
+| `luli-deitada.svg`                 | Silhueta da Luli deitada (rodapé), vetorizada de `luli-deitada-original.webp` |
 | `vamos-conversar.svg`              | Ilustração "Vamos conversar" (Luli com caneca + lettering em arco), vetorizada por camada de cor e por letra |
 | `vamos-conversar-original.webp`    | Arte original da ilustração                                |
 

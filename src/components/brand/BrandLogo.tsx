@@ -3,8 +3,8 @@ import { brandAssets } from "@/config/brand";
 import { cn } from "@/lib/utils/cn";
 
 type BrandLogoProps = {
-  /** horizontal = Luli + lettering; symbol = somente a Luli */
-  variant?: "horizontal" | "symbol";
+  /** horizontal = Luli + lettering; symbol = cabeça da Luli; luli = Luli deitada (silhueta) */
+  variant?: "horizontal" | "symbol" | "luli";
   /** Altura em px — a largura segue a proporção original. */
   height?: number;
   className?: string;
@@ -20,7 +20,9 @@ type BrandLogoProps = {
  */
 export function BrandLogo({ variant = "horizontal", height = 36, className }: BrandLogoProps) {
   const asset =
-    variant === "symbol"
+    variant === "luli"
+      ? brandAssets.luli
+      : variant === "symbol"
       ? height < 48
         ? brandAssets.symbolSmall
         : brandAssets.symbol

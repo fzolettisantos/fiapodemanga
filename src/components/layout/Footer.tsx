@@ -47,8 +47,8 @@ export function Footer() {
       <div className="container-site py-16 md:py-24">
         <div className="grid gap-14 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <Link href="/" aria-label={`${siteConfig.name} — página inicial`} className="inline-flex">
-              <BrandLogo height={56} />
+            <Link href="/" aria-label={`${siteConfig.name} — página inicial`} className="luli-tilt inline-flex">
+              <BrandLogo variant="luli" height={56} />
             </Link>
             <p className="type-subheading mt-8 max-w-md">{siteConfig.centralMessage}</p>
             <div className="mt-8 flex flex-wrap items-center gap-4">

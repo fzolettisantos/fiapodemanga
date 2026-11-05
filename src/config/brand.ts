@@ -26,6 +26,12 @@ export const brandAssets = {
     width: 396,
     height: 413,
   },
+  /** Luli deitada (silhueta) — rodapé. */
+  luli: {
+    src: "/brand/luli-deitada.svg",
+    width: 1047,
+    height: 765,
+  },
   /** PNG quadrado (símbolo sobre grafite) para JSON-LD e integrações. */
   logoPng: { src: "/brand/favicon.png", width: 512, height: 512 },
   ogImage: { src: "/brand/og-image.png", width: 1200, height: 630 },

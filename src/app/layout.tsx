@@ -34,10 +34,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#3f3f3f" },
-    { media: "(prefers-color-scheme: light)", color: "#f7f7f3" },
-  ],
+  // Mesma cor do topo do site (#212121), para a barra do navegador combinar.
+  themeColor: "#212121",
   width: "device-width",
   initialScale: 1,
 };

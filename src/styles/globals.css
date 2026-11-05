@@ -1016,3 +1016,20 @@ html.vt-theme::view-transition-new(root) {
   color-scheme: dark;
   color: var(--color-text);
 }
+
+/* --- Topo: sempre escuro (#212121), nos dois temas (inclui o menu mobile) --- */
+.site-header {
+  --color-bg: #212121;
+  --color-surface: #212121;
+  --color-heading: #cfcfcf;
+  --color-text: #ffffff;
+  --color-text-muted: #dcdcdc;
+  --color-accent: var(--brand-green);
+  --color-accent-2: var(--brand-yellow);
+  --color-line: rgb(255 255 255 / 0.14);
+  --color-line-strong: rgb(255 255 255 / 0.34);
+  --color-btn-primary-border: var(--brand-green);
+  --color-focus: var(--brand-yellow);
+  color-scheme: dark;
+  color: var(--color-text);
+}

@@ -142,7 +142,7 @@ Tudo é progressive enhancement: sem suporte do navegador o conteúdo aparece no
 | Transição entre páginas (blur + slide)   | Navegação interna                      | React `<ViewTransition>` (`motion/PageTransition`) |
 | Nome do serviço que "viaja" até a página | Lista da Home → página da especialidade | `<ViewTransition name share="morph">` |
 | Troca de tema com revelação circular     | Botão dark/light                       | `document.startViewTransition` + `clip-path` |
-| Header que recolhe ao rolar              | Todas as páginas                       | `motion/Interactions` + CSS `translate` |
+| Header que encolhe numa pílula flutuante (ícone da Luli + CTA + menu) ao rolar | Todas as páginas | `motion/Interactions` (`data-scroll`) + CSS |
 | Botões magnéticos                        | CTAs primário e secundário             | `motion/Interactions` (só ponteiro fino) |
 | Varredura no hover das listas            | Especialidades                         | CSS `::before` + `scaleX`              |
 | Luli que inclina / balança               | Sobre (hover) e 404                    | CSS                                    |

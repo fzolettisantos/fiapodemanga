@@ -84,7 +84,7 @@ export function MobileNavigation({ locale, items, homeHref, labels, themeLabels 
   }, [open, close]);
 
   return (
-    <div className="lg:hidden">
+    <div className="header-menu">
       <button
         ref={triggerRef}
         type="button"
@@ -92,9 +92,10 @@ export function MobileNavigation({ locale, items, homeHref, labels, themeLabels 
         aria-controls="menu-mobile"
         aria-haspopup="dialog"
         onClick={() => setOpen(true)}
-        className="inline-flex min-h-11 items-center gap-3 rounded-full border border-line-strong px-4 text-[0.95rem] text-heading transition-colors hover:border-accent hover:text-accent"
+        aria-label={labels.menu}
+        className="header-menu-trigger inline-flex min-h-11 min-w-11 items-center justify-center gap-3 rounded-full border border-line-strong px-4 text-[0.95rem] text-heading transition-colors hover:border-accent hover:text-accent"
       >
-        {labels.menu}
+        <span className="header-menu-label">{labels.menu}</span>
         <span aria-hidden="true" className="flex w-4 flex-col gap-[5px]">
           <span className="h-px w-full bg-current" />
           <span className="h-px w-full bg-current" />

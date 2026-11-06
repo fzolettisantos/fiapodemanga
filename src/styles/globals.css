@@ -463,11 +463,7 @@
     background-color 280ms ease,
     border-color 280ms ease;
 }
-@media (prefers-reduced-motion: no-preference) {
-  :root[data-scroll="down"] .site-header:not(:has(:focus-visible)) {
-    translate: 0 -100%;
-  }
-}
+
 
 /* --- 4. Linhas de serviço: varredura no hover --- */
 .sweep-row {
@@ -1552,5 +1548,107 @@ h3.eyebrow {
   from {
     opacity: 0;
     transform: scale(0.85) translateY(8px);
+  }
+}
+
+
+/* ==================================================================
+   HEADER FLUTUANTE: ao rolar, a barra encolhe numa pílula centralizada
+   (ícone da Luli + CTA + menu). A altura do header não muda, para não
+   deslocar o conteúdo.
+=================================================================== */
+.site-header {
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease,
+    padding 600ms var(--ease-out-expo);
+}
+.site-header__bar {
+  transition:
+    max-width 600ms var(--ease-out-expo),
+    height 600ms var(--ease-out-expo),
+    padding 600ms var(--ease-out-expo),
+    border-radius 600ms var(--ease-out-expo),
+    background-color 300ms ease,
+    box-shadow 600ms var(--ease-out-expo);
+}
+.header-logo-icon,
+.header-cta {
+  display: none;
+}
+@media (min-width: 64rem) {
+  .header-cta {
+    display: inline-flex;
+  }
+  .header-menu {
+    display: none;
+  }
+}
+
+:root[data-scroll="down"] .site-header,
+:root[data-scroll="up"] .site-header {
+  background: transparent;
+  border-color: transparent;
+  pointer-events: none;
+  padding-top: 0.75rem;
+}
+:root[data-scroll="down"] .site-header__bar,
+:root[data-scroll="up"] .site-header__bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: fit-content;
+  max-width: calc(100% - 1.5rem);
+  height: 3.5rem;
+  padding-inline: 0.5rem;
+  padding-left: 0.75rem;
+  border-radius: 999px;
+  background: #212121;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  box-shadow:
+    0 12px 32px rgb(0 0 0 / 0.28),
+    0 2px 6px rgb(0 0 0 / 0.18);
+  pointer-events: auto;
+  animation: header-pill-in 600ms var(--ease-out-expo);
+}
+:root[data-scroll="down"] .header-full-only,
+:root[data-scroll="up"] .header-full-only,
+:root[data-scroll="down"] .header-logo-full,
+:root[data-scroll="up"] .header-logo-full {
+  display: none !important;
+}
+:root[data-scroll="down"] .header-logo-icon,
+:root[data-scroll="up"] .header-logo-icon {
+  display: inline-flex;
+}
+:root[data-scroll="down"] .header-cta,
+:root[data-scroll="up"] .header-cta {
+  display: inline-flex;
+  margin-left: 1.25rem;
+}
+:root[data-scroll="down"] .header-menu,
+:root[data-scroll="up"] .header-menu {
+  display: block;
+}
+:root[data-scroll="down"] .header-menu-label,
+:root[data-scroll="up"] .header-menu-label {
+  display: none;
+}
+:root[data-scroll="down"] .header-menu-trigger,
+:root[data-scroll="up"] .header-menu-trigger {
+  padding: 0;
+  width: 2.75rem;
+  border-color: rgb(255 255 255 / 0.18);
+}
+@keyframes header-pill-in {
+  from {
+    opacity: 0.4;
+    transform: translateY(-10px) scaleX(1.6);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header__bar {
+    transition: none;
+    animation: none !important;
   }
 }

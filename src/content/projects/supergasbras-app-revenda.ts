@@ -21,6 +21,7 @@ const files = {
   deal: ["negociacao.webp", 868, 1772],
   invoice: ["parcelas-e-boleto.webp", 880, 992],
   orders: ["compra-de-vasilhame.webp", 868, 1772],
+  damaged: ["avariados.webp", 1350, 862],
 } as const;
 
 const img = (key: keyof typeof files, alt: string, caption: string) => {
@@ -34,6 +35,8 @@ const base = {
   client: "Supergasbras",
   services: ["aplicativos-sistemas-plataformas", "product-design-ux-ui"],
   cover: { src: `${dir}/capa.webp`, alt: "", width: 1600, height: 1568 },
+  // Demonstração montada com as telas reais (scripts/case-video/supergasbras-app-revenda)
+  video: { mp4: `${dir}/demo.mp4`, webm: `${dir}/demo.webm`, poster: `${dir}/demo-poster.webp`, width: 1600, height: 900 },
   shotTone: "warm" as const,
   publishedAt: "2026-11-06",
   research: [],
@@ -47,6 +50,7 @@ export const supergasbrasAppRevenda: Record<Locale, Project> = {
     ...base,
     segment: "Distribuição de gás (GLP)",
     scope: "Redesign de produto",
+    video: { ...base.video, label: "Demonstração em vídeo do App de Revenda da Supergasbras: central financeira, detalhes de uma negociação, acompanhamento de pedidos, histórico de avariados e filtro por mês." },
     summary:
       "Redesign do aplicativo que a Supergasbras oferece às suas revendas: condições comerciais, compras, pedidos e vida financeira reunidos no celular.",
     cover: {
@@ -90,6 +94,11 @@ export const supergasbrasAppRevenda: Record<Locale, Project> = {
         description:
           "Os pedidos podem ser filtrados por status — em andamento, aguardando pagamento ou finalizado — e mostram a previsão de entrega, o acompanhamento em etapas e os dados do pedido: embalagem, quantidade, nota fiscal e valores.",
       },
+      {
+        title: "Gestão de avariados",
+        description:
+          "Uma área própria organiza o processo de vasilhames avariados: regras, formulário para download, acompanhamento das solicitações, consulta aos tipos de defeito e um histórico mensal de aprovados e reprovados, com o saldo do ano e filtro por mês e ano.",
+      },
     ],
     solution: [
       "O redesign organizou o aplicativo em torno das tarefas da revenda. A navegação inferior separa início, financeiro, pedidos e demais recursos, e cada área abre com atalhos para o que é mais usado.",
@@ -121,6 +130,11 @@ export const supergasbrasAppRevenda: Record<Locale, Project> = {
         "Tela de compra de vasilhame com filtros por status, previsão de entrega, acompanhamento do pedido em etapas e dados de embalagem, quantidade, nota fiscal e valores.",
         "Acompanhamento de pedidos.",
       ),
+      img(
+        "damaged",
+        "Três telas da área de avariados: o menu com regras, formulário, acompanhamento e histórico; o histórico mensal de aprovados e reprovados com o saldo anual; e o filtro por mês e ano.",
+        "Gestão de avariados.",
+      ),
     ],
     seo: {
       title: "Case Supergasbras — Redesign do App de Revenda",
@@ -133,6 +147,7 @@ export const supergasbrasAppRevenda: Record<Locale, Project> = {
     name: "Reseller App",
     segment: "Gas distribution (LPG)",
     scope: "Product redesign",
+    video: { ...base.video, label: "Video demo of the Supergasbras Reseller App: financial hub, agreement details, order tracking, damaged cylinder history and month filter." },
     summary:
       "Redesign of the app Supergasbras offers its resellers: commercial terms, purchases, orders and finances brought together on the phone.",
     cover: {
@@ -176,6 +191,11 @@ export const supergasbrasAppRevenda: Record<Locale, Project> = {
         description:
           "Orders can be filtered by status — in progress, awaiting payment or completed — and show the expected delivery date, step-by-step tracking and order details: cylinder size, quantity, invoice and amounts.",
       },
+      {
+        title: "Damaged cylinder management",
+        description:
+          "A dedicated area organizes the damaged cylinder process: rules, a downloadable form, request tracking, a guide to defect types and a monthly history of approved and rejected items, with the yearly balance and a month and year filter.",
+      },
     ],
     solution: [
       "The redesign organized the app around the reseller’s tasks. The bottom navigation separates home, finances, orders and other features, and each area opens with shortcuts to what is used most.",
@@ -207,6 +227,11 @@ export const supergasbrasAppRevenda: Record<Locale, Project> = {
         "Cylinder purchase screen with status filters, expected delivery, step-by-step order tracking and details on cylinder size, quantity, invoice and amounts.",
         "Order tracking.",
       ),
+      img(
+        "damaged",
+        "Three screens of the damaged cylinder area: the menu with rules, form, tracking and history; the monthly history of approved and rejected items with the yearly balance; and the month and year filter.",
+        "Damaged cylinder management.",
+      ),
     ],
     seo: {
       title: "Supergasbras case — Reseller App redesign",
@@ -219,6 +244,7 @@ export const supergasbrasAppRevenda: Record<Locale, Project> = {
     name: "App de Reventa",
     segment: "Distribución de gas (GLP)",
     scope: "Rediseño de producto",
+    video: { ...base.video, label: "Demostración en video de la App de Reventa de Supergasbras: centro financiero, detalles de una negociación, seguimiento de pedidos, historial de cilindros averiados y filtro por mes." },
     summary:
       "Rediseño de la aplicación que Supergasbras ofrece a sus revendedores: condiciones comerciales, compras, pedidos y finanzas reunidos en el celular.",
     cover: {
@@ -262,6 +288,11 @@ export const supergasbrasAppRevenda: Record<Locale, Project> = {
         description:
           "Los pedidos se pueden filtrar por estado — en curso, esperando pago o finalizado — y muestran la previsión de entrega, el seguimiento por etapas y los datos del pedido: envase, cantidad, factura y montos.",
       },
+      {
+        title: "Gestión de cilindros averiados",
+        description:
+          "Un área propia organiza el proceso de cilindros averiados: reglas, formulario para descargar, seguimiento de las solicitudes, consulta de los tipos de defecto y un historial mensual de aprobados y rechazados, con el saldo del año y filtro por mes y año.",
+      },
     ],
     solution: [
       "El rediseño organizó la aplicación en torno a las tareas del revendedor. La navegación inferior separa inicio, finanzas, pedidos y demás recursos, y cada área se abre con accesos directos a lo más usado.",
@@ -292,6 +323,11 @@ export const supergasbrasAppRevenda: Record<Locale, Project> = {
         "orders",
         "Pantalla de compra de cilindros con filtros por estado, previsión de entrega, seguimiento del pedido por etapas y datos de envase, cantidad, factura y montos.",
         "Seguimiento de pedidos.",
+      ),
+      img(
+        "damaged",
+        "Tres pantallas del área de averiados: el menú con reglas, formulario, seguimiento e historial; el historial mensual de aprobados y rechazados con el saldo anual; y el filtro por mes y año.",
+        "Gestión de cilindros averiados.",
       ),
     ],
     seo: {

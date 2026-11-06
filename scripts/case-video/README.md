@@ -1,5 +1,7 @@
 # Vídeos de demonstração dos cases
 
+Cenas disponíveis: `ged-ai` (plataforma web) e `supergasbras-app-revenda` (app em celular, telas recortadas em `screens/`).
+
 Cada case pode ter uma cena em HTML (`<slug>/scene.html`) montada com as telas reais do produto:
 cursor, cliques, zoom e transições são definidos numa linha do tempo determinística (`window.render(t)`).
 

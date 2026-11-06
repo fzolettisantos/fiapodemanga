@@ -96,6 +96,7 @@ export const en: SiteContent = {
       specialtiesNav: "Expertise on this page",
       skillsLabel: "Expertise",
       learnMore: "Learn more about {name}",
+      skillsCount: "{n} skills",
     },
     serviceDetail: {
       skills: "Expertise",

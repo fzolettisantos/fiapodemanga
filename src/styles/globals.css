@@ -1232,3 +1232,186 @@ h3.eyebrow {
 .badge-sitting .badge-green {
   fill: var(--brand-lime);
 }
+
+/* --- Ilustrações das especialidades (O que fazemos) --- */
+.svc-panel {
+  /* papel claro nos dois temas, como uma prancha de desenho */
+  background:
+    radial-gradient(120% 90% at 20% 0%, #ffffff 0%, transparent 60%),
+    linear-gradient(160deg, #fbfaf5 0%, #f1eee3 100%);
+  border: 1px solid var(--color-line);
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.svc-panel .svc-illu {
+  width: 92%;
+}
+.svc-chip {
+  background: #212121;
+  color: #ffffff;
+}
+.svc-illu * {
+  vector-effect: non-scaling-stroke;
+}
+.svc-illu .svc-slide-a,
+.svc-illu .svc-slide-b,
+.svc-illu .svc-layer,
+.svc-illu .svc-rise,
+.svc-illu .svc-node,
+.svc-illu .svc-spark,
+.svc-illu .svc-flag,
+.svc-illu .svc-ping,
+.svc-illu .svc-float {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.svc-illu .svc-rise {
+  transform-origin: 50% 100%;
+}
+.svc-illu .svc-check {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Entrada: roda uma vez quando o bloco aparece */
+  .js [data-reveal]:not(.is-visible) .svc-illu * {
+    animation-play-state: paused !important;
+  }
+  .svc-illu .svc-slide-a {
+    animation: svc-from-left 1100ms var(--ease-out-expo) 200ms both;
+  }
+  .svc-illu .svc-slide-b {
+    animation: svc-from-right 1100ms var(--ease-out-expo) 200ms both;
+  }
+  .svc-illu .svc-layer {
+    animation: svc-drop 1000ms var(--ease-out-expo) both;
+    animation-delay: calc(150ms + var(--k) * 140ms);
+  }
+  .svc-illu .svc-rise {
+    animation: svc-grow 900ms var(--ease-out-expo) both;
+    animation-delay: calc(200ms + var(--k) * 140ms);
+  }
+  .svc-illu .svc-check {
+    animation: ic-draw 700ms var(--ease-out-expo) 900ms both;
+  }
+  .svc-illu .svc-flag {
+    animation: svc-wave 2.4s ease-in-out 1.2s infinite;
+    transform-origin: 0% 50%;
+  }
+  /* Movimento contínuo leve */
+  .svc-illu .svc-float {
+    animation: svc-float 5s ease-in-out infinite;
+  }
+  .svc-illu .svc-layer.svc-float {
+    animation:
+      svc-drop 1000ms var(--ease-out-expo) calc(150ms + var(--k) * 140ms) both,
+      svc-float 5s ease-in-out 1.4s infinite;
+  }
+  .svc-illu .svc-march {
+    animation: svc-march 1.6s linear infinite;
+  }
+  .svc-illu .svc-ping {
+    animation: svc-ping 2.6s ease-out infinite;
+  }
+  .svc-illu .svc-node {
+    animation: svc-pulse 3s ease-in-out infinite;
+    animation-delay: calc(var(--k) * 0.35s);
+  }
+  .svc-illu .svc-spark {
+    animation: svc-spark 4s ease-in-out infinite;
+  }
+  .svc-illu .svc-glow {
+    animation: svc-glow 3.2s ease-in-out infinite;
+  }
+  .svc-panel .svc-illu {
+    transition: scale 900ms var(--ease-out-expo);
+  }
+  .svc-card:hover .svc-panel .svc-illu {
+    scale: 1.03;
+  }
+}
+@keyframes svc-from-left {
+  from {
+    transform: translateX(-26px);
+  }
+}
+@keyframes svc-from-right {
+  from {
+    transform: translateX(26px);
+  }
+}
+@keyframes svc-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-34px);
+  }
+}
+@keyframes svc-grow {
+  from {
+    transform: scaleY(0.05);
+  }
+}
+@keyframes svc-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -7px;
+  }
+}
+@keyframes svc-march {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+@keyframes svc-ping {
+  0% {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  80%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+@keyframes svc-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+}
+@keyframes svc-spark {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(45deg) scale(1.15);
+  }
+}
+@keyframes svc-wave {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(0.8);
+  }
+}
+@keyframes svc-glow {
+  0%,
+  100% {
+    fill: #fff04a;
+  }
+  50% {
+    fill: #fff6b3;
+  }
+}

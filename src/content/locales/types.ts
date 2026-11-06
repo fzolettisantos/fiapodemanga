@@ -84,6 +84,7 @@ export type SiteContent = {
       specialtiesNav: string;
       skillsLabel: string;
       learnMore: string; // "Saiba mais sobre {name}"
+      skillsCount: string; // "{n} competências"
     };
     serviceDetail: {
       skills: string;

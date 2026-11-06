@@ -3,6 +3,7 @@ import { getI18n } from "@/i18n/server";
 import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
 import { PageHero } from "@/components/sections/PageHero";
 import { ServiceBlock } from "@/components/sections/ServiceBlock";
+import { ServicesNav } from "@/components/navigation/ServicesNav";
 import { ServiceTags } from "@/components/sections/ServiceTags";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { ScrollFillText } from "@/components/motion/ScrollFillText";
@@ -55,31 +56,25 @@ export default async function ServicesPage() {
       {/* ESPECIALIDADES */}
       <section aria-labelledby="especialidades-title" className="border-t border-line">
         <div className="container-site pt-20 md:pt-28">
-          <div className="grid gap-10 lg:grid-cols-12">
-            <div className="lg:col-span-8">
-              <p className="eyebrow">{t.home.services.eyebrow}</p>
-              <h2 id="especialidades-title" className="type-title mt-8">
-                {t.home.services.title}
-              </h2>
-            </div>
-            <nav aria-label={t.ui.servicesPage.specialtiesNav} className="self-end lg:col-span-4">
-              <ol className="space-y-1 text-[0.95rem]">
-                {services.map((s) => (
-                  <li key={s.slug}>
-                    <a href={`#${s.slug}`} className="inline-flex min-h-9 items-center gap-3 hover:text-accent">
-                      <span className="index-number text-xs">{s.number}/</span>
-                      {s.name}
-                    </a>
-                  </li>
-                ))}
-              </ol>
-            </nav>
+          <div className="max-w-4xl">
+            <p className="eyebrow">{t.home.services.eyebrow}</p>
+            <h2 id="especialidades-title" className="type-title mt-8">
+              {t.home.services.title}
+            </h2>
           </div>
         </div>
-        <div className="container-site mt-16 md:mt-24">
-          {services.map((service) => (
-            <ServiceBlock key={service.slug} service={service} />
-          ))}
+        <div className="container-site mt-16 grid gap-10 pb-12 md:mt-24 lg:grid-cols-12">
+          <aside className="hidden lg:col-span-3 lg:block">
+            <ServicesNav
+              label={t.ui.servicesPage.specialtiesNav}
+              items={services.map((s) => ({ slug: s.slug, name: s.name, number: s.number }))}
+            />
+          </aside>
+          <div className="lg:col-span-9">
+            {services.map((service) => (
+              <ServiceBlock key={service.slug} service={service} total={services.length} />
+            ))}
+          </div>
         </div>
       </section>
 

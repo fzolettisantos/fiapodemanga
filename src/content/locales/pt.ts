@@ -105,6 +105,7 @@ export const pt: SiteContent = {
       specialtiesNav: "Especialidades nesta página",
       skillsLabel: "Especialidades",
       learnMore: "Saiba mais sobre {name}",
+      skillsCount: "{n} competências",
     },
     serviceDetail: {
       skills: "Especialidades",

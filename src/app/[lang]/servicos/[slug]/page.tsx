@@ -7,6 +7,7 @@ import { format, getI18n } from "@/i18n/server";
 import { LocaleLink as Link } from "@/components/ui/LocaleLink";
 import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
 import { ServiceTags } from "@/components/sections/ServiceTags";
+import { ServiceIllustration } from "@/components/sections/ServiceIllustration";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { ButtonLink } from "@/components/ui/Button";
@@ -87,10 +88,15 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
 
       <section aria-labelledby="competencias-title" className="border-t border-line">
         <div className="container-site grid gap-12 py-20 md:py-28 lg:grid-cols-12">
-          <h2 id="competencias-title" className="type-heading lg:col-span-4">
-            {L.skills}
-          </h2>
-          <ServiceTags items={service.skills} className="lg:col-span-8" />
+          <div className="lg:col-span-5" data-reveal>
+            <h2 id="competencias-title" className="type-heading">
+              {L.skills}
+            </h2>
+            <div className="svc-panel mt-10">
+              <ServiceIllustration slug={service.slug} />
+            </div>
+          </div>
+          <ServiceTags items={service.skills} className="self-start lg:col-span-6 lg:col-start-7 lg:pt-20" />
         </div>
       </section>
 

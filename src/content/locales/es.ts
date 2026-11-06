@@ -96,6 +96,7 @@ export const es: SiteContent = {
       specialtiesNav: "Especialidades en esta página",
       skillsLabel: "Especialidades",
       learnMore: "Más sobre {name}",
+      skillsCount: "{n} competencias",
     },
     serviceDetail: {
       skills: "Especialidades",

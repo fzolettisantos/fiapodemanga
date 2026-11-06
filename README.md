@@ -145,6 +145,7 @@ Tudo é progressive enhancement: sem suporte do navegador o conteúdo aparece no
 | Botões magnéticos                        | CTAs primário e secundário             | `motion/Interactions` (só ponteiro fino) |
 | Varredura no hover das listas            | Especialidades                         | CSS `::before` + `scaleX`              |
 | Luli que inclina / balança               | Sobre (hover) e 404                    | CSS                                    |
+| Ilustrações isométricas das 7 especialidades (formas de "Nossa abordagem"), com entrada e movimento leve | O que fazemos e páginas de especialidade | `sections/ServiceIllustration` (SVG em código) + `navigation/ServicesNav` (lista lateral com a seção ativa) |
 | Luli sentada: letreiro pulando, traços de brilho pulsando, cauda abanando, vapor e respiração | Chamada final "Vamos conversar?" | `brand/ConversationBadge` com `vamos-conversar-sentada.svg` |
 
 ## Conteúdo

@@ -1100,7 +1100,8 @@ html.vt-theme::view-transition-new(root) {
   .project-slide__media img {
     transition: scale 900ms var(--ease-out-expo);
   }
-  .project-slide:hover .project-slide__media img {
+  .project-slide:hover .project-slide__media img,
+  .project-list__item:hover .project-slide__media img {
     scale: 1.035;
   }
 }

@@ -5,7 +5,7 @@ import { localizeShowcase, showcase } from "@/content/projects/showcase";
 import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
 import { PageHero } from "@/components/sections/PageHero";
 import { CasePreview } from "@/components/sections/CasePreview";
-import { ProjectSlider } from "@/components/sections/ProjectSlider";
+import { ProjectList } from "@/components/sections/ProjectList";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { buildMetadata } from "@/lib/seo/metadata";
 
@@ -29,7 +29,7 @@ export default async function ProjectsPage() {
           <h2 id="vitrine-title" className="eyebrow mb-10 md:mb-14">
             {t.ui.projects.selected}
           </h2>
-          <ProjectSlider projects={localizeShowcase(showcase, t.showcase)} labels={t.ui.slider} />
+          <ProjectList projects={localizeShowcase(showcase, t.showcase)} label={t.ui.projects.list} />
         </div>
       </section>
 

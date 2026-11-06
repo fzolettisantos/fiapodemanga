@@ -1663,6 +1663,11 @@ h3.eyebrow {
   padding: clamp(1rem, 3vw, 2.5rem);
   border-radius: 2px;
 }
+.case-shot--warm {
+  background:
+    radial-gradient(120% 90% at 20% 0%, #fffaf6 0%, transparent 60%),
+    linear-gradient(160deg, #fbefe7 0%, #f3ddd0 100%);
+}
 .case-shot img {
   filter: drop-shadow(0 18px 30px rgb(20 40 80 / 0.14));
 }

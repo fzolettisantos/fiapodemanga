@@ -1,6 +1,7 @@
 import type { Project } from "@/types/content";
 import { defaultLocale, type Locale } from "@/i18n/config";
 import { gedAi } from "./ged-ai";
+import { supergasbrasAppRevenda } from "./supergasbras-app-revenda";
 
 /**
  * Cases publicados (página completa em /projetos/<slug>), por idioma.
@@ -17,9 +18,9 @@ import { gedAi } from "./ged-ai";
  *  5. Em `showcase.ts`, informe `caseSlug` no item da vitrine para ligar o slide ao case.
  */
 const byLocale: Record<Locale, Project[]> = {
-  pt: [gedAi.pt],
-  en: [gedAi.en],
-  es: [gedAi.es],
+  pt: [gedAi.pt, supergasbrasAppRevenda.pt],
+  en: [gedAi.en, supergasbrasAppRevenda.en],
+  es: [gedAi.es, supergasbrasAppRevenda.es],
 };
 
 export const projects: Project[] = byLocale[defaultLocale];

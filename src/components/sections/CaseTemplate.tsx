@@ -156,7 +156,13 @@ export async function CaseTemplate({ project }: { project: Project }) {
                   const reverse = i % 2 === 1;
                   return (
                     <li key={step.title} className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12" data-reveal>
-                      <figure className={cn("case-shot lg:col-span-7", reverse && "lg:order-2 lg:col-start-6")}>
+                      <figure
+                        className={cn(
+                          "case-shot lg:col-span-7",
+                          project.shotTone === "warm" && "case-shot--warm",
+                          reverse && "lg:order-2 lg:col-start-6",
+                        )}
+                      >
                         <Image
                           src={img.src}
                           alt={img.alt}
@@ -164,7 +170,11 @@ export async function CaseTemplate({ project }: { project: Project }) {
                           height={img.height}
                           sizes="(min-width: 1024px) 56vw, 100vw"
                           quality={90}
-                          className="h-auto w-full"
+                          className={cn(
+                            img.height > img.width * 1.2
+                              ? "mx-auto h-auto max-h-[min(44rem,80vh)] w-auto max-w-full"
+                              : "h-auto w-full",
+                          )}
                         />
                         {img.caption ? <figcaption className="sr-only">{img.caption}</figcaption> : null}
                       </figure>

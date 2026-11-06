@@ -40,6 +40,7 @@ export const showcase: ShowcaseProject[] = [
   },
   {
     slug: "supergasbras-app-revenda",
+    caseSlug: "supergasbras-app-revenda",
     title: "App de Revenda",
     client: "Supergasbras",
     category: "Aplicativo",

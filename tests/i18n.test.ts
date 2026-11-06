@@ -60,4 +60,22 @@ describe("cases", () => {
     // sem resultados inventados
     expect(pt!.results).toEqual([]);
   });
+
+  it("todo case publicado existe nos três idiomas, com telas pareadas ao processo e sem resultados inventados", async () => {
+    const { getProjects } = await import("@/content/projects");
+    const { showcase } = await import("@/content/projects/showcase");
+    const slugs = getProjects("pt").map((p) => p.slug);
+    expect(slugs).toContain("supergasbras-app-revenda");
+    for (const locale of ["en", "es"] as const) {
+      expect(getProjects(locale).map((p) => p.slug)).toEqual(slugs);
+    }
+    for (const project of getProjects("pt")) {
+      expect(project.images.length).toBeGreaterThanOrEqual(project.process.length);
+      expect(project.results).toEqual([]);
+    }
+    // todo slide com case aponta para um case existente
+    for (const item of showcase) {
+      if (item.caseSlug) expect(slugs).toContain(item.caseSlug);
+    }
+  });
 });

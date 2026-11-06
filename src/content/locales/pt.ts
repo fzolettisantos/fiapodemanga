@@ -136,6 +136,8 @@ export const pt: SiteContent = {
       ],
       viewAll: "Ver todos os projetos",
       viewCase: "Ver case",
+      videoPause: "Pausar vídeo",
+      videoPlay: "Reproduzir vídeo",
       scope: "Escopo",
       segment: "Segmento",
       client: "Cliente",

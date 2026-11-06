@@ -4,6 +4,7 @@ import type { Project } from "@/types/content";
 import { LocaleLink as Link } from "@/components/ui/LocaleLink";
 import { getI18n } from "@/i18n/server";
 import { cn } from "@/lib/utils/cn";
+import { CaseVideo } from "./CaseVideo";
 
 function CaseSection({ number, title, children }: { number: string; title: string; children: ReactNode }) {
   return (
@@ -104,7 +105,16 @@ export async function CaseTemplate({ project }: { project: Project }) {
         </dl>
       </header>
 
-      {project.cover ? (
+      {project.video ? (
+        <div className="container-site">
+          <CaseVideo
+            {...project.video}
+            label={project.video.label ?? project.name}
+            pauseLabel={P.videoPause}
+            playLabel={P.videoPlay}
+          />
+        </div>
+      ) : project.cover ? (
         <div className="container-site">
           <div className="overflow-hidden rounded-sm">
             <Image

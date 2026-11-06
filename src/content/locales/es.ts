@@ -127,6 +127,8 @@ export const es: SiteContent = {
       ],
       viewAll: "Ver todos los proyectos",
       viewCase: "Ver caso",
+      videoPause: "Pausar video",
+      videoPlay: "Reproducir video",
       scope: "Alcance",
       segment: "Segmento",
       client: "Cliente",

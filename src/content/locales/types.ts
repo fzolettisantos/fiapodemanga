@@ -105,6 +105,8 @@ export type SiteContent = {
       narrative: { title: string; description: string }[];
       viewAll: string;
       viewCase: string;
+      videoPause: string;
+      videoPlay: string;
       scope: string;
       segment: string;
       client: string;

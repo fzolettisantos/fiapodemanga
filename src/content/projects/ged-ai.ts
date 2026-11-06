@@ -20,6 +20,8 @@ const base = {
   name: "ged.ai",
   services: ["aplicativos-sistemas-plataformas", "product-design-ux-ui", "design-tecnologia-ia"],
   cover: { src: `${dir}/capa.webp`, alt: "", width: 1600, height: 1568 },
+  // Demonstração montada com as telas reais (scripts/case-video/ged-ai)
+  video: { mp4: `${dir}/demo.mp4`, webm: `${dir}/demo.webm`, poster: `${dir}/demo-poster.webp`, width: 1600, height: 900 },
   publishedAt: "2026-11-06",
 };
 
@@ -27,6 +29,7 @@ export const gedAi: Record<Locale, Project> = {
   pt: {
     ...base,
     segment: "Gestão eletrônica de documentos",
+    video: { ...base.video, label: "Demonstração em vídeo da plataforma ged.ai: navegação pela lista de documentos, cadastro em etapas, gerenciamento, filtros e histórico com resumo por IA." },
     scope: "Redesign de produto",
     summary:
       "Redesign de uma plataforma de gestão eletrônica de documentos com inteligência artificial: da organização e da busca ao histórico e às aprovações.",
@@ -114,6 +117,7 @@ export const gedAi: Record<Locale, Project> = {
   en: {
     ...base,
     segment: "Electronic document management",
+    video: { ...base.video, label: "Video demo of the ged.ai platform: browsing the document list, step-by-step upload, document management, filters and history with an AI summary." },
     scope: "Product redesign",
     summary:
       "Redesign of an AI-powered electronic document management platform: from organizing and searching to history and approvals.",
@@ -201,6 +205,7 @@ export const gedAi: Record<Locale, Project> = {
   es: {
     ...base,
     segment: "Gestión electrónica de documentos",
+    video: { ...base.video, label: "Demostración en video de la plataforma ged.ai: navegación por la lista de documentos, registro por etapas, gestión, filtros e historial con resumen por IA." },
     scope: "Rediseño de producto",
     summary:
       "Rediseño de una plataforma de gestión electrónica de documentos con inteligencia artificial: de la organización y la búsqueda al historial y las aprobaciones.",

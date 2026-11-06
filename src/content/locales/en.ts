@@ -127,6 +127,8 @@ export const en: SiteContent = {
       ],
       viewAll: "See all projects",
       viewCase: "View case",
+      videoPause: "Pause video",
+      videoPlay: "Play video",
       scope: "Scope",
       segment: "Industry",
       client: "Client",

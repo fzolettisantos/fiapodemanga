@@ -160,6 +160,8 @@ Tudo é progressive enhancement: sem suporte do navegador o conteúdo aparece no
   <entrada> public/images/projetos/<slug>/capa.webp` (amplia 2x com Lanczos e aplica realce leve de nitidez).
 - **Case publicado:** `ged.ai` (`src/content/projects/ged-ai.ts`, PT/EN/ES), acessível em `/projetos/ged-ai` pelo slide
   da Home e pela lista de `/projetos`. As telas são preparadas com `scripts/prepare-case-screens.py`.
+  O banner é um vídeo de demonstração (sem áudio, em loop, com botão de pausa) montado com as telas reais:
+  a cena fica em `scripts/case-video/ged-ai/scene.html` (instruções em `scripts/case-video/README.md`).
 - **Cases**: copie `src/content/projects/_template.ts`, preencha **somente com dados reais e autorizados**
   e adicione ao array em `src/content/projects/index.ts`. Rotas, sitemap e Home atualizam sozinhos.
 - **Insights**: mesmo processo em `src/content/articles/`. Enquanto não houver artigos, `/insights`

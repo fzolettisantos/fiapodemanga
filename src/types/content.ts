@@ -66,6 +66,8 @@ export type Project = {
   learnings: string[];
   /** Somente imagens com autorização de uso */
   cover?: ImageAsset;
+  /** Vídeo de demonstração exibido no lugar da capa (sem áudio, em loop) */
+  video?: { mp4: string; webm?: string; poster: string; width: number; height: number; label?: string };
   images: ImageAsset[];
   publishedAt: string; // ISO yyyy-mm-dd
   seo: Seo;

@@ -10,6 +10,7 @@ import { CasePreview } from "@/components/sections/CasePreview";
 import { ProjectSlider } from "@/components/sections/ProjectSlider";
 import { localizeShowcase, showcase } from "@/content/projects/showcase";
 import { ContactCta } from "@/components/sections/ContactCta";
+import { ConversationBadge } from "@/components/brand/ConversationBadge";
 import { FiberLine } from "@/components/brand/FiberLine";
 import { WordReveal } from "@/components/motion/WordReveal";
 import { ScrollFillText } from "@/components/motion/ScrollFillText";
@@ -36,7 +37,7 @@ function splitAccent(title: string): { text: string; accent?: boolean }[] {
 }
 
 export default async function HomePage() {
-  const { t } = await getI18n();
+  const { t, href } = await getI18n();
   const c = t.home;
   const services = t.services;
   const projects = getProjectsSorted().slice(0, 3);
@@ -80,10 +81,18 @@ export default async function HomePage() {
       {/* SOBRE */}
       <section aria-labelledby="sobre-title" className="border-t border-line">
         <div className="container-site grid gap-10 py-20 md:py-32 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-3">
-            <p className="eyebrow lg:sticky lg:top-28">{c.about.eyebrow}</p>
+          <div className="lg:col-span-4">
+            <div className="lg:sticky lg:top-28">
+              <p className="eyebrow">{c.about.eyebrow}</p>
+              <ConversationBadge
+                src="/brand/vamos-conversar-sentada.svg"
+                label={t.ui.badgeAria}
+                href={href("/contato")}
+                className="mt-10 w-full max-w-[18rem] sm:max-w-[21rem] lg:mt-12 lg:max-w-[24rem]"
+              />
+            </div>
           </div>
-          <div className="lg:col-span-9" data-reveal>
+          <div className="lg:col-span-8" data-reveal>
             <h2 id="sobre-title" className="type-title">
               {c.about.title}
             </h2>

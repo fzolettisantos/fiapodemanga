@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils/cn";
 
-const SRC = "/brand/vamos-conversar.svg";
+const DEFAULT_SRC = "/brand/vamos-conversar.svg";
 
 /**
  * Ilustração "Vamos conversar": a Luli com a caneca + lettering em arco (SVG vetorizado).
@@ -16,7 +16,18 @@ const SRC = "/brand/vamos-conversar.svg";
  *    sejam animados por CSS (ver "Ilustração Vamos conversar" em globals.css).
  * Sem JavaScript, exibe o mesmo SVG como imagem. O arquivo é estático e do próprio site.
  */
-export function ConversationBadge({ className, label, href }: { className?: string; label: string; href: string }) {
+export function ConversationBadge({
+  className,
+  label,
+  href,
+  src = DEFAULT_SRC,
+}: {
+  className?: string;
+  label: string;
+  href: string;
+  /** Arte: /brand/vamos-conversar.svg (deitada) ou /brand/vamos-conversar-sentada.svg (sentada) */
+  src?: string;
+}) {
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -25,7 +36,7 @@ export function ConversationBadge({ className, label, href }: { className?: stri
     let cancelled = false;
 
     const load = () => {
-      fetch(SRC)
+      fetch(src)
         .then((res) => (res.ok ? res.text() : Promise.reject(new Error(String(res.status)))))
         .then((svg) => {
           if (cancelled) return;
@@ -60,7 +71,7 @@ export function ConversationBadge({ className, label, href }: { className?: stri
       cancelled = true;
       observer.disconnect();
     };
-  }, []);
+  }, [src]);
 
   return (
     <Link
@@ -71,7 +82,7 @@ export function ConversationBadge({ className, label, href }: { className?: stri
       <span ref={ref} className="conversation-badge__art block aspect-square" />
       <noscript>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={SRC} alt="" width={1254} height={1254} className="block h-auto w-full" />
+        <img src={src} alt="" width={1254} height={1254} className="block h-auto w-full" />
       </noscript>
     </Link>
   );

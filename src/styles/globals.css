@@ -1154,3 +1154,81 @@ h3.eyebrow {
   -webkit-user-drag: none;
   user-select: none;
 }
+
+/* --- Ilustração "Vamos conversar" com a Luli sentada --- */
+.badge-sitting .badge-ray {
+  fill: var(--brand-lime);
+}
+:root:not([data-theme="dark"]) .badge-sitting .badge-ray {
+  /* no fundo claro, um tom de lima mais denso para os traços aparecerem */
+  fill: #c8e000;
+}
+@media (prefers-reduced-motion: no-preference) {
+  /* Letreiro: as letras pulam em sequência, linha de cima e depois a de baixo */
+  .badge-sitting .badge-letter {
+    animation: badge-letter-bounce 3s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+    animation-delay: calc(var(--i) * 0.08s + var(--row) * 0.15s - 3s);
+  }
+  /* O letreiro fica reto: sem o giro do anel da outra ilustração */
+  .badge-sitting .badge-ring {
+    animation: none;
+  }
+  /* Traços de brilho: pulsam para fora, grupo por grupo */
+  .badge-sitting .badge-ray {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: badge-ray-pop 1.8s ease-in-out infinite;
+    animation-delay: calc(var(--g) * 0.22s + var(--k) * 0.07s);
+  }
+  /* Cauda abanando */
+  .badge-sitting .badge-tail {
+    transform-box: fill-box;
+    transform-origin: 85% 88%;
+    animation: badge-tail-wag 1.6s ease-in-out infinite;
+  }
+}
+@keyframes badge-letter-bounce {
+  0%,
+  45%,
+  100% {
+    transform: none;
+  }
+  18% {
+    transform: translateY(-26px) rotate(-3deg);
+  }
+  30% {
+    transform: translateY(4px);
+  }
+}
+@keyframes badge-ray-pop {
+  0%,
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+  50% {
+    transform: translate(calc(var(--dx) * 18px), calc(var(--dy) * 18px)) scale(1.12);
+    opacity: 0.6;
+  }
+}
+@keyframes badge-tail-wag {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  20% {
+    rotate: -10deg;
+  }
+  40% {
+    rotate: 4deg;
+  }
+  60% {
+    rotate: -8deg;
+  }
+  80% {
+    rotate: 2deg;
+  }
+}
+.badge-sitting .badge-green {
+  fill: var(--brand-lime);
+}

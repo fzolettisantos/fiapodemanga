@@ -1137,3 +1137,20 @@ h3.eyebrow {
     background-size: 0% 0.3em;
   }
 }
+
+/* Arraste com o mouse no slider */
+@media (hover: hover) and (pointer: fine) {
+  .project-slider__track {
+    cursor: grab;
+  }
+}
+.project-slider__track.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none !important;
+  scroll-behavior: auto;
+  user-select: none;
+}
+.project-slider__track img {
+  -webkit-user-drag: none;
+  user-select: none;
+}

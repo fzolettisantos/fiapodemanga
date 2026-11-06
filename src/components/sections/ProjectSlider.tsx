@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils/cn";
 
 /**
  * Slider de projetos: rolagem horizontal nativa com scroll-snap (toque, trackpad,
- * teclado) + botões anterior/próximo e contador. Sem autoplay.
+ * teclado), arraste com o mouse, botões anterior/próximo e contador. Sem autoplay.
  */
 export type SliderLabels = {
   region: string;
@@ -68,6 +68,110 @@ export function ProjectSlider({
     };
   }, [update]);
 
+  /** Índice do slide mais próximo de uma posição de rolagem. */
+  const nearest = useCallback(
+    (left: number) => {
+      const pos = positions();
+      let best = 0;
+      pos.forEach((p, i) => {
+        if (Math.abs(p - left) < Math.abs((pos[best] ?? 0) - left)) best = i;
+      });
+      return best;
+    },
+    [positions],
+  );
+
+  // Arraste com o mouse (no toque, a rolagem nativa já cuida disso).
+  useEffect(() => {
+    const el = scroller.current;
+    if (!el) return;
+    let dragging = false;
+    let moved = false;
+    let suppressClick = false;
+    let pointerId = -1;
+    let startX = 0;
+    let startLeft = 0;
+    let startIndex = 0;
+    let lastX = 0;
+    let lastT = 0;
+    let velocity = 0;
+
+    const reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const onDown = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      dragging = true;
+      moved = false;
+      pointerId = e.pointerId;
+      startX = lastX = e.clientX;
+      lastT = e.timeStamp;
+      startLeft = el.scrollLeft;
+      startIndex = nearest(startLeft);
+      velocity = 0;
+    };
+
+    const onMove = (e: PointerEvent) => {
+      if (!dragging || e.pointerId !== pointerId) return;
+      const dx = e.clientX - startX;
+      if (!moved) {
+        if (Math.abs(dx) < 5) return;
+        moved = true;
+        el.classList.add("is-dragging");
+        el.setPointerCapture(pointerId);
+      }
+      e.preventDefault();
+      el.scrollLeft = startLeft - dx;
+      const dt = e.timeStamp - lastT;
+      if (dt > 0) velocity = (e.clientX - lastX) / dt;
+      lastX = e.clientX;
+      lastT = e.timeStamp;
+    };
+
+    const onUp = (e: PointerEvent) => {
+      if (!dragging || e.pointerId !== pointerId) return;
+      dragging = false;
+      if (!moved) return;
+      suppressClick = true;
+      window.setTimeout(() => (suppressClick = false), 0);
+
+      const dx = e.clientX - startX;
+      const fling = Math.abs(velocity) > 0.45; // px/ms
+      let target = nearest(el.scrollLeft);
+      // Um gesto curto ou rápido ainda avança um slide na direção do arraste.
+      if (target === startIndex) {
+        if (dx < -50 || (fling && velocity < 0)) target = startIndex + 1;
+        else if (dx > 50 || (fling && velocity > 0)) target = startIndex - 1;
+      }
+      const pos = positions();
+      target = Math.max(0, Math.min(pos.length - 1, target));
+      el.scrollTo({ left: pos[target] ?? 0, behavior: reduced() ? "auto" : "smooth" });
+
+      const restore = () => el.classList.remove("is-dragging");
+      el.addEventListener("scrollend", restore, { once: true });
+      window.setTimeout(restore, 700);
+    };
+
+    const onClick = (e: MouseEvent) => {
+      if (suppressClick) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    el.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointermove", onMove, { passive: false });
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    el.addEventListener("click", onClick, true);
+    return () => {
+      el.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+      el.removeEventListener("click", onClick, true);
+    };
+  }, [nearest, positions]);
+
   const go = (to: number) => {
     const el = scroller.current;
     const target = positions()[Math.max(0, Math.min(total - 1, to))];
@@ -108,6 +212,7 @@ export function ProjectSlider({
                   width={project.image.width}
                   height={project.image.height}
                   quality={85}
+                  draggable={false}
                   sizes="(min-width: 1280px) 54vw, (min-width: 1024px) 58vw, (min-width: 640px) 72vw, 86vw"
                   className="aspect-[800/784] h-auto w-full object-cover lg:aspect-[5/4]"
                 />

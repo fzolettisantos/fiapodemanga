@@ -71,7 +71,9 @@ export async function CaseTemplate({ project }: { project: Project }) {
           {project.scope ? (
             <div>
               <dt className="font-mono text-xs tracking-[0.06em] text-muted uppercase">{P.scope}</dt>
-              <dd className="mt-2 text-text">{project.scope}</dd>
+              <dd className="mt-2">
+                <span className="inline-flex min-h-8 items-center rounded-full border border-line-strong px-3 py-1 text-[0.85rem] leading-tight text-text">{project.scope}</span>
+              </dd>
             </div>
           ) : null}
           {project.client ? (
@@ -90,10 +92,10 @@ export async function CaseTemplate({ project }: { project: Project }) {
             <div className="lg:col-span-2">
               <dt className="font-mono text-xs tracking-[0.06em] text-muted uppercase">{P.specialties}</dt>
               <dd className="mt-2">
-                <ul className="flex flex-wrap gap-x-4 gap-y-1">
+                <ul className="flex flex-wrap gap-2">
                   {relatedServices.map((s) => (
                     <li key={s.slug}>
-                      <Link href={`/servicos/${s.slug}`} className="link-underline text-text">
+                      <Link href={`/servicos/${s.slug}`} className="inline-flex min-h-8 items-center rounded-full border border-line-strong px-3 py-1 text-[0.85rem] leading-tight text-text transition-colors hover:border-accent hover:text-accent focus-visible:border-accent">
                         {s.name}
                       </Link>
                     </li>

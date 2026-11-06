@@ -40,9 +40,9 @@ Ajustes de ilustração aplicados na vetorização:
 | `og-image.png`                     | Open Graph / Twitter, 1200×630                             |
 
 | `luli-deitada.svg`                 | Silhueta da Luli deitada (rodapé), vetorizada de `luli-deitada-original.webp` |
-| `vamos-conversar.svg`              | Ilustração "Vamos conversar" (Luli com caneca + lettering em arco), vetorizada por camada de cor e por letra |
+| `vamos-conversar.svg`              | Ilustração anterior (Luli deitada + lettering em arco) — fora de uso no site, mantida como arquivo da marca |
 | `vamos-conversar-original.webp`    | Arte original da ilustração                                |
-| `vamos-conversar-sentada.svg`      | Ilustração "Vamos conversar" com a Luli sentada (Home, seção Sobre nós), vetorizada por camada, letra, traço de brilho e cauda |
+| `vamos-conversar-sentada.svg`      | Ilustração "Vamos conversar" com a Luli sentada (chamada final "Vamos conversar?"), vetorizada por camada, letra, traço de brilho e cauda |
 | `vamos-conversar-sentada-original.webp` | Arte original da Luli sentada                          |
 
 As ilustrações são refeitas com `scripts/vectorize-badge.py` (deitada) e `scripts/vectorize-sitting.py` (sentada). Como `/brand/*` é servido com cache de 1 ano,

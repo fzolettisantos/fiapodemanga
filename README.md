@@ -145,8 +145,7 @@ Tudo é progressive enhancement: sem suporte do navegador o conteúdo aparece no
 | Botões magnéticos                        | CTAs primário e secundário             | `motion/Interactions` (só ponteiro fino) |
 | Varredura no hover das listas            | Especialidades                         | CSS `::before` + `scaleX`              |
 | Luli que inclina / balança               | Sobre (hover) e 404                    | CSS                                    |
-| Luli sentada: letreiro pulando, traços de brilho pulsando, cauda abanando, vapor e respiração | Home, seção Sobre nós | `brand/ConversationBadge` com `vamos-conversar-sentada.svg` |
-| Ilustração "Vamos conversar": letras em onda, anel que gira com a rolagem, vapor subindo e Luli respirando | Chamada final "Vamos conversar?" (todas as páginas com a seção) | `brand/ConversationBadge` (SVG carregado sob demanda) |
+| Luli sentada: letreiro pulando, traços de brilho pulsando, cauda abanando, vapor e respiração | Chamada final "Vamos conversar?" | `brand/ConversationBadge` com `vamos-conversar-sentada.svg` |
 
 ## Conteúdo
 

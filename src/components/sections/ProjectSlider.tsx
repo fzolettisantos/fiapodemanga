@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { ShowcaseProject } from "@/content/projects/showcase";
@@ -19,6 +20,7 @@ export type SliderLabels = {
   next: string;
   of: string;
   item: string;
+  viewCase?: string;
 };
 
 export function ProjectSlider({
@@ -204,7 +206,7 @@ export function ProjectSlider({
             aria-label={`${i + 1} ${labels.of} ${total}: ${project.title}${project.client ? ` — ${project.client}` : ""}`}
             className="project-slide w-[86%] shrink-0 snap-start sm:w-[72%] lg:w-[58%] xl:w-[54%]"
           >
-            <figure>
+            <figure className="relative">
               <div className="project-slide__media overflow-hidden rounded-sm">
                 <Image
                   src={project.image.src}
@@ -220,11 +222,24 @@ export function ProjectSlider({
               <figcaption className="mt-6 flex items-start gap-4">
                 <span className="index-number pt-1.5 text-sm">{String(i + 1).padStart(2, "0")}/</span>
                 <span>
-                  <span className="type-subheading block">{project.title}</span>
+                  <span className="type-subheading block">
+                    {project.href ? (
+                      <Link href={project.href} draggable={false} className="after:absolute after:inset-0">
+                        {project.title}
+                      </Link>
+                    ) : (
+                      project.title
+                    )}
+                  </span>
                   <span className="mt-2 block font-mono text-xs tracking-[0.06em] text-muted uppercase">
                     {project.client ? `${project.client} · ` : ""}
                     {project.category}
                   </span>
+                  {project.href && labels.viewCase ? (
+                    <span aria-hidden="true" className="mt-3 block text-sm text-accent">
+                      {labels.viewCase} ↗
+                    </span>
+                  ) : null}
                 </span>
               </figcaption>
             </figure>

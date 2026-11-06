@@ -16,9 +16,9 @@ export function generateStaticParams(): Params[] {
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProject(slug);
-  if (!project) return {};
   const { locale } = await getI18n();
+  const project = getProject(slug, locale);
+  if (!project) return {};
   return buildMetadata({
     locale,
     title: project.seo.title,
@@ -34,9 +34,9 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 
 export default async function ProjectPage({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const { locale, t } = await getI18n();
+  const project = getProject(slug, locale);
   if (!project) notFound();
-  const { t } = await getI18n();
 
   return (
     <>

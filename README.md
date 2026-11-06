@@ -158,6 +158,8 @@ Tudo é progressive enhancement: sem suporte do navegador o conteúdo aparece no
 - **Vitrine de projetos (slider)**: `src/content/projects/showcase.ts` — título, cliente, categoria e imagem
   de cada projeto: slider na Home (`ProjectSlider`) e lista, um embaixo do outro, em `/projetos` (`ProjectList`). Novas imagens: `python3 scripts/prepare-project-images.py
   <entrada> public/images/projetos/<slug>/capa.webp` (amplia 2x com Lanczos e aplica realce leve de nitidez).
+- **Case publicado:** `ged.ai` (`src/content/projects/ged-ai.ts`, PT/EN/ES), acessível em `/projetos/ged-ai` pelo slide
+  da Home e pela lista de `/projetos`. As telas são preparadas com `scripts/prepare-case-screens.py`.
 - **Cases**: copie `src/content/projects/_template.ts`, preencha **somente com dados reais e autorizados**
   e adicione ao array em `src/content/projects/index.ts`. Rotas, sitemap e Home atualizam sozinhos.
 - **Insights**: mesmo processo em `src/content/articles/`. Enquanto não houver artigos, `/insights`

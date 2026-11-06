@@ -2,11 +2,9 @@ import type { Metadata } from "next";
 import { ArrowUpRight } from "lucide-react";
 import { LocaleLink as Link } from "@/components/ui/LocaleLink";
 import { getI18n } from "@/i18n/server";
-import { getProjectsSorted } from "@/content/projects";
 import { ButtonLink } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
-import { CasePreview } from "@/components/sections/CasePreview";
 import { ProjectSlider } from "@/components/sections/ProjectSlider";
 import { localizeShowcase, showcase } from "@/content/projects/showcase";
 import { ContactCta } from "@/components/sections/ContactCta";
@@ -37,10 +35,9 @@ function splitAccent(title: string): { text: string; accent?: boolean }[] {
 }
 
 export default async function HomePage() {
-  const { t } = await getI18n();
+  const { t, href } = await getI18n();
   const c = t.home;
   const services = t.services;
-  const projects = getProjectsSorted().slice(0, 3);
 
   return (
     <>
@@ -246,17 +243,10 @@ export default async function HomePage() {
             </div>
           </div>
           <ProjectSlider
-            projects={localizeShowcase(showcase, t.showcase)}
-            labels={t.ui.slider}
+            projects={localizeShowcase(showcase, t.showcase, href)}
+            labels={{ ...t.ui.slider, viewCase: t.ui.projects.viewCase }}
             className="mt-16 md:mt-24"
           />
-          {projects.length > 0 ? (
-            <ol className="mt-16 border-t border-line">
-              {projects.map((project, index) => (
-                <CasePreview key={project.slug} project={project} index={index} />
-              ))}
-            </ol>
-          ) : null}
         </div>
       </section>
 

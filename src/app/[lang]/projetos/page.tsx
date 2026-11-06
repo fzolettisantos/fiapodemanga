@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { getI18n } from "@/i18n/server";
-import { getProjectsSorted } from "@/content/projects";
 import { localizeShowcase, showcase } from "@/content/projects/showcase";
 import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
 import { PageHero } from "@/components/sections/PageHero";
-import { CasePreview } from "@/components/sections/CasePreview";
 import { ProjectList } from "@/components/sections/ProjectList";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -15,9 +13,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ProjectsPage() {
-  const { t } = await getI18n();
+  const { t, href } = await getI18n();
   const c = t.projectsPage;
-  const projects = getProjectsSorted();
 
   return (
     <>
@@ -29,24 +26,14 @@ export default async function ProjectsPage() {
           <h2 id="vitrine-title" className="eyebrow mb-10 md:mb-14">
             {t.ui.projects.selected}
           </h2>
-          <ProjectList projects={localizeShowcase(showcase, t.showcase)} label={t.ui.projects.list} />
+          <ProjectList
+            projects={localizeShowcase(showcase, t.showcase, href)}
+            label={t.ui.projects.list}
+            viewCase={t.ui.projects.viewCase}
+          />
         </div>
       </section>
 
-      {projects.length > 0 ? (
-        <section aria-labelledby="lista-projetos-title" className="border-t border-line">
-          <div className="container-site py-16 md:py-24">
-            <h2 id="lista-projetos-title" className="sr-only">
-              {t.ui.projects.list}
-            </h2>
-            <ol className="border-t border-line">
-              {projects.map((project, index) => (
-                <CasePreview key={project.slug} project={project} index={index} />
-              ))}
-            </ol>
-          </div>
-        </section>
-      ) : null}
 
       <section aria-labelledby="narrativa-title" className="border-t border-line">
         <div className="container-site py-20 md:py-28">

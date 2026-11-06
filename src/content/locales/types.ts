@@ -104,6 +104,9 @@ export type SiteContent = {
       narrativeEyebrow: string;
       narrative: { title: string; description: string }[];
       viewAll: string;
+      viewCase: string;
+      scope: string;
+      segment: string;
       client: string;
       year: string;
       specialties: string;

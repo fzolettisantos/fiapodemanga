@@ -46,6 +46,8 @@ export type Project = {
   name: string;
   client?: string;
   segment: string;
+  /** O que foi feito (ex.: "Redesign de produto") */
+  scope?: string;
   year?: string;
   /** Resumo curto para listagem */
   summary: string;
@@ -56,6 +58,8 @@ export type Project = {
   research: string[];
   hypotheses: string[];
   process: { title: string; description: string }[];
+  /** Título alternativo da seção "Processo" (ex.: "O que foi redesenhado") */
+  processTitle?: string;
   solution: string[];
   /** Somente resultados comprovados, com fonte/medição quando possível */
   results: { label: string; value?: string; description: string }[];

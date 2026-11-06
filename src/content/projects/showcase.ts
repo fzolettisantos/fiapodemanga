@@ -16,6 +16,10 @@ export type ShowcaseProject = {
   category: string;
   /** slugs de especialidades relacionadas */
   services: string[];
+  /** Slug do case completo (/projetos/<slug>), quando existir */
+  caseSlug?: string;
+  /** Link já localizado para o case (preenchido na página) */
+  href?: string;
   image: ImageAsset;
 };
 
@@ -24,6 +28,7 @@ const size = { width: 1600, height: 1568 };
 export const showcase: ShowcaseProject[] = [
   {
     slug: "ged-ai",
+    caseSlug: "ged-ai",
     title: "ged.ai",
     category: "Plataforma web",
     services: ["aplicativos-sistemas-plataformas", "product-design-ux-ui", "design-tecnologia-ia"],
@@ -75,9 +80,12 @@ export const showcase: ShowcaseProject[] = [
 export function localizeShowcase(
   items: ShowcaseProject[],
   texts: Record<string, { title: string; category: string; alt: string }>,
+  href?: (path: string) => string,
 ): ShowcaseProject[] {
   return items.map((p) => {
     const tx = texts[p.slug];
-    return tx ? { ...p, title: tx.title, category: tx.category, image: { ...p.image, alt: tx.alt } } : p;
+    const link = p.caseSlug && href ? href(`/projetos/${p.caseSlug}`) : undefined;
+    const item = tx ? { ...p, title: tx.title, category: tx.category, image: { ...p.image, alt: tx.alt } } : p;
+    return { ...item, href: link };
   });
 }

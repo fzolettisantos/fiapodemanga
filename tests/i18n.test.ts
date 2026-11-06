@@ -46,3 +46,18 @@ describe("i18n — conteúdo", () => {
     if (!r.success) expect(r.errors.name).toBe("Please enter your name.");
   });
 });
+
+describe("cases", () => {
+  it("o case ged.ai existe nos três idiomas, com o mesmo slug e as mesmas imagens", async () => {
+    const { getProject } = await import("@/content/projects");
+    const pt = getProject("ged-ai", "pt");
+    const en = getProject("ged-ai", "en");
+    const es = getProject("ged-ai", "es");
+    expect(pt && en && es).toBeTruthy();
+    expect(en!.images.map((i) => i.src)).toEqual(pt!.images.map((i) => i.src));
+    expect(es!.process.length).toBe(pt!.process.length);
+    expect(en!.problem[0]).not.toBe(pt!.problem[0]);
+    // sem resultados inventados
+    expect(pt!.results).toEqual([]);
+  });
+});

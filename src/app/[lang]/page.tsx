@@ -10,7 +10,8 @@ import { CasePreview } from "@/components/sections/CasePreview";
 import { ProjectSlider } from "@/components/sections/ProjectSlider";
 import { localizeShowcase, showcase } from "@/content/projects/showcase";
 import { ContactCta } from "@/components/sections/ContactCta";
-import { FiberLine } from "@/components/brand/FiberLine";
+import { HeroMascot } from "@/components/brand/HeroMascot";
+import { HeroBackdrop } from "@/components/sections/HeroBackdrop";
 import { WordReveal } from "@/components/motion/WordReveal";
 import { ScrollFillText } from "@/components/motion/ScrollFillText";
 import { Marquee } from "@/components/motion/Marquee";
@@ -44,27 +45,30 @@ export default async function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section aria-labelledby="hero-title" className="relative overflow-hidden">
-        <div className="container-site pt-16 pb-20 md:pt-28 md:pb-32">
-          <p className="eyebrow">{c.hero.eyebrow}</p>
-          <WordReveal
-            id="hero-title"
-            className="type-display mt-8 max-w-[14ch] md:mt-10"
-            parts={splitAccent(c.hero.title)}
-          />
-
-          <FiberLine className="mt-12 -mr-[10vw] w-[110%] max-w-none md:mt-16" />
-
-          <div className="hero-enter mt-12 grid gap-10 md:mt-16 lg:grid-cols-12">
-            <p className="type-lead max-w-xl lg:col-span-6 lg:col-start-6">{c.hero.description}</p>
-            <div className="flex flex-wrap items-start gap-3 lg:col-span-6 lg:col-start-6">
-              <ButtonLink href={c.hero.primaryCta.href} variant="primary" size="lg">
-                {c.hero.primaryCta.label}
-              </ButtonLink>
-              <ButtonLink href={c.hero.secondaryCta.href} variant="secondary" size="lg">
-                {c.hero.secondaryCta.label}
-              </ButtonLink>
+      <section aria-labelledby="hero-title" className="hero relative isolate overflow-hidden">
+        <HeroBackdrop />
+        <div className="container-site grid items-center gap-12 pt-16 pb-20 md:pt-24 md:pb-28 lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-7">
+            <p className="eyebrow">{c.hero.eyebrow}</p>
+            <WordReveal
+              id="hero-title"
+              className="type-display mt-8 max-w-[14ch] md:mt-10"
+              parts={splitAccent(c.hero.title)}
+            />
+            <div className="hero-enter mt-10 max-w-xl md:mt-12">
+              <p className="type-lead">{c.hero.description}</p>
+              <div className="mt-10 flex flex-wrap items-start gap-3">
+                <ButtonLink href={c.hero.primaryCta.href} variant="primary" size="lg">
+                  {c.hero.primaryCta.label}
+                </ButtonLink>
+                <ButtonLink href={c.hero.secondaryCta.href} variant="secondary" size="lg">
+                  {c.hero.secondaryCta.label}
+                </ButtonLink>
+              </div>
             </div>
+          </div>
+          <div className="hero-mascot-col lg:col-span-5">
+            <HeroMascot label={t.ui.mascot.label} next={t.ui.mascot.next} phrases={t.ui.mascot.phrases} />
           </div>
         </div>
       </section>

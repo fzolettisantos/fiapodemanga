@@ -140,6 +140,12 @@ export type SiteContent = {
     };
     contact: { orWrite: string; formRegion: string };
     badgeAria: string;
+    /** Balão de fala da Luli no hero */
+    mascot: {
+      label: string;
+      next: string;
+      phrases: { line1: string; line2: string }[];
+    };
     notFound: { eyebrow: string; title: string; description: string; home: string; services: string };
   };
   form: {

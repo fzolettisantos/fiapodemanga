@@ -162,6 +162,16 @@ export const en: SiteContent = {
     },
     contact: { orWrite: "If you prefer, write to", formRegion: "Contact form" },
     badgeAria: "Let’s talk — get in touch with Fiapo de Manga",
+    mascot: {
+      label: "Luli, Fiapo de Manga’s mascot",
+      next: "Another line",
+      phrases: [
+        { line1: "A good question?", line2: "I’ll sniff it out." },
+        { line1: "Complex problem?", line2: "Let’s unpack it." },
+        { line1: "New product?", line2: "Start with research." },
+        { line1: "Coffee’s ready.", line2: "Shall we talk?" },
+      ],
+    },
     notFound: {
       eyebrow: "Error 404",
       title: "That question went unanswered.",

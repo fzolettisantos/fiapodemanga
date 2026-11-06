@@ -171,6 +171,16 @@ export const pt: SiteContent = {
     },
     contact: { orWrite: "Se preferir, escreva para", formRegion: "Formulário de contato" },
     badgeAria: "Vamos conversar — fale com a Fiapo de Manga",
+    mascot: {
+      label: "Luli, a mascote da Fiapo de Manga",
+      next: "Outra frase",
+      phrases: [
+        { line1: "Uma boa pergunta?", line2: "Eu farejo." },
+        { line1: "Problema complexo?", line2: "Vamos destrinchar." },
+        { line1: "Produto novo?", line2: "Começa pela pesquisa." },
+        { line1: "O café tá pronto.", line2: "Vamos conversar?" },
+      ],
+    },
     notFound: {
       eyebrow: "Erro 404",
       title: "Essa pergunta ficou sem resposta.",

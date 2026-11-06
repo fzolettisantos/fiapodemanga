@@ -132,6 +132,7 @@ Tudo é progressive enhancement: sem suporte do navegador o conteúdo aparece no
 | Efeito                                   | Onde                                   | Como                                   |
 | ---------------------------------------- | -------------------------------------- | -------------------------------------- |
 | Título palavra por palavra (máscara)     | Hero da Home e das páginas internas    | `motion/WordReveal` + CSS keyframes    |
+| Hero: Luli mascote com balão de frases (troca automática e botão) + fundo de wireframes em parallax | Home | `brand/HeroMascot` + `sections/HeroBackdrop` (`animation-timeline: scroll(root)`) |
 | Faixa tipográfica infinita (marquee)     | Home (especialidades), Serviços        | `motion/Marquee`, CSS puro, pausa no hover |
 | Frase que acende com a rolagem           | Destaques (callouts)                   | `motion/ScrollFillText`, `view-timeline` |
 | Revelação de blocos ligada à rolagem     | Seções com `data-reveal`               | `animation-timeline: view()` (fallback IntersectionObserver) |

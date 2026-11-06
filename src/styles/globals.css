@@ -725,10 +725,13 @@ html.vt-theme::view-transition-new(root) {
 }
 
 /* --- 8. Ilustração "Vamos conversar" --- */
-.conversation-badge {
+.conversation-badge,
+.hero-mascot {
   --badge-ink: #161616;
   --badge-white: #ffffff;
   --badge-grey: #cfcfcf;
+}
+.conversation-badge {
   border-radius: 50%;
   transition: scale 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -1413,5 +1416,141 @@ h3.eyebrow {
   }
   50% {
     fill: #fff6b3;
+  }
+}
+
+/* ==================================================================
+   HERO: Luli mascote + fundo de wireframes em parallax
+=================================================================== */
+.hero {
+  --wf-line: rgb(255 255 255 / 0.2);
+  --wf-fill: rgb(63 63 63 / 0.55);
+  --wf-accent: rgb(204 255 123 / 0.22);
+}
+:root:not([data-theme="dark"]) .hero {
+  --wf-line: rgb(33 33 33 / 0.18);
+  --wf-fill: rgb(247 247 243 / 0.6);
+  --wf-accent: rgb(225 255 0 / 0.45);
+}
+/* textura de grade pontilhada, como uma prancheta */
+.hero-grid {
+  background-image: radial-gradient(var(--wf-line) 1px, transparent 1.2px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(120% 90% at 70% 30%, #000 30%, transparent 75%);
+}
+.hero-wf {
+  rotate: var(--rot);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-wf__svg {
+    animation: hero-wf-float 9s ease-in-out infinite;
+    animation-delay: calc(var(--i) * -1.4s);
+  }
+}
+@keyframes hero-wf-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -10px;
+  }
+}
+/* Parallax: cada peça sobe numa velocidade e gira um pouco conforme a rolagem */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-wf {
+      animation: hero-parallax linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 100vh;
+    }
+    .hero-mascot-col {
+      animation: hero-mascot-scroll linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 90vh;
+    }
+    .hero-mascot__art {
+      animation: hero-mascot-peek linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 70vh;
+    }
+  }
+}
+@keyframes hero-parallax {
+  to {
+    transform: translateY(calc(var(--speed) * -320px));
+    rotate: calc(var(--rot) + var(--speed) * 10deg);
+  }
+}
+@keyframes hero-mascot-scroll {
+  to {
+    transform: translateY(90px);
+  }
+}
+@keyframes hero-mascot-peek {
+  to {
+    rotate: -8deg;
+    scale: 0.94;
+  }
+}
+
+/* Balão de fala */
+.hero-bubble {
+  background: var(--brand-yellow);
+  color: #212121;
+  border: 2px solid #212121;
+  box-shadow: 4px 5px 0 #212121;
+}
+.hero-bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -11px;
+  width: 20px;
+  height: 20px;
+  background: var(--brand-yellow);
+  border-right: 2px solid #212121;
+  border-bottom: 2px solid #212121;
+  transform: translateX(-50%) rotate(45deg);
+}
+.hero-bubble-next {
+  background: #212121;
+  color: #ffffff;
+  border: 2px solid var(--color-bg);
+  transition:
+    rotate 500ms var(--ease-out-expo),
+    background-color 200ms ease;
+}
+.hero-bubble-next:hover {
+  rotate: 180deg;
+  background: #3f3f3f;
+}
+.hero-sparkle path {
+  fill: var(--brand-lime);
+  stroke: #212121;
+  stroke-width: 1.2;
+}
+.hero-mascot__art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-bubble {
+    animation: hero-bubble-pop 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    transform-origin: 50% 110%;
+  }
+  .hero-sparkle {
+    animation: svc-spark 3.6s ease-in-out infinite;
+  }
+  .hero-mascot__art[data-loaded] svg {
+    animation: badge-in 900ms var(--ease-out-expo) both;
+  }
+}
+@keyframes hero-bubble-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(8px);
   }
 }

@@ -162,6 +162,16 @@ export const es: SiteContent = {
     },
     contact: { orWrite: "Si lo prefieres, escríbenos a", formRegion: "Formulario de contacto" },
     badgeAria: "Hablemos — contacta con Fiapo de Manga",
+    mascot: {
+      label: "Luli, la mascota de Fiapo de Manga",
+      next: "Otra frase",
+      phrases: [
+        { line1: "¿Una buena pregunta?", line2: "Yo la olfateo." },
+        { line1: "¿Problema complejo?", line2: "Vamos a desmenuzarlo." },
+        { line1: "¿Producto nuevo?", line2: "Empieza por investigar." },
+        { line1: "El café está listo.", line2: "¿Hablamos?" },
+      ],
+    },
     notFound: {
       eyebrow: "Error 404",
       title: "Esa pregunta se quedó sin respuesta.",

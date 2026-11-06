@@ -7,6 +7,9 @@ Uso:
   npx svgo --multipass (removeViewBox, collapseGroups e moveGroupAttrsToElems desligados)
   → public/brand/vamos-conversar-sentada.svg
 
+  Com --mascot, gera só a Luli (sem letreiro e traços), para o mascote do hero:
+  python3 scripts/vectorize-sitting.py --mascot <entrada> /tmp/mascote.svg → public/brand/luli-mascote.svg
+
 Requisitos: potrace, Pillow, numpy, scipy.
 
 Camadas (traçadas separadamente com potrace):
@@ -58,7 +61,7 @@ def layer(cls, mask, color, **kw):
     return f'<g class="{cls}" fill="{color}">{body}</g>' if body else ""
 
 
-def main(src, out):
+def main(src, out, mascot=False):
     im = np.asarray(Image.open(src).convert("RGB")).astype(float)
     R, G, B = im[..., 0], im[..., 1], im[..., 2]
     lum = 0.2126 * R + 0.7152 * G + 0.0722 * B
@@ -157,10 +160,14 @@ def main(src, out):
         )
 
     # viewBox recortado no conteúdo (quadrado, com respiro)
-    ys, xs = np.where(light)
+    region = np.isin(lab, dog_ids) if mascot else light
+    ys, xs = np.where(region)
     cx, cy = (xs.min() + xs.max()) / 2, (ys.min() + ys.max()) / 2
-    side = max(xs.max() - xs.min(), ys.max() - ys.min()) + 60
+    side = max(xs.max() - xs.min(), ys.max() - ys.min()) + (40 if mascot else 60)
     vb = f"{cx - side / 2:.0f} {cy - side / 2:.0f} {side:.0f} {side:.0f}"
+    if mascot:
+        # Mascote: só a Luli (sem letreiro e sem traços de brilho)
+        letter_svg, rays_svg = [], []
 
     svg = (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vb}" class="badge-svg badge-sitting" role="img" '
@@ -176,6 +183,7 @@ def main(src, out):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
+    args = [a for a in sys.argv[1:] if a != "--mascot"]
+    if len(args) != 2:
         sys.exit(__doc__)
-    main(sys.argv[1], sys.argv[2])
+    main(args[0], args[1], mascot="--mascot" in sys.argv)

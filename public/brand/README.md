@@ -43,6 +43,7 @@ Ajustes de ilustração aplicados na vetorização:
 | `vamos-conversar.svg`              | Ilustração anterior (Luli deitada + lettering em arco) — fora de uso no site, mantida como arquivo da marca |
 | `vamos-conversar-original.webp`    | Arte original da ilustração                                |
 | `vamos-conversar-sentada.svg`      | Ilustração "Vamos conversar" com a Luli sentada (chamada final "Vamos conversar?"), vetorizada por camada, letra, traço de brilho e cauda |
+| `luli-mascote.svg`                 | Luli sentada sem letreiro e sem brilhos — mascote do hero (`vectorize-sitting.py --mascot`) |
 | `vamos-conversar-sentada-original.webp` | Arte original da Luli sentada                          |
 
 As ilustrações são refeitas com `scripts/vectorize-badge.py` (deitada) e `scripts/vectorize-sitting.py` (sentada). Como `/brand/*` é servido com cache de 1 ano,

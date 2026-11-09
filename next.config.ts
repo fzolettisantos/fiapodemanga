@@ -17,16 +17,6 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     qualities: [75, 85],
-    // Papo Reto: caricaturas e charges enviadas pelo painel ficam no Supabase Storage.
-    remotePatterns: [{ protocol: "https", hostname: "**.supabase.co", pathname: "/storage/v1/object/public/**" }],
-  },
-  // Papo Reto: fontes e caricaturas lidas em tempo de execução pelo gerador de cards.
-  outputFileTracingIncludes: {
-    "/papo-reto/api/share-card": ["./src/papo-reto/assets/fonts/**", "./public/papo-reto/characters/**"],
-  },
-  // Papo Reto: upload de caricaturas e charges pelo painel.
-  experimental: {
-    serverActions: { bodySizeLimit: "4mb" },
   },
   async headers() {
     return [

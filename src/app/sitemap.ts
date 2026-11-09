@@ -5,7 +5,6 @@ import { getProjectsSorted } from "@/content/projects";
 import { getArticlesSorted } from "@/content/articles";
 import { locales, localizePath } from "@/i18n/config";
 import { languageAlternates } from "@/lib/seo/metadata";
-import { TAB_SLUGS } from "@/papo-reto/types";
 
 type Entry = {
   path: string;
@@ -43,7 +42,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // /insights só entra no sitemap quando houver artigos publicados.
   if (articles.length > 0) entries.push({ path: "/insights", changeFrequency: "weekly", priority: 0.6 });
 
-  const localized = entries.flatMap((entry) =>
+  return entries.flatMap((entry) =>
     locales.map((locale) => ({
       url: absoluteUrl(localizePath(locale, entry.path)),
       lastModified: entry.lastModified ?? now,
@@ -52,14 +51,4 @@ export default function sitemap(): MetadataRoute.Sitemap {
       alternates: { languages: languageAlternates(entry.path) },
     })),
   );
-
-  // Papo Reto Ranking: só em português, fora do roteamento de idiomas.
-  const papoReto = ["/papo-reto", ...TAB_SLUGS.map((tab) => `/papo-reto/${tab}`)].map((path) => ({
-    url: absoluteUrl(path),
-    lastModified: now,
-    changeFrequency: "hourly" as const,
-    priority: 0.5,
-  }));
-
-  return [...localized, ...papoReto];
 }

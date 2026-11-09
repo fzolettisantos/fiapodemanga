@@ -1,7 +1,4 @@
 @import "tailwindcss";
-/* O Papo Reto Ranking (/papo-reto) tem CSS e tema próprios. */
-@source not "../papo-reto";
-@source not "../app/papo-reto";
 
 /* Tema controlado por data-theme no <html> (definido antes da pintura). */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));

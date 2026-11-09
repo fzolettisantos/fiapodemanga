@@ -41,7 +41,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   ]);
   const { data: shotRows } = await sb
     .from("static_shots")
-    .select("id, ranking_id, participant_id, quantity, location, weapon")
+    .select("id, ranking_id, participant_id, quantity, location, place, weapon")
     .order("created_at");
   const shots = shotRows ?? [];
   const standings = standingsRes.data ?? [];
@@ -109,7 +109,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
             <button className={button}>Salvar ordem</button>
           </form>
 
-          <h3 className="mt-5 font-bold">Tiros (quantidade · local do tiro · tipo de arma)</h3>
+          <h3 className="mt-5 font-bold">Tiros (quantidade · local do tiro · localidade · tipo de arma)</h3>
           <div className="mt-2 space-y-3">
             {participants.filter((p) => p.active).map((p) => {
               const mine = shots.filter((s) => s.ranking_id === ranking.id && s.participant_id === p.id);
@@ -120,7 +120,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                   <ul className="mt-2 space-y-1 text-sm">
                     {mine.map((s) => (
                       <li key={s.id} className="flex items-center justify-between gap-2">
-                        <span><strong className="tabular">{s.quantity}</strong> · {s.location} · {s.weapon}</span>
+                        <span><strong className="tabular">{s.quantity}</strong> · {s.location} · {s.place || "—"} · {s.weapon}</span>
                         <form action={deleteShot}>
                           <input type="hidden" name="id" value={s.id} />
                           <button className="text-red underline">remover</button>
@@ -128,11 +128,12 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                       </li>
                     ))}
                   </ul>
-                  <form action={addShot} className="mt-2 grid gap-2 sm:grid-cols-[90px_1fr_1fr_auto]">
+                  <form action={addShot} className="mt-2 grid gap-2 sm:grid-cols-[90px_1fr_1fr_1fr_auto]">
                     <input type="hidden" name="id" value={ranking.id} />
                     <input type="hidden" name="participant_id" value={p.id} />
                     <input name="quantity" type="number" min={1} max={9999} required placeholder="Tiros" className={input} aria-label={`Quantidade de tiros em ${p.name}`} />
                     <input name="location" required maxLength={60} placeholder="Local do tiro" className={input} aria-label={`Local do tiro em ${p.name}`} />
+                    <input name="place" maxLength={60} placeholder="Localidade (opcional)" className={input} aria-label={`Localidade dos tiros em ${p.name}`} />
                     <input name="weapon" required maxLength={60} placeholder="Tipo de arma" className={input} aria-label={`Tipo de arma em ${p.name}`} />
                     <button className={button}>Adicionar</button>
                   </form>

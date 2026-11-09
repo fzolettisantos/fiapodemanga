@@ -94,7 +94,7 @@ pessoa da lista). As expressões seguem as mesmas regras de posição. A aba nã
 botão de votar, e o voto é recusado na API (`not_votable`) e no banco (`rankings.mode = 'static'`).
 No modo demonstração a ordem é simulada e sinalizada como "Ordem simulada".
 
-**Tiros do Véio.** Cada box mostra uma tabela com **quantidade de tiros · local do tiro · tipo de arma** e o
+**Tiros do Véio.** Cada box mostra uma tabela com **quantidade de tiros · local do tiro · localidade · tipo de arma** (localidade opcional: onde aconteceu) e o
 total de tiros da pessoa; acima de todos os boxes aparece o total de tiros somando todos. Os registros são
 cadastrados no painel (seção do Bala do Véio → "Tiros"), ficam na tabela `static_shots` e o card
 compartilhável mostra o total de cada um. A ordem do ranking continua sendo a definida pelo programa.

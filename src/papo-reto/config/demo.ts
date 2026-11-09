@@ -40,16 +40,16 @@ export const DEMO_STATIC_POSITIONS: Partial<Record<RankingSlug, Record<string, n
 };
 
 /** Tiros SIMULADOS do Bala do Véio (no ar, quem cadastra é o programa pelo painel). */
-const shot = (id: string, quantity: number, location: string, weapon: string): BalaShot => ({ id, quantity, location, weapon });
+const shot = (id: string, quantity: number, location: string, place: string, weapon: string): BalaShot => ({ id, quantity, location, place, weapon });
 export const DEMO_SHOTS: Record<string, BalaShot[]> = {
   carabina: [
-    shot("c1", 12, "No ego", "Berinjela"),
-    shot("c2", 7, "Na moral", "Chinelo de dedo"),
-    shot("c3", 4, "No orgulho", "Corneta"),
+    shot("c1", 12, "No ego", "Estúdio do Papo Reto", "Berinjela"),
+    shot("c2", 7, "Na moral", "Grupo do WhatsApp", "Chinelo de dedo"),
+    shot("c3", 4, "No orgulho", "Live no YouTube", "Corneta"),
   ],
-  mano: [shot("m1", 9, "Na careca", "Berinjela"), shot("m2", 5, "Na paciência", "Bola murcha")],
-  benja: [shot("b1", 6, "No microfone", "Corneta"), shot("b2", 3, "Na gravata", "Chinelo de dedo")],
-  gadu: [shot("g1", 5, "Na tiara", "Estilingue de pipoca")],
-  joneta: [shot("j1", 2, "No fone de ouvido", "Bolinha de papel"), shot("j2", 1, "Na resenha", "Berinjela")],
-  kleber: [shot("k1", 1, "Na canela", "Chinelo de dedo")],
+  mano: [shot("m1", 9, "Na careca", "Estúdio do Papo Reto", "Berinjela"), shot("m2", 5, "Na paciência", "Arquibancada", "Bola murcha")],
+  benja: [shot("b1", 6, "No microfone", "Abertura do programa", "Corneta"), shot("b2", 3, "Na gravata", "Intervalo", "Chinelo de dedo")],
+  gadu: [shot("g1", 5, "Na tiara", "Bastidores", "Estilingue de pipoca")],
+  joneta: [shot("j1", 2, "No fone de ouvido", "Mesa de som", "Bolinha de papel"), shot("j2", 1, "Na resenha", "Estúdio do Papo Reto", "Berinjela")],
+  kleber: [shot("k1", 1, "Na canela", "Live no YouTube", "Chinelo de dedo")],
 };

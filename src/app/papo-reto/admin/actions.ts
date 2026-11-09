@@ -161,13 +161,14 @@ export async function addShot(form: FormData) {
   const quantity = Number(text(form, "quantity", 4));
   const location = text(form, "location", 60);
   const weapon = text(form, "weapon", 60);
+  const place = text(form, "place", 60) || null;
   if (!UUID.test(participantId)) done("Participante inválido.", true);
   if (!Number.isInteger(quantity) || quantity < 1 || quantity > 9999) done("Quantidade de tiros: número de 1 a 9999.", true);
   if (!location || !weapon) done("Informe o local do tiro e o tipo de arma.", true);
   const sb = getServiceClient();
   const { data: ranking } = await sb.from("rankings").select("mode").eq("id", rankingId).single();
   if (ranking?.mode !== "static") done("Esse ranking não tem tiros.", true);
-  const { error } = await sb.from("static_shots").insert({ ranking_id: rankingId, participant_id: participantId, quantity, location, weapon });
+  const { error } = await sb.from("static_shots").insert({ ranking_id: rankingId, participant_id: participantId, quantity, location, place, weapon });
   if (error) done(`Erro ao salvar tiros: ${error.message}`, true);
   done("Tiros registrados.");
 }

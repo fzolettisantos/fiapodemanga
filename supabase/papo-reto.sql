@@ -63,6 +63,8 @@ create table if not exists public.static_shots (
   created_at     timestamptz not null default now(),
   updated_at     timestamptz not null default now()
 );
+-- Localidade onde aconteceu (opcional), ex.: "Estúdio do Papo Reto".
+alter table public.static_shots add column if not exists place text check (length(place) <= 60);
 create index if not exists static_shots_ranking_idx on public.static_shots (ranking_id, participant_id);
 
 create table if not exists public.votes (

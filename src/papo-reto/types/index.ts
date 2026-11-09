@@ -66,6 +66,8 @@ export interface BalaShot {
   location: string;
   /** Tipo de arma (ex.: "Berinjela"). */
   weapon: string;
+  /** Localidade onde aconteceu (ex.: "Estúdio do Papo Reto"). Opcional. */
+  place: string | null;
 }
 
 export interface RankingResults {

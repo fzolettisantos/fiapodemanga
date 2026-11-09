@@ -9,36 +9,38 @@ export function ShotsTable({ shots, name }: { shots: BalaShot[]; name: string })
   const total = shotsTotal(shots);
   return (
     <div className="mt-3 overflow-hidden rounded-xl border border-line">
-      <table className="w-full table-fixed text-left text-[13px]">
+      <table className="w-full table-fixed text-left text-[12px] leading-snug sm:text-[13px]">
         <caption className="sr-only">Tiros em {name}</caption>
         <thead className="bg-surface-2 text-[11px] font-extrabold uppercase tracking-wide text-muted">
           <tr>
-            <th scope="col" className="w-[22%] px-2.5 py-2">Tiros</th>
-            <th scope="col" className="px-2.5 py-2">Local do tiro</th>
-            <th scope="col" className="px-2.5 py-2">Tipo de arma</th>
+            <th scope="col" className="w-[15%] px-2 py-2">Tiros</th>
+            <th scope="col" className="px-2 py-2">Local do tiro</th>
+            <th scope="col" className="px-2 py-2">Localidade</th>
+            <th scope="col" className="px-2 py-2">Tipo de arma</th>
           </tr>
         </thead>
         <tbody>
           {shots.length === 0 ? (
             <tr className="border-t border-line">
-              <td colSpan={3} className="px-2.5 py-2.5 text-muted">Nenhum tiro registrado. Por enquanto.</td>
+              <td colSpan={4} className="px-2 py-2.5 text-muted">Nenhum tiro registrado. Por enquanto.</td>
             </tr>
           ) : (
             shots.map((shot) => (
               <tr key={shot.id} className="border-t border-line align-top">
-                <td className="px-2.5 py-2 font-display text-[17px] leading-none tabular text-yellow">{formatNumber(shot.quantity)}</td>
-                <td className="break-words px-2.5 py-2 font-semibold">{shot.location}</td>
-                <td className="break-words px-2.5 py-2 text-muted">{shot.weapon}</td>
+                <td className="px-2 py-2 font-display text-[17px] leading-none tabular text-yellow">{formatNumber(shot.quantity)}</td>
+                <td className="break-words hyphens-auto px-2 py-2 font-semibold">{shot.location}</td>
+                <td className="break-words hyphens-auto px-2 py-2">{shot.place || <span className="text-muted" aria-label="sem localidade">—</span>}</td>
+                <td className="break-words hyphens-auto px-2 py-2 text-muted">{shot.weapon}</td>
               </tr>
             ))
           )}
         </tbody>
         <tfoot className="border-t-2 border-line bg-surface-2">
           <tr>
-            <th scope="row" colSpan={2} className="px-2.5 py-2 text-[11px] font-extrabold uppercase tracking-wide text-muted">
+            <th scope="row" colSpan={3} className="px-2 py-2 text-[11px] font-extrabold uppercase tracking-wide text-muted">
               Total de tiros
             </th>
-            <td className="px-2.5 py-2 text-right font-display text-xl leading-none tabular text-white">{formatNumber(total)}</td>
+            <td className="px-2 py-2 text-right font-display text-xl leading-none tabular text-white">{formatNumber(total)}</td>
           </tr>
         </tfoot>
       </table>

@@ -158,12 +158,12 @@ export async function getRankingResults(
         if (config.id) {
           const { data, error } = await sb
             .from("static_shots")
-            .select("id, participant_id, quantity, location, weapon, updated_at")
+            .select("id, participant_id, quantity, location, place, weapon, updated_at")
             .eq("ranking_id", config.id)
             .order("created_at");
           if (error) throw new Error(`Erro ao carregar os tiros: ${error.message}`);
-          for (const row of (data ?? []) as { id: string; participant_id: string; quantity: number; location: string; weapon: string; updated_at: string }[]) {
-            (shots[row.participant_id] ??= []).push({ id: row.id, quantity: row.quantity, location: row.location, weapon: row.weapon });
+          for (const row of (data ?? []) as { id: string; participant_id: string; quantity: number; location: string; place: string | null; weapon: string; updated_at: string }[]) {
+            (shots[row.participant_id] ??= []).push({ id: row.id, quantity: row.quantity, location: row.location, place: row.place, weapon: row.weapon });
             stamps.push(row.updated_at);
           }
         }

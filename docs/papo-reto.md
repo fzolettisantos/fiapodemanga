@@ -96,8 +96,8 @@ No modo demonstração a ordem é simulada e sinalizada como "Ordem simulada".
 
 ## Ilustrações dos rankings
 
-A ilustração ao lado do título de cada ranking (ex.: o troféu do Falou Merda) fica em
-`public/papo-reto/rankings/<ranking>.webp` (ou `.png`/`.avif`), quadrada (ex.: 640×640).
+A ilustração grande abaixo do título de cada ranking (ex.: o troféu do Falou Merda) fica em
+`public/papo-reto/rankings/<ranking>.webp` (ou `.png`/`.avif`), quadrada (ex.: 800×800).
 É detectada sozinha no `dev`/`build`; sem arquivo, nada aparece. O texto alternativo fica em
 `illustrationAlt` (`src/papo-reto/config/rankings.ts`).
 

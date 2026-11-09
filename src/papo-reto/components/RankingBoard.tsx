@@ -110,8 +110,8 @@ export function RankingBoard({
   return (
     <div className="lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-10">
       <header className="mb-4 lg:sticky lg:top-24 lg:self-start">
-        <div className="flex items-start gap-3 sm:gap-5">
-          <div className="min-w-0 flex-1">
+        <div>
+          <div>
             <p className={`text-xs font-extrabold uppercase tracking-[0.18em] ${accent}`}>
               {kicker}
             </p>
@@ -120,17 +120,6 @@ export function RankingBoard({
             </h2>
             <p className="mt-1.5 text-lg font-bold leading-snug text-yellow">{copy.subtitle}</p>
           </div>
-          {illustration ? (
-            <Image
-              src={illustration}
-              alt={copy.illustrationAlt ?? ""}
-              width={320}
-              height={320}
-              sizes="(min-width: 640px) 144px, 104px"
-              loading="eager"
-              className="size-[104px] shrink-0 rounded-2xl object-cover sm:size-36"
-            />
-          ) : null}
         </div>
         <p className="mt-1.5 max-w-2xl text-[15px] leading-snug text-muted">{copy.description}</p>
         {results && isStatic ? (
@@ -168,6 +157,18 @@ export function RankingBoard({
           <p className="mt-3 rounded-xl border border-line bg-surface px-3 py-2 text-sm font-semibold" role="note">
             A votação deste ranking está pausada. Os resultados continuam visíveis.
           </p>
+        ) : null}
+        {illustration ? (
+          // Ilustração grande do ranking (troféu). No desktop ocupa a coluna fixa ao lado da lista.
+          <Image
+            src={illustration}
+            alt={copy.illustrationAlt ?? ""}
+            width={800}
+            height={800}
+            sizes="(min-width: 1024px) 380px, (min-width: 640px) 300px, 240px"
+            loading="eager"
+            className="mx-auto mt-5 aspect-square w-full max-w-[240px] rounded-3xl object-cover sm:max-w-[300px] lg:mx-0 lg:max-w-[380px]"
+          />
         ) : null}
       </header>
 

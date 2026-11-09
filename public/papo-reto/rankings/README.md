@@ -6,4 +6,4 @@ Ilustração exibida ao lado do título de cada ranking. Nome do arquivo = slug 
 - `sabio.webp`
 - `bala-do-veio.webp`
 
-Quadrada (ex.: 640×640). O `npm run dev`/`npm run build` detecta os arquivos sozinho; sem arquivo, nada é exibido.
+Quadrada (ex.: 800×800). O `npm run dev`/`npm run build` detecta os arquivos sozinho; sem arquivo, nada é exibido.

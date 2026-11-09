@@ -109,8 +109,8 @@ A ilustração grande abaixo do título de cada ranking (ex.: o troféu do Falou
 
 ### Arte de fundo das laterais
 
-O Troféu Falou Merda tem uma arte de fundo nas laterais da tela
-(`public/papo-reto/rankings/falou-merda-bg-left.webp` e `-right.webp`), fixa nas bordas e trocada com uma
+O Troféu Falou Merda e O Sábio da Resenha têm arte de fundo nas laterais da tela
+(`public/papo-reto/rankings/<ranking>-bg-left.webp` e `-bg-right.webp`), fixa nas bordas e trocada com uma
 transição curta ao mudar de aba. Ela só aparece em telas a partir de 1280px e ocupa apenas o espaço livre ao
 lado do conteúdo, para não ficar atrás de textos; no celular nada é carregado. Para outro ranking, adicione os dois
 arquivos e a entrada em `BACKDROPS` (`src/papo-reto/components/RankingBackdrop.tsx`).

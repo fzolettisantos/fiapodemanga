@@ -1,1 +1,22 @@
-{}
+{
+  "benja": {
+    "falou-merda": {
+      "top": "/papo-reto/characters/benja/falou-merda/top.webp",
+      "middle": "/papo-reto/characters/benja/falou-merda/middle.webp",
+      "bottom": "/papo-reto/characters/benja/falou-merda/bottom.webp",
+      "neutral": "/papo-reto/characters/benja/falou-merda/neutral.webp"
+    },
+    "sabio": {
+      "top": "/papo-reto/characters/benja/sabio/top.webp",
+      "middle": "/papo-reto/characters/benja/sabio/middle.webp",
+      "bottom": "/papo-reto/characters/benja/sabio/bottom.webp",
+      "neutral": "/papo-reto/characters/benja/sabio/neutral.webp"
+    },
+    "bala-do-veio": {
+      "top": "/papo-reto/characters/benja/bala-do-veio/top.webp",
+      "middle": "/papo-reto/characters/benja/bala-do-veio/middle.webp",
+      "bottom": "/papo-reto/characters/benja/bala-do-veio/bottom.webp",
+      "neutral": "/papo-reto/characters/benja/bala-do-veio/neutral.webp"
+    }
+  }
+}

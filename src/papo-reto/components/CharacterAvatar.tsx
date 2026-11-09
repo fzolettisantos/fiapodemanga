@@ -60,7 +60,10 @@ export function CharacterAvatar({
     <div
       role="img"
       aria-label={label}
-      className={`relative shrink-0 overflow-hidden rounded-full bg-surface-2 ${box} ${showImage ? "" : "outline-1 outline-dashed outline-line -outline-offset-1"} ${className}`}
+      className={`relative shrink-0 overflow-hidden rounded-full ${box} ${
+        // Caricatura real: fundo "papel de jornal" para destacar o rosto. Placeholder: fundo escuro tracejado.
+        showImage ? "bg-[#EDE3CC]" : "bg-surface-2 outline-1 outline-dashed outline-line -outline-offset-1"
+      } ${className}`}
     >
       <AnimatePresence initial={false} mode="popLayout">
         <motion.div
@@ -78,7 +81,7 @@ export function CharacterAvatar({
               fill
               sizes={`${px}px`}
               loading={eager ? "eager" : "lazy"}
-              className="object-contain"
+              className="object-cover"
               onError={() => setFailed(src)}
             />
           ) : (

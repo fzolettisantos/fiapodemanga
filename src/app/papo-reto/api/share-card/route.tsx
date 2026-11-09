@@ -20,21 +20,25 @@ const fonts = Promise.all([
   readFile(join(process.cwd(), "src/papo-reto/assets/fonts/barlow-700.woff")),
 ]);
 
-/** Caricatura PNG/JPEG (o gerador de imagens não lê WebP/AVIF); senão, o placeholder ilustrado. */
-async function avatarSource(slug: RankingSlug, entry: RankedEntry) {
-  const src = resolveCharacterImage(entry.participant.slug, slug, entry.state, entry.participant.avatarPaths);
+/**
+ * Caricatura PNG/JPEG (o gerador de imagens não lê WebP/AVIF). Para arquivos locais em WebP/AVIF,
+ * usa a versão .png de mesmo nome quando existir; senão, o placeholder ilustrado.
+ */
+async function avatarSource(slug: RankingSlug, entry: RankedEntry): Promise<{ src: string; real: boolean }> {
+  let src = resolveCharacterImage(entry.participant.slug, slug, entry.state, entry.participant.avatarPaths);
+  if (src?.startsWith("/papo-reto/characters/")) src = src.replace(/\.(webp|avif)$/i, ".png");
   if (src && /\.(png|jpe?g)(\?.*)?$/i.test(src)) {
-    if (/^https:\/\//.test(src)) return src;
+    if (/^https:\/\//.test(src)) return { src, real: true };
     if (src.startsWith("/papo-reto/characters/")) {
       try {
         const file = await readFile(join(process.cwd(), "public", src));
-        return `data:image/${src.endsWith(".png") ? "png" : "jpeg"};base64,${file.toString("base64")}`;
+        return { src: `data:image/${src.endsWith(".png") ? "png" : "jpeg"};base64,${file.toString("base64")}`, real: true };
       } catch {
         /* usa o placeholder */
       }
     }
   }
-  return faceSvgDataUri(placeholderMood(slug, entry.state));
+  return { src: faceSvgDataUri(placeholderMood(slug, entry.state)), real: false };
 }
 
 export async function GET(request: NextRequest) {
@@ -78,7 +82,7 @@ export async function GET(request: NextRequest) {
             {`${entry.position}º`}
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={avatar} width={380} height={380} alt="" style={{ borderRadius: 190, background: "#1D222B", border: `8px solid ${entry.position === 1 ? "#FFD23F" : "#3A3F4B"}` }} />
+          <img src={avatar.src} width={380} height={380} alt="" style={{ borderRadius: 190, background: avatar.real ? "#EDE3CC" : "#1D222B", border: `8px solid ${entry.position === 1 ? "#FFD23F" : "#3A3F4B"}` }} />
         </div>
         <div style={{ display: "flex", fontFamily: "Anton", fontSize: 92, marginTop: 40, textTransform: "uppercase" }}>
           {entry.participant.name}

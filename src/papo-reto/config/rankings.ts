@@ -76,6 +76,8 @@ export const RANKINGS: Record<RankingSlug, RankingCopy> = {
     description:
       "No meio de tanta barbaridade, sempre aparece uma opinião sensata. Quem merece o título de cérebro do Papo Reto?",
     cta: "Dar moral pra esse",
+    illustrationAlt:
+      "Troféu O Sábio da Resenha: busto caricato de toga e coroa de louros, mão no queixo e um livro de futebol",
     defaultPeriod: "weekly",
     badges: { top: "Cérebro do Papo Reto", bottom: "Lanterna da sabedoria" },
     expressions: {

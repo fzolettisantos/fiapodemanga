@@ -1,0 +1,212 @@
+-- =====================================================================
+-- Papo Reto Ranking — schema do Supabase
+-- Rode inteiro no SQL Editor do Supabase (é idempotente: pode rodar de novo).
+-- =====================================================================
+
+
+-- ---------------------------------------------------------------------
+-- Participantes
+-- ---------------------------------------------------------------------
+create table if not exists public.participants (
+  id           uuid primary key default gen_random_uuid(),
+  slug         text not null unique check (slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and length(slug) <= 40),
+  name         text not null check (length(name) between 1 and 60),
+  nickname     text check (length(nickname) <= 80),
+  active       boolean not null default true,
+  sort_order   integer not null default 0,
+  -- { "<ranking>": { "top": "url", "middle": "url", "bottom": "url", "neutral": "url" } }
+  avatar_paths jsonb not null default '{}'::jsonb,
+  created_at   timestamptz not null default now()
+);
+
+-- ---------------------------------------------------------------------
+-- Rankings (o texto fica no código; aqui ficam status e período)
+-- ---------------------------------------------------------------------
+create table if not exists public.rankings (
+  id             uuid primary key default gen_random_uuid(),
+  slug           text not null unique,
+  name           text not null,
+  description    text,
+  kind           text not null check (kind in ('positive', 'negative')),
+  status         text not null default 'active' check (status in ('active', 'inactive')),
+  period_kind    text not null default 'weekly' check (period_kind in ('daily', 'weekly', 'monthly', 'all_time')),
+  week_starts_on smallint not null default 1 check (week_starts_on between 0 and 6),
+  created_at     timestamptz not null default now()
+);
+
+-- ---------------------------------------------------------------------
+-- Votos: um por votante, por ranking, por período.
+-- voter_key e ip_hash são HMACs gerados no servidor (nenhum IP ou cookie cru é guardado).
+-- ---------------------------------------------------------------------
+create table if not exists public.votes (
+  id             bigint generated always as identity primary key,
+  ranking_id     uuid not null references public.rankings(id) on delete cascade,
+  participant_id uuid not null references public.participants(id) on delete cascade,
+  period_key     text not null check (length(period_key) <= 20),
+  voter_key      text not null check (length(voter_key) <= 100),
+  ip_hash        text not null check (length(ip_hash) <= 100),
+  created_at     timestamptz not null default now(),
+  unique (ranking_id, period_key, voter_key)
+);
+create index if not exists votes_ip_idx on public.votes (ranking_id, period_key, ip_hash);
+
+-- Placar agregado (leitura pública e Realtime, sem expor os votos individuais).
+create table if not exists public.vote_totals (
+  ranking_id     uuid not null references public.rankings(id) on delete cascade,
+  participant_id uuid not null references public.participants(id) on delete cascade,
+  period_key     text not null,
+  votes          integer not null default 0 check (votes >= 0),
+  updated_at     timestamptz not null default now(),
+  primary key (ranking_id, period_key, participant_id)
+);
+
+-- ---------------------------------------------------------------------
+-- Charges
+-- ---------------------------------------------------------------------
+create table if not exists public.charges (
+  id           uuid primary key default gen_random_uuid(),
+  title        text not null check (length(title) between 1 and 120),
+  image_url    text not null,
+  storage_path text,
+  description  text check (length(description) <= 500),
+  credits      text not null default 'Oberdan',
+  published_on date not null default current_date,
+  published    boolean not null default false,
+  width        integer,
+  height       integer,
+  created_at   timestamptz not null default now()
+);
+create index if not exists charges_published_idx on public.charges (published, published_on desc);
+
+-- ---------------------------------------------------------------------
+-- Placar: mantido por trigger
+-- ---------------------------------------------------------------------
+create or replace function public.apply_vote_total() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  if tg_op = 'INSERT' then
+    insert into vote_totals (ranking_id, participant_id, period_key, votes)
+    values (new.ranking_id, new.participant_id, new.period_key, 1)
+    on conflict (ranking_id, period_key, participant_id)
+    do update set votes = vote_totals.votes + 1, updated_at = now();
+    return new;
+  elsif tg_op = 'DELETE' then
+    update vote_totals set votes = greatest(votes - 1, 0), updated_at = now()
+    where ranking_id = old.ranking_id and period_key = old.period_key and participant_id = old.participant_id;
+    return old;
+  end if;
+  return null;
+end $$;
+
+drop trigger if exists votes_apply_total on public.votes;
+create trigger votes_apply_total after insert or delete on public.votes
+for each row execute function public.apply_vote_total();
+
+-- ---------------------------------------------------------------------
+-- Voto: validação no banco. Só a service role (servidor do site) pode chamar.
+-- Retorna: ok | duplicate | ip_limit | invalid | closed
+-- ---------------------------------------------------------------------
+create or replace function public.cast_vote(
+  p_ranking_slug   text,
+  p_participant_id uuid,
+  p_period_key     text,
+  p_voter_key      text,
+  p_ip_hash        text,
+  p_ip_limit       integer default 20
+) returns text
+language plpgsql security definer set search_path = public as $$
+declare
+  v_ranking rankings%rowtype;
+  v_count   integer;
+  v_id      bigint;
+begin
+  select * into v_ranking from rankings where slug = p_ranking_slug;
+  if not found then return 'invalid'; end if;
+  if v_ranking.status <> 'active' then return 'closed'; end if;
+  if not exists (select 1 from participants where id = p_participant_id and active) then return 'invalid'; end if;
+  if p_voter_key is null or p_ip_hash is null or p_period_key is null then return 'invalid'; end if;
+
+  -- Evita corrida entre votos do mesmo IP no mesmo ranking/período.
+  perform pg_advisory_xact_lock(hashtext(v_ranking.id::text || p_period_key || p_ip_hash));
+
+  if exists (select 1 from votes where ranking_id = v_ranking.id and period_key = p_period_key and voter_key = p_voter_key) then
+    return 'duplicate';
+  end if;
+
+  select count(*) into v_count from votes
+  where ranking_id = v_ranking.id and period_key = p_period_key and ip_hash = p_ip_hash;
+  if v_count >= greatest(p_ip_limit, 1) then return 'ip_limit'; end if;
+
+  insert into votes (ranking_id, participant_id, period_key, voter_key, ip_hash)
+  values (v_ranking.id, p_participant_id, p_period_key, p_voter_key, p_ip_hash)
+  on conflict (ranking_id, period_key, voter_key) do nothing
+  returning id into v_id;
+
+  return case when v_id is null then 'duplicate' else 'ok' end;
+end $$;
+
+revoke all on function public.cast_vote(text, uuid, text, text, text, integer) from public, anon, authenticated;
+grant execute on function public.cast_vote(text, uuid, text, text, text, integer) to service_role;
+revoke all on function public.apply_vote_total() from public, anon, authenticated;
+
+-- ---------------------------------------------------------------------
+-- RLS: o público só LÊ o necessário. Escritas passam pelo servidor (service role).
+-- ---------------------------------------------------------------------
+alter table public.participants enable row level security;
+alter table public.rankings     enable row level security;
+alter table public.votes        enable row level security;
+alter table public.vote_totals  enable row level security;
+alter table public.charges      enable row level security;
+
+drop policy if exists "participantes ativos são públicos" on public.participants;
+create policy "participantes ativos são públicos" on public.participants for select to anon, authenticated using (active);
+
+drop policy if exists "rankings são públicos" on public.rankings;
+create policy "rankings são públicos" on public.rankings for select to anon, authenticated using (true);
+
+drop policy if exists "placar é público" on public.vote_totals;
+create policy "placar é público" on public.vote_totals for select to anon, authenticated using (true);
+
+drop policy if exists "charges publicadas são públicas" on public.charges;
+create policy "charges publicadas são públicas" on public.charges for select to anon, authenticated using (published);
+
+-- votes: sem nenhuma policy → anon/authenticated não leem nem escrevem.
+revoke all on public.votes from anon, authenticated;
+revoke insert, update, delete on public.participants, public.rankings, public.vote_totals, public.charges from anon, authenticated;
+
+-- ---------------------------------------------------------------------
+-- Realtime do placar
+-- ---------------------------------------------------------------------
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'vote_totals'
+  ) then
+    alter publication supabase_realtime add table public.vote_totals;
+  end if;
+exception when undefined_object then
+  raise notice 'Publicação supabase_realtime não encontrada; Realtime desativado.';
+end $$;
+
+-- ---------------------------------------------------------------------
+-- Storage: caricaturas e charges (leitura pública; upload só pelo servidor)
+-- ---------------------------------------------------------------------
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values
+  ('characters', 'characters', true, 2097152, array['image/webp', 'image/avif', 'image/png']),
+  ('charges', 'charges', true, 4194304, array['image/webp', 'image/avif', 'image/png', 'image/jpeg'])
+on conflict (id) do nothing;
+
+-- ---------------------------------------------------------------------
+-- Dados iniciais
+-- ---------------------------------------------------------------------
+insert into public.rankings (slug, name, description, kind, period_kind) values
+  ('falou-merda', 'Troféu Falou Merda', 'Aqui o primeiro lugar é uma vergonha.', 'negative', 'weekly'),
+  ('sabio', 'O Sábio da Resenha', 'Milagrosamente, alguém falou algo que presta.', 'positive', 'weekly'),
+  ('bala-do-veio', 'Quem vai levar Bala do Véio?', 'Falou demais? Agora aguenta a bronca.', 'negative', 'weekly')
+on conflict (slug) do nothing;
+
+-- Cadastre os demais participantes pelo painel /admin (ou com inserts como este).
+insert into public.participants (slug, name, nickname, sort_order) values
+  ('benja', 'Benja', 'Benjamin Back', 1)
+on conflict (slug) do nothing;

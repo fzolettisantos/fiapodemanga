@@ -9,15 +9,15 @@ describe("votação (modo demonstração, mesma regra do banco)", () => {
   beforeEach(() => __resetDemoStore());
 
   it("registra o voto e soma no placar", () => {
-    const before = demoTotals("falou-merda", base.periodKey)["participante-3"]!;
-    expect(demoCastVote({ ...base, participantId: "participante-3", voterKey: "v1" })).toBe("ok");
-    expect(demoTotals("falou-merda", base.periodKey)["participante-3"]).toBe(before + 1);
-    expect(demoMyVote("falou-merda", base.periodKey, "v1")).toBe("participante-3");
+    const before = demoTotals("falou-merda", base.periodKey)["joneta"]!;
+    expect(demoCastVote({ ...base, participantId: "joneta", voterKey: "v1" })).toBe("ok");
+    expect(demoTotals("falou-merda", base.periodKey)["joneta"]).toBe(before + 1);
+    expect(demoMyVote("falou-merda", base.periodKey, "v1")).toBe("joneta");
   });
 
   it("bloqueia voto duplicado no mesmo ranking e período", () => {
     expect(demoCastVote({ ...base, participantId: "benja", voterKey: "v1" })).toBe("ok");
-    expect(demoCastVote({ ...base, participantId: "participante-2", voterKey: "v1" })).toBe("duplicate");
+    expect(demoCastVote({ ...base, participantId: "mano", voterKey: "v1" })).toBe("duplicate");
   });
 
   it("permite votar em outro ranking e no período seguinte", () => {

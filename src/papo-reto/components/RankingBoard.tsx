@@ -240,6 +240,7 @@ export function RankingBoard({
                     voteState={voteState}
                     move={moves[id]}
                     eager={index < 2}
+                    index={index}
                     onVote={() => handleVote(id)}
                     onShare={() => onShareParticipant(entry)}
                   />

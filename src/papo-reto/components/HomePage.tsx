@@ -37,7 +37,7 @@ export async function HomePage({ initialTab }: { initialTab: TabSlug }) {
       <Header />
       {isDemo ? (
         <p className="demo-stripes px-4 py-1.5 text-center text-[13px] font-bold leading-tight text-ink" role="note">
-          MODO DEMONSTRAÇÃO · participantes provisórios e números simulados — não são votos reais.
+          MODO DEMONSTRAÇÃO · números simulados — não são votos reais.
         </p>
       ) : null}
       <main>

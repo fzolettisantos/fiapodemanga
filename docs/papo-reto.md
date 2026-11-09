@@ -48,7 +48,7 @@ cp .env.example .env.local
 npm run dev            # http://localhost:3000/papo-reto
 ```
 
-Sem as variáveis do Supabase o Papo Reto sobe em **modo demonstração**: participantes provisórios e números
+Sem as variáveis do Supabase o Papo Reto sobe em **modo demonstração**: participantes reais, mas números
 **simulados**, sinalizados por uma faixa amarela no topo e pelo selo "Dados simulados" em cada ranking e
 em cada card compartilhável. A votação funciona (em memória, por instância do servidor), mas nada disso é voto real.
 O resto do site não depende dessas variáveis.
@@ -114,7 +114,7 @@ public/papo-reto/characters/benja/sabio/…
 public/papo-reto/characters/benja/bala-do-veio/…
 ```
 
-- A pasta é o **slug** do participante; aceita `.avif`, `.webp` ou `.png` (quadrado, ex.: 512×512, fundo transparente, rosto centralizado com a mesma margem).
+- A pasta é o **slug** do participante: `kleber`, `benja`, `mano`, `joneta`, `carabina`, `gadu` (já criadas); aceita `.avif`, `.webp` ou `.png` (quadrado, ex.: 512×512, fundo transparente, rosto centralizado com a mesma margem).
 - O manifesto é gerado sozinho no `dev`/`build`. Também dá para enviar pelo painel `/papo-reto/admin` (Supabase Storage), que tem prioridade sobre a pasta.
 - Enquanto um arquivo não existir, aparece um **placeholder ilustrado genérico** (não retrata ninguém) com a expressão certa daquele estado. O sistema **nunca** usa outra expressão no lugar.
 - Só as caricaturas da aba aberta são carregadas, e fora da tela com lazy loading.
@@ -152,7 +152,7 @@ em ciclos de 8 s com a pessoa sem interagir, ou ao tocar em "atualizar posiçõe
    - a função `cast_vote` (executável só pela service role) e o trigger que mantém o placar;
    - o placar na publicação do **Realtime**;
    - os buckets públicos `characters` e `charges` (upload só pelo servidor);
-   - os três rankings e o participante Benja. Cadastre os demais pelo `/papo-reto/admin`.
+   - os três rankings e os participantes (Kleber o Gladiador, Benja, Mano, Joneta, Carabina e Gadu Boyceta). Novos pelo `/papo-reto/admin`.
 3. Em **Project Settings → API**, copie a URL, a chave `anon` e a `service_role` para o `.env.local`.
 4. Gere os segredos:
    ```bash
@@ -203,7 +203,6 @@ fecha e o foco volta); link "Pular para os rankings"; nada depende de hover; saf
 ## Pendências (dependem de vocês)
 
 - **Caricaturas autorizadas** do Oberdan (3 expressões × 3 rankings por participante).
-- **Nomes e slugs** dos demais participantes (no modo demo aparecem como "Participante 2…5").
 - **Logos em alta resolução** (SVG): os enviados têm 98×52 e 66×65 px e perdem nitidez em telas densas.
 - **Autorização de uso** das marcas Papo Reto / Canal do Benja e confirmação do link oficial do YouTube (`NEXT_PUBLIC_YOUTUBE_URL`).
 - Credenciais do Supabase e domínio final.

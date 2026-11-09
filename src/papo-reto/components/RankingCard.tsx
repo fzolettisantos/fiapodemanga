@@ -16,6 +16,7 @@ export function RankingCard({
   voteState,
   move,
   eager,
+  index,
   onVote,
   onShare,
 }: {
@@ -25,6 +26,8 @@ export function RankingCard({
   voteState: VoteButtonState;
   move?: Move;
   eager?: boolean;
+  /** Ordem do card na lista (varia as frases mesmo entre empatados). */
+  index: number;
   onVote: () => void;
   onShare: () => void;
 }) {
@@ -81,7 +84,10 @@ export function RankingCard({
               </p>
             ) : null}
             <h3 className="truncate font-display text-[22px] uppercase leading-tight sm:text-2xl">{participant.name}</h3>
-            <p className="text-[14px] leading-snug text-muted">“{pickPhrase(slug, entry.state, participant.slug, entry.position)}”</p>
+            {participant.nickname ? (
+              <p className="-mt-0.5 truncate text-xs font-semibold text-muted">{participant.nickname}</p>
+            ) : null}
+            <p className="text-[14px] leading-snug text-muted">“{pickPhrase(slug, entry.state, participant.slug, index + 1)}”</p>
           </div>
           {/* Ranking estático: sem votos nem botão de voto, só compartilhar. */}
           {isStatic ? shareButton : null}

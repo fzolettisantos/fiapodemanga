@@ -56,6 +56,8 @@ export const RANKINGS: Record<RankingSlug, RankingCopy> = {
         "Tá chegando perigosamente perto do topo.",
         "Olhando pra cima e torcendo pra não subir.",
         "Mais uma besteira e assume a liderança.",
+        "Desconfiado: sabe que já falou coisa pior.",
+        "Fingindo que não é com ele.",
       ],
       bottom: [
         "Por enquanto, escapou da vergonha.",
@@ -96,6 +98,8 @@ export const RANKINGS: Record<RankingSlug, RankingCopy> = {
         "Pensando bem… quase lá.",
         "Observa, analisa e espera a vez dele.",
         "Tem lampejos de lucidez.",
+        "Concentrado. Ou só com sono.",
+        "Às vezes acerta. Ninguém sabe como.",
       ],
       bottom: [
         "Tentando parecer inteligente. Não colou.",
@@ -135,6 +139,8 @@ export const RANKINGS: Record<RankingSlug, RankingCopy> = {
         "Apreensivo, tentando sair da mira.",
         "Uma provocação a mais e a bronca é dele.",
         "Olhando pra cima e rezando.",
+        "Já ouviu o barulho da bronca chegando.",
+        "Tá quieto. Quieto demais.",
       ],
       bottom: [
         "Escapou da bronca. Por enquanto.",
@@ -171,8 +177,10 @@ export function stableHash(value: string) {
   return hash >>> 0;
 }
 
-export function pickPhrase(slug: RankingSlug, state: ExpressionState, participantSlug: string, position = 0) {
+export function pickPhrase(slug: RankingSlug, state: ExpressionState, participantSlug: string, place = 0) {
   const list = RANKINGS[slug].phrases[state];
-  // A posição entra na conta para que vizinhos no mesmo estado não repitam a frase.
-  return list[(stableHash(`${slug}:${participantSlug}`) + position) % list.length]!;
+  // Topo e lanterna variam por participante; no meio, a ordem na lista define a frase,
+  // para que cards no mesmo estado não repitam (há 5 frases para o meio).
+  const seed = state === "middle" ? stableHash(slug) + place : stableHash(`${slug}:${participantSlug}`) + place;
+  return list[seed % list.length]!;
 }

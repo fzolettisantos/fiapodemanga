@@ -1,26 +1,29 @@
 import type { Participant, RankingSlug } from "@/papo-reto/types";
 
+/** Participantes do Papo Reto, na ordem administrativa. Também estão na carga inicial do banco. */
+export const PAPO_RETO_CAST: Participant[] = [
+  { id: "kleber", slug: "kleber", name: "Kleber o Gladiador", nickname: null, sortOrder: 1, avatarPaths: {} },
+  { id: "benja", slug: "benja", name: "Benja", nickname: null, sortOrder: 2, avatarPaths: {} },
+  { id: "mano", slug: "mano", name: "Mano", nickname: null, sortOrder: 3, avatarPaths: {} },
+  { id: "joneta", slug: "joneta", name: "Joneta", nickname: null, sortOrder: 4, avatarPaths: {} },
+  { id: "carabina", slug: "carabina", name: "Carabina", nickname: null, sortOrder: 5, avatarPaths: {} },
+  { id: "gadu", slug: "gadu", name: "Gadu Boyceta", nickname: "Caique Silva", sortOrder: 6, avatarPaths: {} },
+];
+
 /**
  * MODO DEMONSTRAÇÃO — usado apenas quando o Supabase não está configurado.
- * Participantes provisórios e números SIMULADOS. Nada aqui representa votos reais.
- * Substitua pelos participantes reais cadastrando-os no Supabase (ver README).
+ * Participantes reais, mas números e ordens SIMULADOS. Nada aqui representa votos reais.
  */
-export const DEMO_PARTICIPANTS: Participant[] = [
-  { id: "benja", slug: "benja", name: "Benja", nickname: "O apresentador", sortOrder: 1, avatarPaths: {} },
-  { id: "participante-2", slug: "participante-2", name: "Participante 2", nickname: "Nome a definir", sortOrder: 2, avatarPaths: {} },
-  { id: "participante-3", slug: "participante-3", name: "Participante 3", nickname: "Nome a definir", sortOrder: 3, avatarPaths: {} },
-  { id: "participante-4", slug: "participante-4", name: "Participante 4", nickname: "Nome a definir", sortOrder: 4, avatarPaths: {} },
-  { id: "participante-5", slug: "participante-5", name: "Participante 5", nickname: "Nome a definir", sortOrder: 5, avatarPaths: {} },
-];
+export const DEMO_PARTICIPANTS: Participant[] = PAPO_RETO_CAST;
 
 /** Votos SIMULADOS iniciais do modo demonstração (só rankings com votação). */
 export const DEMO_SEED_VOTES: Record<RankingSlug, Record<string, number>> = {
-  "falou-merda": { benja: 1284, "participante-2": 978, "participante-3": 623, "participante-4": 341, "participante-5": 118 },
-  sabio: { benja: 402, "participante-2": 515, "participante-3": 233, "participante-4": 233, "participante-5": 87 },
+  "falou-merda": { benja: 1284, mano: 978, joneta: 623, kleber: 412, carabina: 341, gadu: 118 },
+  sabio: { mano: 515, benja: 402, kleber: 233, joneta: 233, gadu: 150, carabina: 87 },
   "bala-do-veio": {},
 };
 
 /** Ordem SIMULADA do ranking estático Bala do Véio (no ar, quem define é o programa pelo painel). */
 export const DEMO_STATIC_POSITIONS: Partial<Record<RankingSlug, Record<string, number>>> = {
-  "bala-do-veio": { "participante-3": 1, "participante-2": 2, benja: 3, "participante-5": 4, "participante-4": 5 },
+  "bala-do-veio": { carabina: 1, mano: 2, benja: 3, gadu: 4, joneta: 5, kleber: 6 },
 };

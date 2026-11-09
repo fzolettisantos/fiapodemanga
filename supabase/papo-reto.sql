@@ -228,7 +228,12 @@ on conflict (slug) do nothing;
 -- Bala do Véio é estático (brincadeira interna do programa, sem votação do público).
 update public.rankings set mode = 'static' where slug = 'bala-do-veio';
 
--- Cadastre os demais participantes pelo painel /admin (ou com inserts como este).
+-- Participantes do Papo Reto. Novos participantes podem ser cadastrados pelo painel /papo-reto/admin.
 insert into public.participants (slug, name, nickname, sort_order) values
-  ('benja', 'Benja', 'Benjamin Back', 1)
+  ('kleber', 'Kleber o Gladiador', null, 1),
+  ('benja', 'Benja', null, 2),
+  ('mano', 'Mano', null, 3),
+  ('joneta', 'Joneta', null, 4),
+  ('carabina', 'Carabina', null, 5),
+  ('gadu', 'Gadu Boyceta', 'Caique Silva', 6)
 on conflict (slug) do nothing;

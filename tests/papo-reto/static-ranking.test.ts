@@ -29,7 +29,9 @@ describe("Bala do Véio é estático", () => {
     const shots = results!.shots!;
     const perPerson = Object.values(shots).map((list) => list.reduce((t, s) => t + s.quantity, 0));
     expect(results!.totalShots).toBe(perPerson.reduce((a, b) => a + b, 0));
-    expect(shotsTotal(shots.carabina!)).toBe(23);
+    expect(shotsTotal(shots.serdan!)).toBe(12);
+    expect(shotsTotal(shots.kleber!)).toBe(12);
+    expect(results!.totalShots).toBe(48);
     expect(shotsLabel(1)).toBe("1 tiro");
     expect(shotsLabel(1234)).toBe("1.234 tiros");
   });
@@ -86,11 +88,22 @@ describe("textos do ranking estático", () => {
 });
 
 describe("participante só em alguns rankings", () => {
-  it("Véio Fanático Tricolor aparece no Falou Merda e no Sábio, não no Bala do Véio", async () => {
+  it("citados só no Bala do Véio não aparecem nos rankings de voto", async () => {
     const [fm, sabio, bala] = await getRankingResults(["falou-merda", "sabio", "bala-do-veio"]);
-    const has = (r: typeof fm) => r!.entries.some((e) => e.participant.id === "veio-tricolor");
-    expect(has(fm)).toBe(true);
-    expect(has(sabio)).toBe(true);
-    expect(has(bala)).toBe(false);
+    const has = (r: typeof fm, id: string) => r!.entries.some((e) => e.participant.id === id);
+    expect(has(bala, "serdan")).toBe(true);
+    expect(has(fm, "serdan")).toBe(false);
+    expect(has(sabio, "douglas-dias")).toBe(false);
+    expect(has(bala, "veio-tricolor")).toBe(true);
+  });
+
+  it("Bala do Véio segue o total de tiros", async () => {
+    const [bala] = await getRankingResults(["bala-do-veio"]);
+    const at = (id: string) => bala!.entries.find((e) => e.participant.id === id)!;
+    expect(bala!.entries.slice(0, 2).map((e) => e.participant.id).sort()).toEqual(["kleber", "serdan"]);
+    expect(at("serdan")).toMatchObject({ position: 1, state: "top" });
+    expect(at("kleber").position).toBe(1);
+    expect(at("kleber").tied).toBe(true);
+    expect(at("benja").state).toBe("bottom"); // sem tiros: escapou
   });
 });

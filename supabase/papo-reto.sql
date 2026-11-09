@@ -66,8 +66,11 @@ create table if not exists public.static_shots (
   created_at     timestamptz not null default now(),
   updated_at     timestamptz not null default now()
 );
--- Localidade onde aconteceu (opcional), ex.: "Estúdio do Papo Reto".
+-- Localidade onde aconteceu (opcional), ex.: "Episódio 360". Local e arma também são opcionais.
 alter table public.static_shots add column if not exists place text check (length(place) <= 60);
+alter table public.static_shots add column if not exists note text check (length(note) <= 200);
+alter table public.static_shots alter column location drop not null;
+alter table public.static_shots alter column weapon drop not null;
 create index if not exists static_shots_ranking_idx on public.static_shots (ranking_id, participant_id);
 
 create table if not exists public.votes (
@@ -275,7 +278,51 @@ insert into public.participants (slug, name, nickname, sort_order) values
   ('gadu', 'Gadu Boyceta', 'Caique Silva', 6)
 on conflict (slug) do nothing;
 
--- Véio Fanático Tricolor: só no Falou Merda e no Sábio.
+-- Véio Fanático Tricolor: nos três rankings (levou um tiro dele mesmo no Bala do Véio).
 insert into public.participants (slug, name, nickname, sort_order, rankings) values
-  ('veio-tricolor', 'Véio Fanático Tricolor', null, 7, array['falou-merda', 'sabio'])
+  ('veio-tricolor', 'Véio Fanático Tricolor', null, 7, null)
 on conflict (slug) do nothing;
+update public.participants set rankings = null where slug = 'veio-tricolor';
+
+-- Citados nos dados do Bala do Véio (só nesse ranking).
+insert into public.participants (slug, name, nickname, sort_order, rankings) values
+  ('serdan', 'Serdan', null, 8, array['bala-do-veio']),
+  ('oberdan', 'Oberdan', null, 9, array['bala-do-veio']),
+  ('lucas-samuel', 'Lucas Samuel', 'do chat', 10, array['bala-do-veio']),
+  ('dentinho', 'Dentinho', null, 11, array['bala-do-veio']),
+  ('luiz-gusttavo', 'Luiz Gusttavo', 'torcedor do Cruzeiro', 12, array['bala-do-veio']),
+  ('mastigasamba', 'Mastigasamba', null, 13, array['bala-do-veio']),
+  ('bruno-di-santi', 'Bruno Di Santi', null, 14, array['bala-do-veio']),
+  ('nem', 'Nem', null, 15, array['bala-do-veio']),
+  ('douglas-dias', 'Douglas Dias', null, 16, array['bala-do-veio'])
+on conflict (slug) do nothing;
+
+-- Tiros do Bala do Véio — dados do programa (Caique), atualização de 09/11.
+-- Só é carregado se o ranking ainda não tiver tiros (rodar o arquivo de novo não duplica).
+do $$
+declare v_ranking uuid;
+begin
+  select id into v_ranking from public.rankings where slug = 'bala-do-veio';
+  if v_ranking is null or exists (select 1 from public.static_shots where ranking_id = v_ranking) then return; end if;
+  insert into public.static_shots (ranking_id, participant_id, quantity, location, place, note, created_at)
+  select v_ranking, p.id, d.quantity, d.location, d.place, d.note, now() + make_interval(secs => d.n)
+  from (values
+    (1, 'serdan', 12, 'Na testa', null, null),
+    (2, 'gadu', 7, 'Local não pré-definido', null, null),
+    (3, 'carabina', 1, 'Na cara', null, null),
+    (4, 'oberdan', 1, 'Local não pré-definido', null, null),
+    (5, 'mano', 1, 'Na cara', null, 'Porque falou da Dona Bila'),
+    (6, 'lucas-samuel', 1, null, 'Chat', null),
+    (7, 'dentinho', 1, null, null, null),
+    (8, 'luiz-gusttavo', 1, 'Na testa', null, null),
+    (9, 'mastigasamba', 1, null, null, '“Foda-se o Mastigasamba”'),
+    (10, 'bruno-di-santi', 1, null, null, 'Ameaça feita nas entrelinhas + combo de deixar ele amarrado numa árvore 3 dias'),
+    (11, 'kleber', 10, null, null, null),
+    (12, 'kleber', 2, 'Na perna', null, 'Última atualização (09/11)'),
+    (13, 'nem', 1, 'Na boca', 'Episódio 360', null),
+    (14, 'douglas-dias', 7, null, null, 'Pediu pra um grafiteiro fazer o escudo do Palmeiras no muro da casa do Véio'),
+    (15, 'veio-tricolor', 1, 'Na cabeça (nele mesmo)', 'EP 629, aos 1:08:12',
+      '“Se eu apanhar de um gordinho desse (Carabina) eu dou um tiro na minha cabeça”')
+  ) as d(n, slug, quantity, location, place, note)
+  join public.participants p on p.slug = d.slug;
+end $$;

@@ -87,7 +87,7 @@ export function RankingCard({
                 {badge}
               </p>
             ) : null}
-            <h3 className="truncate font-display text-[22px] uppercase leading-tight sm:text-2xl">{participant.name}</h3>
+            <h3 className="line-clamp-2 break-words font-display text-[22px] uppercase leading-[1.05] sm:text-2xl">{participant.name}</h3>
             {participant.nickname ? (
               <p className="-mt-0.5 truncate text-xs font-semibold text-muted">{participant.nickname}</p>
             ) : null}

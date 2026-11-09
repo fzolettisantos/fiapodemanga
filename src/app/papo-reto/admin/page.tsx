@@ -7,7 +7,7 @@ import { getServiceClient } from "@/papo-reto/lib/server/supabase";
 import { EXPRESSION_STATES, inRanking, RANKING_SLUGS, type RankingSlug } from "@/papo-reto/types";
 import {
   createCharge, createParticipant, deleteCharge, logout, removeCaricature,
-  addShot, deleteShot, saveStaticStandings, setChargePublished, updateParticipant, updateRanking, uploadCaricature,
+  addShot, deleteShot, setChargePublished, updateParticipant, updateRanking, uploadCaricature,
 } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -32,19 +32,17 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   }
 
   const sb = getServiceClient();
-  const [participantsRes, rankingsRes, chargesRes, results, standingsRes] = await Promise.all([
+  const [participantsRes, rankingsRes, chargesRes, results] = await Promise.all([
     sb.from("participants").select("id, slug, name, nickname, sort_order, avatar_paths, active, rankings").order("sort_order"),
     sb.from("rankings").select("id, slug, status, period_kind, week_starts_on, mode"),
     sb.from("charges").select("id, title, published, published_on, credits").order("published_on", { ascending: false }),
     Promise.all((["week", "month", "season"] as const).map((view) => getRankingResults(undefined, { view }))).then((all) => all.flat()),
-    sb.from("static_standings").select("ranking_id, participant_id, position"),
   ]);
   const { data: shotRows } = await sb
     .from("static_shots")
-    .select("id, ranking_id, participant_id, quantity, location, place, weapon")
+    .select("id, ranking_id, participant_id, quantity, location, place, weapon, note")
     .order("created_at");
   const shots = shotRows ?? [];
-  const standings = standingsRes.data ?? [];
   const staticRankings = (rankingsRes.data ?? []).filter((r) => r.mode === "static");
   const participants = (participantsRes.data ?? []).map((row) => ({ ...mapParticipant(row), active: row.active as boolean }));
   const rankings = rankingsRes.data ?? [];
@@ -87,29 +85,11 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
       {staticRankings.map((ranking) => (
         <section key={ranking.id} aria-labelledby={`h-static-${ranking.slug}`}>
           <h2 id={`h-static-${ranking.slug}`} className="font-display text-2xl uppercase">
-            {isRankingSlugKnown(ranking.slug) ? RANKINGS[ranking.slug].title : ranking.slug} — ordem do programa
+            {isRankingSlugKnown(ranking.slug) ? RANKINGS[ranking.slug].title : ranking.slug} — tiros
           </h2>
-          <form action={saveStaticStandings} className={`${card} mt-3 space-y-2`}>
-            <input type="hidden" name="id" value={ranking.id} />
-            <p className="text-sm text-muted">Sem votação do público. 1 = topo (mais na mira). Posições iguais empatam; deixe vazio para tirar do ranking.</p>
-            {participants.filter((p) => p.active && inRanking(p, ranking.slug as RankingSlug)).map((p) => (
-              <label key={p.id} className="flex items-center justify-between gap-3">
-                <span>{p.name}</span>
-                <input
-                  type="number"
-                  min={1}
-                  max={99}
-                  name={`pos_${p.id}`}
-                  defaultValue={standings.find((s) => s.ranking_id === ranking.id && s.participant_id === p.id)?.position ?? ""}
-                  className={`${input} w-24`}
-                  aria-label={`Posição de ${p.name}`}
-                />
-              </label>
-            ))}
-            <button className={button}>Salvar ordem</button>
-          </form>
+          <p className="mt-2 text-sm text-muted">Sem votação do público. A ordem segue o total de tiros de cada um (iguais empatam).</p>
 
-          <h3 className="mt-5 font-bold">Tiros (quantidade · local do tiro · localidade · tipo de arma)</h3>
+          <h3 className="mt-5 font-bold">Tiros (quantidade obrigatória; local, localidade, arma e motivo opcionais)</h3>
           <div className="mt-2 space-y-3">
             {participants.filter((p) => p.active && inRanking(p, ranking.slug as RankingSlug)).map((p) => {
               const mine = shots.filter((s) => s.ranking_id === ranking.id && s.participant_id === p.id);
@@ -120,7 +100,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                   <ul className="mt-2 space-y-1 text-sm">
                     {mine.map((s) => (
                       <li key={s.id} className="flex items-center justify-between gap-2">
-                        <span><strong className="tabular">{s.quantity}</strong> · {s.location} · {s.place || "—"} · {s.weapon}</span>
+                        <span><strong className="tabular">{s.quantity}</strong> · {s.location || "—"} · {s.place || "—"} · {s.weapon || "—"}{s.note ? ` · ${s.note}` : ""}</span>
                         <form action={deleteShot}>
                           <input type="hidden" name="id" value={s.id} />
                           <button className="text-red underline">remover</button>
@@ -128,13 +108,14 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                       </li>
                     ))}
                   </ul>
-                  <form action={addShot} className="mt-2 grid gap-2 sm:grid-cols-[90px_1fr_1fr_1fr_auto]">
+                  <form action={addShot} className="mt-2 grid gap-2 sm:grid-cols-[90px_1fr_1fr_1fr]">
                     <input type="hidden" name="id" value={ranking.id} />
                     <input type="hidden" name="participant_id" value={p.id} />
                     <input name="quantity" type="number" min={1} max={9999} required placeholder="Tiros" className={input} aria-label={`Quantidade de tiros em ${p.name}`} />
-                    <input name="location" required maxLength={60} placeholder="Local do tiro" className={input} aria-label={`Local do tiro em ${p.name}`} />
+                    <input name="location" maxLength={60} placeholder="Local do tiro (opcional)" className={input} aria-label={`Local do tiro em ${p.name}`} />
                     <input name="place" maxLength={60} placeholder="Localidade (opcional)" className={input} aria-label={`Localidade dos tiros em ${p.name}`} />
-                    <input name="weapon" required maxLength={60} placeholder="Tipo de arma" className={input} aria-label={`Tipo de arma em ${p.name}`} />
+                    <input name="weapon" maxLength={60} placeholder="Tipo de arma (opcional)" className={input} aria-label={`Tipo de arma em ${p.name}`} />
+                    <input name="note" maxLength={200} placeholder="Motivo / observação (opcional)" className={`${input} sm:col-span-3`} aria-label={`Motivo dos tiros em ${p.name}`} />
                     <button className={button}>Adicionar</button>
                   </form>
                 </div>

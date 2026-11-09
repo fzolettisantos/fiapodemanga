@@ -69,12 +69,14 @@ export interface VotingPeriod {
 export interface BalaShot {
   id: string;
   quantity: number;
-  /** Local do tiro (ex.: "No ego"). */
-  location: string;
-  /** Tipo de arma (ex.: "Berinjela"). */
-  weapon: string;
-  /** Localidade onde aconteceu (ex.: "Estúdio do Papo Reto"). Opcional. */
+  /** Local do tiro (ex.: "Na testa"). Opcional. */
+  location: string | null;
+  /** Tipo de arma (ex.: "Berinjela"). Opcional. */
+  weapon: string | null;
+  /** Localidade onde aconteceu (ex.: "Episódio 360"). Opcional. */
   place: string | null;
+  /** Motivo ou observação (ex.: "Porque falou da Dona Bila"). Opcional. */
+  note: string | null;
 }
 
 export interface RankingResults {

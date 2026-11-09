@@ -1,8 +1,9 @@
 import "server-only";
-import { DEMO_PARTICIPANTS, DEMO_SHOTS, DEMO_STATIC_POSITIONS } from "@/papo-reto/config/demo";
+import { BALA_SHOTS, BALA_UPDATED_AT } from "@/papo-reto/config/bala-do-veio";
+import { DEMO_PARTICIPANTS } from "@/papo-reto/config/demo";
 import { RANKINGS } from "@/papo-reto/config/rankings";
 import { getViewPeriod, getVotingPeriod, isPeriodKind } from "@/papo-reto/lib/period";
-import { rankEntries, rankStatic } from "@/papo-reto/lib/ranking";
+import { rankEntries } from "@/papo-reto/lib/ranking";
 import type { BalaShot, AvatarPaths, Charge, Participant, PeriodKind, RankingResults, RankingSlug, RankingView, VotingPeriod } from "@/papo-reto/types";
 import { inRanking, RANKING_SLUGS } from "@/papo-reto/types";
 import { demoMyVote, demoTotals } from "./demo-store";
@@ -11,6 +12,16 @@ import { getServiceClient } from "./supabase";
 
 const sumShots = (shots: Record<string, BalaShot[]>) =>
   Object.values(shots).reduce((total, list) => total + list.reduce((s, x) => s + x.quantity, 0), 0);
+
+/**
+ * Ranking estático (Bala do Véio): a ordem segue o total de tiros de cada um (mais tiros = topo; iguais empatam).
+ * Mesmas regras de posição e expressão do ranking votado; sem votos nem percentuais.
+ */
+function rankByShots(participants: Participant[], shots: Record<string, BalaShot[]>) {
+  return rankEntries(
+    participants.map((p) => ({ participant: p, votes: (shots[p.id] ?? []).reduce((t, s) => t + s.quantity, 0) })),
+  ).map((entry) => ({ ...entry, votes: 0, percent: 0 }));
+}
 
 /** Rankings estáticos não têm período de votação. */
 const STATIC_PERIOD: VotingPeriod = { kind: "all_time", key: "STATIC", label: "Ranking definido pelo programa" };
@@ -98,7 +109,7 @@ export async function getRankingResults(
   if (!isSupabaseConfigured()) {
     return configs.map((config) => {
       if (RANKINGS[config.slug].mode === "static") {
-        const positions = DEMO_STATIC_POSITIONS[config.slug] ?? {};
+        // Dados do programa (não simulados): lista do Bala do Véio, ordem pelo total de tiros.
         return {
           slug: config.slug,
           mode: "static",
@@ -106,12 +117,12 @@ export async function getRankingResults(
           active: config.active,
           period: STATIC_PERIOD,
           totalVotes: 0,
-          entries: rankStatic(DEMO_PARTICIPANTS.filter((p) => inRanking(p, config.slug)).map((p) => ({ participant: p, position: positions[p.id] ?? 0 }))),
-          isDemo: true,
+          entries: rankByShots(DEMO_PARTICIPANTS.filter((p) => inRanking(p, config.slug)), BALA_SHOTS),
+          isDemo: false,
           updatedAt,
-          standingsUpdatedAt: null,
-          shots: DEMO_SHOTS,
-          totalShots: sumShots(DEMO_SHOTS),
+          standingsUpdatedAt: BALA_UPDATED_AT,
+          shots: BALA_SHOTS,
+          totalShots: sumShots(BALA_SHOTS),
         } satisfies RankingResults;
       }
       const votingPeriod = getVotingPeriod("weekly", now, { weekStartsOn: config.weekStartsOn });
@@ -145,27 +156,24 @@ export async function getRankingResults(
   return Promise.all(
     configs.map(async (config) => {
       if (RANKINGS[config.slug].mode === "static") {
-        let rows: { participant_id: string; position: number; updated_at: string }[] = [];
-        if (config.id) {
-          const { data, error } = await sb
-            .from("static_standings")
-            .select("participant_id, position, updated_at")
-            .eq("ranking_id", config.id);
-          if (error) throw new Error(`Erro ao carregar o ranking do programa: ${error.message}`);
-          rows = data ?? [];
-        }
-        const positions = new Map(rows.map((r) => [r.participant_id, r.position]));
         const shots: Record<string, BalaShot[]> = {};
-        const stamps = rows.map((r) => r.updated_at);
+        const stamps: string[] = [];
         if (config.id) {
           const { data, error } = await sb
             .from("static_shots")
-            .select("id, participant_id, quantity, location, place, weapon, updated_at")
+            .select("id, participant_id, quantity, location, place, weapon, note, updated_at")
             .eq("ranking_id", config.id)
             .order("created_at");
           if (error) throw new Error(`Erro ao carregar os tiros: ${error.message}`);
-          for (const row of (data ?? []) as { id: string; participant_id: string; quantity: number; location: string; place: string | null; weapon: string; updated_at: string }[]) {
-            (shots[row.participant_id] ??= []).push({ id: row.id, quantity: row.quantity, location: row.location, place: row.place, weapon: row.weapon });
+          for (const row of (data ?? []) as (Omit<BalaShot, "id"> & { id: string; participant_id: string; updated_at: string })[]) {
+            (shots[row.participant_id] ??= []).push({
+              id: row.id,
+              quantity: row.quantity,
+              location: row.location,
+              place: row.place,
+              weapon: row.weapon,
+              note: row.note,
+            });
             stamps.push(row.updated_at);
           }
         }
@@ -177,7 +185,7 @@ export async function getRankingResults(
           active: config.active,
           period: STATIC_PERIOD,
           totalVotes: 0,
-          entries: rankStatic(participants.filter((p) => inRanking(p, config.slug)).map((p) => ({ participant: p, position: positions.get(p.id) ?? 0 }))),
+          entries: rankByShots(participants.filter((p) => inRanking(p, config.slug)), shots),
           isDemo: false,
           updatedAt,
           standingsUpdatedAt: latest,

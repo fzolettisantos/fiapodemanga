@@ -131,6 +131,12 @@
       "middle": "/papo-reto/characters/veio-tricolor/sabio/middle.webp",
       "bottom": "/papo-reto/characters/veio-tricolor/sabio/bottom.webp",
       "neutral": "/papo-reto/characters/veio-tricolor/sabio/neutral.webp"
+    },
+    "bala-do-veio": {
+      "top": "/papo-reto/characters/veio-tricolor/bala-do-veio/top.webp",
+      "middle": "/papo-reto/characters/veio-tricolor/bala-do-veio/middle.webp",
+      "bottom": "/papo-reto/characters/veio-tricolor/bala-do-veio/bottom.webp",
+      "neutral": "/papo-reto/characters/veio-tricolor/bala-do-veio/neutral.webp"
     }
   }
 }

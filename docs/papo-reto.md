@@ -88,24 +88,20 @@ descrevendo a expressão e `aria-label` em cada card.
 
 ### Bala do Véio: ranking do programa
 
-É uma brincadeira interna do programa: **o público não vota**. A ordem é definida no painel
-(`/papo-reto/admin` → "ordem do programa": 1 = mais na mira; posições iguais empatam; campo vazio tira a
-pessoa da lista). As expressões seguem as mesmas regras de posição. A aba não mostra votos, porcentagem nem
-botão de votar, e o voto é recusado na API (`not_votable`) e no banco (`rankings.mode = 'static'`).
-No modo demonstração a ordem é simulada e sinalizada como "Ordem simulada".
+É uma brincadeira interna do programa: **o público não vota**. A ordem segue o **total de tiros** de cada um
+(mais tiros no topo; totais iguais empatam; quem não levou tiro fica em último, "longe da bronca"). As expressões
+seguem as mesmas regras de posição. A aba não mostra votos, porcentagem nem botão de votar, e o voto é recusado na
+API (`not_votable`) e no banco (`rankings.mode = 'static'`).
 
-**Tiros do Véio.** Cada box mostra uma tabela com **quantidade de tiros · local do tiro · localidade · tipo de arma** (localidade opcional: onde aconteceu) e o
-total de tiros da pessoa; acima de todos os boxes aparece o total de tiros somando todos. Os registros são
-cadastrados no painel (seção do Bala do Véio → "Tiros"), ficam na tabela `static_shots` e o card
-compartilhável mostra o total de cada um. A ordem do ranking continua sendo a definida pelo programa.
-No modo demonstração os tiros são simulados.
+**Tiros do Véio.** Cada box mostra uma tabela com **quantidade · local do tiro · localidade · tipo de arma** e o
+total de tiros da pessoa; o motivo aparece numa linha abaixo do registro, e colunas sem nenhum dado no box ficam
+escondidas. Acima de todos os boxes aparece o total geral. Só a quantidade é obrigatória.
 
-## Ilustrações dos rankings
-
-A ilustração grande abaixo do título de cada ranking (ex.: o troféu do Falou Merda) fica em
-`public/papo-reto/rankings/<ranking>.webp` (ou `.png`/`.avif`), quadrada (ex.: 800×800).
-É detectada sozinha no `dev`/`build`; sem arquivo, nada aparece. O texto alternativo fica em
-`illustrationAlt` (`src/papo-reto/config/rankings.ts`).
+- **Dados atuais:** atualização de 09/11 informada pelo Caique, em `src/papo-reto/config/bala-do-veio.ts`
+  (mostrados no site enquanto o Supabase não está ligado) e na carga inicial do `supabase/papo-reto.sql`.
+- **Próximas atualizações:** pelo painel (seção do Bala do Véio → "Tiros"), na tabela `static_shots`.
+- Pessoas citadas só nesse ranking (Serdan, Oberdan, Lucas Samuel, Dentinho, Luiz Gusttavo, Mastigasamba,
+  Bruno Di Santi, Nem e Douglas Dias) estão cadastradas com `rankings = ['bala-do-veio']`.
 
 ### Arte de fundo das laterais
 

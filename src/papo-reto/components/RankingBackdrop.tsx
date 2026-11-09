@@ -17,10 +17,7 @@ interface Side {
 interface Backdrop {
   left: Side;
   right: Side;
-  /**
-   * Não ampliar além do tamanho original: a arte fica presa no topo e some em degradê embaixo.
-   * Para artes concentradas na parte de cima (ex.: Bala do Véio), que cortariam os balões se esticadas.
-   */
+  /** Não ampliar além do tamanho original (artes concentradas na parte de cima, ex.: Bala do Véio). */
   noUpscale?: boolean;
 }
 
@@ -35,23 +32,29 @@ const BACKDROPS: Partial<Record<TabSlug, Backdrop>> = {
     noUpscale: true,
   },
   sabio: {
-    left: { src: "/papo-reto/rankings/sabio-bg-left.webp", width: 450, height: 941 },
-    right: { src: "/papo-reto/rankings/sabio-bg-right.webp", width: 482, height: 941 },
+    left: { src: "/papo-reto/rankings/sabio-bg-left.webp", width: 440, height: 849 },
+    right: { src: "/papo-reto/rankings/sabio-bg-right.webp", width: 540, height: 849 },
   },
 };
 
-// Largura de cada lateral: só o espaço livre ao lado do conteúdo (64rem), para nunca ficar atrás do texto,
-// e no máximo a largura da arte na altura da tela. Em telas menores aparece só a parte de fora (os rostos).
-const artHeight = (side: Side, noUpscale?: boolean) => (noUpscale ? `min(100vh, ${side.height}px)` : "100vh");
-const sideWidth = (side: Side, noUpscale?: boolean) =>
-  `min(calc((100vw - 64rem) / 2 + 0.5rem), calc(${artHeight(side, noUpscale)} * ${side.width} / ${side.height}))`;
+// Espaço livre ao lado do conteúdo (64rem): a arte nunca passa por trás do texto.
+const GAP = "calc((100vw - 64rem) / 2 + 0.5rem)";
+
+/**
+ * Altura da arte: a que faz a lateral caber inteira no espaço livre, entre 70% e 100% da tela.
+ * Em telas largas a arte aparece inteira; nas menores, fica maior que o espaço e mostra só a parte de fora (os rostos).
+ * Com noUpscale, também não passa do tamanho original do arquivo.
+ */
+const artHeight = (side: Side, noUpscale?: boolean) =>
+  `clamp(70vh, calc(${GAP} * ${side.height} / ${side.width}), ${noUpscale ? `min(100vh, ${side.height}px)` : "100vh"})`;
 
 function SideArt({ side, align, noUpscale }: { side: Side; align: "left" | "right"; noUpscale?: boolean }) {
+  const height = artHeight(side, noUpscale);
   return (
     <div
       className={`absolute inset-y-0 ${align === "left" ? "left-0" : "right-0"}`}
       style={{
-        width: sideWidth(side, noUpscale),
+        width: `min(${GAP}, calc(${height} * ${side.width} / ${side.height}))`,
         // Some em direção ao conteúdo.
         maskImage: `linear-gradient(to ${align === "left" ? "right" : "left"}, #000 80%, transparent)`,
       }}
@@ -60,10 +63,10 @@ function SideArt({ side, align, noUpscale }: { side: Side; align: "left" | "righ
         className="size-full bg-no-repeat"
         style={{
           backgroundImage: `url(${side.src})`,
-          backgroundSize: `auto ${noUpscale ? `min(100%, ${side.height}px)` : "100%"}`,
-          backgroundPosition: `${align} ${noUpscale ? "top" : "center"}`,
-          // Sem ampliar, a arte termina antes do fim da tela: some em degradê embaixo.
-          maskImage: noUpscale ? `linear-gradient(to bottom, #000 calc(min(100%, ${side.height}px) * 0.8), transparent min(100%, ${side.height}px))` : undefined,
+          backgroundSize: `auto ${height}`,
+          backgroundPosition: `${align} top`,
+          // Presa no topo: quando não ocupa a altura toda, some em degradê embaixo.
+          maskImage: `linear-gradient(to bottom, #000 calc(${height} * 0.85), transparent ${height})`,
         }}
       />
     </div>

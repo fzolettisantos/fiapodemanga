@@ -39,6 +39,26 @@
       "neutral": "/papo-reto/characters/carabina/bala-do-veio/neutral.webp"
     }
   },
+  "gadu": {
+    "falou-merda": {
+      "top": "/papo-reto/characters/gadu/falou-merda/top.webp",
+      "middle": "/papo-reto/characters/gadu/falou-merda/middle.webp",
+      "bottom": "/papo-reto/characters/gadu/falou-merda/bottom.webp",
+      "neutral": "/papo-reto/characters/gadu/falou-merda/neutral.webp"
+    },
+    "sabio": {
+      "top": "/papo-reto/characters/gadu/sabio/top.webp",
+      "middle": "/papo-reto/characters/gadu/sabio/middle.webp",
+      "bottom": "/papo-reto/characters/gadu/sabio/bottom.webp",
+      "neutral": "/papo-reto/characters/gadu/sabio/neutral.webp"
+    },
+    "bala-do-veio": {
+      "top": "/papo-reto/characters/gadu/bala-do-veio/top.webp",
+      "middle": "/papo-reto/characters/gadu/bala-do-veio/middle.webp",
+      "bottom": "/papo-reto/characters/gadu/bala-do-veio/bottom.webp",
+      "neutral": "/papo-reto/characters/gadu/bala-do-veio/neutral.webp"
+    }
+  },
   "kleber": {
     "falou-merda": {
       "top": "/papo-reto/characters/kleber/falou-merda/top.webp",

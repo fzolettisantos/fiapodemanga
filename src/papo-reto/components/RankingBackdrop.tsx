@@ -12,6 +12,10 @@ interface Side {
   /** Tamanho do arquivo, para calcular a largura máxima na altura da tela. */
   width: number;
   height: number;
+  /** Quanto pode avançar por baixo do conteúdo (ex.: "14rem" no lado dos cards, que têm fundo sólido). */
+  overlap?: string;
+  /** Posição horizontal da arte quando não cabe inteira (ex.: "50%"); padrão: presa na borda da tela. */
+  focus?: string;
 }
 
 interface Backdrop {
@@ -25,8 +29,10 @@ const BACKDROPS: Partial<Record<TabSlug, Backdrop>> = {
     right: { src: "/papo-reto/rankings/falou-merda-bg-right.webp", width: 440, height: 849 },
   },
   "bala-do-veio": {
-    left: { src: "/papo-reto/rankings/bala-do-veio-bg-left.webp", width: 520, height: 849 },
-    right: { src: "/papo-reto/rankings/bala-do-veio-bg-right.webp", width: 611, height: 849 },
+    // Arte mais larga e voltada para o centro: à esquerda (lado do título) fica centralizada no caixote e nos
+    // balões; à direita avança por baixo dos cards (fundo sólido) e fica presa na arma e nos balões.
+    left: { src: "/papo-reto/rankings/bala-do-veio-bg-left.webp", width: 570, height: 849, focus: "55%" },
+    right: { src: "/papo-reto/rankings/bala-do-veio-bg-right.webp", width: 752, height: 849, overlap: "14rem", focus: "0%" },
   },
   sabio: {
     left: { src: "/papo-reto/rankings/sabio-bg-left.webp", width: 440, height: 849 },
@@ -46,11 +52,11 @@ function SideArt({ side, align }: { side: Side; align: "left" | "right" }) {
     <div
       className={`absolute inset-y-0 ${align === "left" ? "left-0" : "right-0"}`}
       style={{
-        width: `min(${GAP}, calc(100vh * ${side.width} / ${side.height}))`,
+        width: `min(calc(${GAP} + ${side.overlap ?? "0rem"}), calc(100vh * ${side.width} / ${side.height}))`,
         backgroundImage: `url(${side.src})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "auto 100%",
-        backgroundPosition: `${align} center`,
+        backgroundPosition: `${side.focus ?? align} center`,
         // Some em direção ao conteúdo.
         maskImage: `linear-gradient(to ${align === "left" ? "right" : "left"}, #000 80%, transparent)`,
       }}

@@ -161,7 +161,7 @@ export function RankingBoard({
         ) : null}
         {illustration ? (
           // Ilustração grande do ranking (troféu). No desktop ocupa a coluna fixa ao lado da lista.
-          // Respeita o formato do arquivo: quadradas em selo arredondado; horizontais (ex.: fundo transparente) inteiras.
+          // Respeita o formato do arquivo: quadradas em selo arredondado; horizontais inteiras, sem corte.
           <Image
             src={illustration.src}
             alt={copy.illustrationAlt ?? ""}
@@ -171,7 +171,7 @@ export function RankingBoard({
             loading="eager"
             className={
               wideIllustration
-                ? "mx-auto mt-5 h-auto w-full max-w-[480px] lg:mx-0 lg:max-w-none"
+                ? "mx-auto mt-5 h-auto w-full max-w-[480px] rounded-3xl lg:mx-0 lg:max-w-none"
                 : "mx-auto mt-5 h-auto w-full max-w-[240px] rounded-3xl sm:max-w-[300px] lg:mx-0 lg:max-w-[380px]"
             }
           />

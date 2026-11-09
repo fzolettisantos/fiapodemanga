@@ -37,7 +37,8 @@ html {
 }
 
 body {
-  background: var(--color-bg);
+  /* Sem fundo próprio: o fundo fica no <html>, para a arte lateral dos rankings (z negativo) aparecer. */
+  background: transparent;
   color: var(--color-white);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;

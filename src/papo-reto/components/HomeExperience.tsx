@@ -13,6 +13,7 @@ import type { Charge, RankedEntry, RankingResults, RankingSlug, RankingView, Tab
 import { ChargeGallery } from "./ChargeGallery";
 import { RankingBoard } from "./RankingBoard";
 import { PANEL_ID, RankingTabs, tabId } from "./RankingTabs";
+import { RankingBackdrop } from "./RankingBackdrop";
 import { ShareRanking } from "./ShareRanking";
 import { Toast } from "./Toast";
 
@@ -147,6 +148,7 @@ export function HomeExperience({
 
   return (
     <MotionConfig reducedMotion="user">
+      <RankingBackdrop tab={tab} />
       <div id="rankings" className="scroll-mt-0">
         <RankingTabs active={tab} onChange={changeTab} />
         <div className="mx-auto max-w-5xl px-4 pt-5 lg:pt-8">

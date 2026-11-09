@@ -17,8 +17,6 @@ interface Side {
 interface Backdrop {
   left: Side;
   right: Side;
-  /** Não ampliar além do tamanho original (artes concentradas na parte de cima, ex.: Bala do Véio). */
-  noUpscale?: boolean;
 }
 
 const BACKDROPS: Partial<Record<TabSlug, Backdrop>> = {
@@ -29,7 +27,6 @@ const BACKDROPS: Partial<Record<TabSlug, Backdrop>> = {
   "bala-do-veio": {
     left: { src: "/papo-reto/rankings/bala-do-veio-bg-left.webp", width: 520, height: 849 },
     right: { src: "/papo-reto/rankings/bala-do-veio-bg-right.webp", width: 611, height: 849 },
-    noUpscale: true,
   },
   sabio: {
     left: { src: "/papo-reto/rankings/sabio-bg-left.webp", width: 440, height: 849 },
@@ -41,35 +38,23 @@ const BACKDROPS: Partial<Record<TabSlug, Backdrop>> = {
 const GAP = "calc((100vw - 64rem) / 2 + 0.5rem)";
 
 /**
- * Altura da arte: a que faz a lateral caber inteira no espaço livre, entre 70% e 100% da tela.
- * Em telas largas a arte aparece inteira; nas menores, fica maior que o espaço e mostra só a parte de fora (os rostos).
- * Com noUpscale, também não passa do tamanho original do arquivo.
+ * As duas laterais usam sempre a altura completa da tela (mesma escala dos dois lados, já que os arquivos
+ * têm a mesma altura). A largura é limitada ao espaço livre: em telas menores aparece só a parte de fora.
  */
-const artHeight = (side: Side, noUpscale?: boolean) =>
-  `clamp(70vh, calc(${GAP} * ${side.height} / ${side.width}), ${noUpscale ? `min(100vh, ${side.height}px)` : "100vh"})`;
-
-function SideArt({ side, align, noUpscale }: { side: Side; align: "left" | "right"; noUpscale?: boolean }) {
-  const height = artHeight(side, noUpscale);
+function SideArt({ side, align }: { side: Side; align: "left" | "right" }) {
   return (
     <div
       className={`absolute inset-y-0 ${align === "left" ? "left-0" : "right-0"}`}
       style={{
-        width: `min(${GAP}, calc(${height} * ${side.width} / ${side.height}))`,
+        width: `min(${GAP}, calc(100vh * ${side.width} / ${side.height}))`,
+        backgroundImage: `url(${side.src})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "auto 100%",
+        backgroundPosition: `${align} center`,
         // Some em direção ao conteúdo.
         maskImage: `linear-gradient(to ${align === "left" ? "right" : "left"}, #000 80%, transparent)`,
       }}
-    >
-      <div
-        className="size-full bg-no-repeat"
-        style={{
-          backgroundImage: `url(${side.src})`,
-          backgroundSize: `auto ${height}`,
-          backgroundPosition: `${align} top`,
-          // Presa no topo: quando não ocupa a altura toda, some em degradê embaixo.
-          maskImage: `linear-gradient(to bottom, #000 calc(${height} * 0.85), transparent ${height})`,
-        }}
-      />
-    </div>
+    />
   );
 }
 
@@ -87,8 +72,8 @@ export function RankingBackdrop({ tab }: { tab: TabSlug }) {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
         >
-          <SideArt side={art.left} align="left" noUpscale={art.noUpscale} />
-          <SideArt side={art.right} align="right" noUpscale={art.noUpscale} />
+          <SideArt side={art.left} align="left" />
+          <SideArt side={art.right} align="right" />
         </motion.div>
       ) : null}
     </AnimatePresence>

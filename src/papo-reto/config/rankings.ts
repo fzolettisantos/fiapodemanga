@@ -116,6 +116,8 @@ export const RANKINGS: Record<RankingSlug, RankingCopy> = {
     description:
       "Tem gente que não perde a oportunidade de provocar. Aqui não tem votação: quem entra na mira da corneta do Véio é decidido pelo próprio programa.",
     defaultPeriod: "all_time",
+    illustrationAlt:
+      "Ilustração Bala do Véio: senhor de boné vermelho e óculos, piscando um olho e mirando uma berinjela que solta fumaça",
     badges: { top: "Na mira do Véio", bottom: "Longe da bronca" },
     expressions: {
       top: "apavorado e tenso, esperando a bronca",

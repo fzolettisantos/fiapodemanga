@@ -1,4 +1,17 @@
 {
-  "falou-merda": "/papo-reto/rankings/falou-merda.webp",
-  "sabio": "/papo-reto/rankings/sabio.webp"
+  "falou-merda": {
+    "src": "/papo-reto/rankings/falou-merda.webp",
+    "width": 800,
+    "height": 800
+  },
+  "sabio": {
+    "src": "/papo-reto/rankings/sabio.webp",
+    "width": 800,
+    "height": 800
+  },
+  "bala-do-veio": {
+    "src": "/papo-reto/rankings/bala-do-veio.webp",
+    "width": 960,
+    "height": 640
+  }
 }

@@ -100,7 +100,8 @@ export function RankingBoard({
   const pendingReorder = Boolean(live && shown && !sameStanding(shown, live));
   const accent = copy.kind === "positive" ? "text-green" : "text-red";
   const isStatic = copy.mode === "static";
-  const illustration = (illustrations as Partial<Record<RankingSlug, string>>)[slug];
+  const illustration = (illustrations as Partial<Record<RankingSlug, { src: string; width: number; height: number }>>)[slug];
+  const wideIllustration = illustration ? illustration.width > illustration.height * 1.2 : false;
   const kicker = isStatic
     ? "Ranking do programa · sem votação do público"
     : copy.kind === "positive"
@@ -160,14 +161,19 @@ export function RankingBoard({
         ) : null}
         {illustration ? (
           // Ilustração grande do ranking (troféu). No desktop ocupa a coluna fixa ao lado da lista.
+          // Respeita o formato do arquivo: quadradas em selo arredondado; horizontais (ex.: fundo transparente) inteiras.
           <Image
-            src={illustration}
+            src={illustration.src}
             alt={copy.illustrationAlt ?? ""}
-            width={800}
-            height={800}
-            sizes="(min-width: 1024px) 380px, (min-width: 640px) 300px, 240px"
+            width={illustration.width}
+            height={illustration.height}
+            sizes={wideIllustration ? "(min-width: 1024px) 420px, (min-width: 640px) 480px, 100vw" : "(min-width: 1024px) 380px, (min-width: 640px) 300px, 240px"}
             loading="eager"
-            className="mx-auto mt-5 aspect-square w-full max-w-[240px] rounded-3xl object-cover sm:max-w-[300px] lg:mx-0 lg:max-w-[380px]"
+            className={
+              wideIllustration
+                ? "mx-auto mt-5 h-auto w-full max-w-[480px] lg:mx-0 lg:max-w-none"
+                : "mx-auto mt-5 h-auto w-full max-w-[240px] rounded-3xl sm:max-w-[300px] lg:mx-0 lg:max-w-[380px]"
+            }
           />
         ) : null}
       </header>

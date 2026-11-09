@@ -1,7 +1,7 @@
 // Gera src/papo-reto/generated/character-manifest.json com as caricaturas de public/papo-reto/characters.
 // Assim o site sabe, sem requisições extras, quais expressões já foram fornecidas e quais
 // precisam do placeholder neutro. Roda sozinho antes de `dev` e `build`.
-import { readdir, writeFile, mkdir } from "node:fs/promises";
+import { readdir, readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 
@@ -30,14 +30,33 @@ if (existsSync(CHAR_DIR)) {
   }
 }
 
-// Ilustrações dos rankings (ao lado do título): public/papo-reto/rankings/<ranking>.<ext>
+/** Largura e altura lidas do cabeçalho do arquivo (PNG, WebP ou AVIF), sem dependências. */
+function imageSize(buf) {
+  if (buf.toString("ascii", 1, 4) === "PNG") return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
+  if (buf.toString("ascii", 0, 4) === "RIFF" && buf.toString("ascii", 8, 12) === "WEBP") {
+    const chunk = buf.toString("ascii", 12, 16);
+    if (chunk === "VP8X") return { width: 1 + buf.readUIntLE(24, 3), height: 1 + buf.readUIntLE(27, 3) };
+    if (chunk === "VP8L") {
+      const bits = buf.readUInt32LE(21);
+      return { width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1 };
+    }
+    if (chunk === "VP8 ") return { width: buf.readUInt16LE(26) & 0x3fff, height: buf.readUInt16LE(28) & 0x3fff };
+  }
+  const ispe = buf.indexOf("ispe");
+  if (ispe > 0) return { width: buf.readUInt32BE(ispe + 8), height: buf.readUInt32BE(ispe + 12) };
+  return { width: 800, height: 800 };
+}
+
+// Ilustrações dos rankings (abaixo do título): public/papo-reto/rankings/<ranking>.<ext>
 const RANKING_DIR = join(ROOT, "public", "papo-reto", "rankings");
 const illustrations = {};
 if (existsSync(RANKING_DIR)) {
   const files = await readdir(RANKING_DIR);
   for (const ranking of RANKINGS) {
     const ext = EXTENSIONS.find((e) => files.includes(`${ranking}.${e}`));
-    if (ext) illustrations[ranking] = `/papo-reto/rankings/${ranking}.${ext}`;
+    if (!ext) continue;
+    const size = imageSize(await readFile(join(RANKING_DIR, `${ranking}.${ext}`)));
+    illustrations[ranking] = { src: `/papo-reto/rankings/${ranking}.${ext}`, ...size };
   }
 }
 await writeFile(

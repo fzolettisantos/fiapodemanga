@@ -41,9 +41,15 @@ describe("compartilhamento", () => {
 describe("caricaturas", () => {
   it("usa a expressão exata cadastrada e nunca outra", () => {
     const sources = { "falou-merda": { top: "https://x/top.webp" } };
-    expect(resolveCharacterImage("benja", "falou-merda", "top", sources)).toBe("https://x/top.webp");
-    expect(resolveCharacterImage("benja", "falou-merda", "bottom", sources)).toBeNull();
-    expect(resolveCharacterImage("benja", "sabio", "top", sources)).toBeNull();
+    // Participante fictício, sem arquivos em public/papo-reto/characters.
+    expect(resolveCharacterImage("sem-caricatura", "falou-merda", "top", sources)).toBe("https://x/top.webp");
+    expect(resolveCharacterImage("sem-caricatura", "falou-merda", "bottom", sources)).toBeNull();
+    expect(resolveCharacterImage("sem-caricatura", "sabio", "top", sources)).toBeNull();
+  });
+
+  it("acha as caricaturas locais pelo manifesto", () => {
+    expect(resolveCharacterImage("benja", "falou-merda", "top")).toBe("/papo-reto/characters/benja/falou-merda/top.webp");
+    expect(resolveCharacterImage("mano", "sabio", "bottom")).toBe("/papo-reto/characters/mano/sabio/bottom.webp");
   });
 
   it("placeholder segue a lógica de cada ranking", () => {

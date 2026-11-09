@@ -37,7 +37,8 @@ export const RANKINGS: Record<RankingSlug, RankingCopy> = {
     description:
       "Tem opinião ruim, tem opinião péssima e tem aquelas que deveriam ser proibidas pelo Estatuto do Torcedor. Vote em quem mais falou besteira com a confiança de quem sabe tudo.",
     cta: "Votar nessa figura",
-    illustrationAlt: "Troféu Falou Merda: um cocô sorridente, de coroa, no alto de um troféu dourado com louros",
+    illustrationAlt:
+      "Troféu Falou Merda: troféu dourado com louros e a cabeça caricata de um homem de óculos fazendo careta, com um cocô dourado no alto",
     defaultPeriod: "weekly",
     badges: { top: "Líder da vergonha", bottom: "Escapou (por enquanto)" },
     expressions: {

@@ -1,7 +1,7 @@
 import "server-only";
 import type { RankingSlug, VoteStatus } from "@/papo-reto/types";
 import { RANKINGS } from "@/papo-reto/config/rankings";
-import { getVotingPeriod } from "@/papo-reto/lib/period";
+import { getVoteKeys } from "@/papo-reto/lib/period";
 import { getRankingConfigs } from "./data";
 import { demoCastVote } from "./demo-store";
 import { getIpVoteLimit, isSupabaseConfigured } from "./env";
@@ -25,13 +25,14 @@ export async function castVote(input: {
   const [config] = await getRankingConfigs([input.ranking]);
   if (!config) return "invalid";
   if (!config.active) return "closed";
-  const period = getVotingPeriod(config.periodKind, input.now ?? new Date(), { weekStartsOn: config.weekStartsOn });
+  // Voto semanal que soma também no mês e na temporada (ano) da data do voto.
+  const keys = getVoteKeys(input.now ?? new Date(), { weekStartsOn: config.weekStartsOn });
   const ipLimit = getIpVoteLimit();
 
   if (!isSupabaseConfigured()) {
     return demoCastVote({
       slug: input.ranking,
-      periodKey: period.key,
+      keys,
       participantId: input.participantId,
       voterKey: input.voterKey,
       ipHash: input.ipHash,
@@ -42,7 +43,9 @@ export async function castVote(input: {
   const { data, error } = await getServiceClient().rpc("cast_vote", {
     p_ranking_slug: input.ranking,
     p_participant_id: input.participantId,
-    p_period_key: period.key,
+    p_period_key: keys.week,
+    p_month_key: keys.month,
+    p_season_key: keys.season,
     p_voter_key: input.voterKey,
     p_ip_hash: input.ipHash,
     p_ip_limit: ipLimit,

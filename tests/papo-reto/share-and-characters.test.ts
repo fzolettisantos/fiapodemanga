@@ -10,6 +10,7 @@ const results = (votes: Record<string, number>, isDemo = false): RankingResults 
   return {
     slug: "falou-merda",
     mode: "vote",
+    view: "week",
     active: true,
     period: { kind: "weekly", key: "W", label: "" },
     totalVotes: entries.reduce((s, e) => s + e.votes, 0),
@@ -25,6 +26,12 @@ describe("compartilhamento", () => {
     expect(rankingShareText("falou-merda", results({ benja: 9, b: 1 }, true))).not.toContain("LIDERA");
     expect(rankingShareText("falou-merda", results({ benja: 0, b: 0 }))).not.toContain("LIDERA");
     expect(rankingShareText("falou-merda", results({ benja: 3, b: 3 }))).toContain("Empate");
+  });
+
+  it("fora da semana, o texto diz o recorte", () => {
+    const r = { ...results({ benja: 9, b: 1 }), view: "season" as const, period: { kind: "season" as const, key: "S2026", label: "Temporada 2026" } };
+    expect(rankingShareText("falou-merda", r)).toContain("(TEMPORADA 2026)");
+    expect(participantHeadline("falou-merda", r.entries[0]!, r)).toContain("(TEMPORADA 2026)");
   });
 
   it("manchete do card coerente com a posição", () => {

@@ -16,7 +16,12 @@ export function rankingShareText(slug: RankingSlug, results?: RankingResults | n
   if (!results || results.isDemo || !hasResult(results)) return invite;
   const leaders = results.entries.filter((e) => e.position === 1);
   if (leaders.length !== 1) return `Empate no topo do ${copy.title}! ${invite}`;
-  return `${upper(copy.leaderMessage(leaders[0]!.participant.name))} ${isStatic ? "Confira:" : "Vota aí também:"}`;
+  return `${upper(copy.leaderMessage(leaders[0]!.participant.name))}${periodSuffix(results)} ${isStatic ? "Confira:" : "Vota aí também:"}`;
+}
+
+/** " (TEMPORADA 2026)" / " (NOVEMBRO DE 2026)" — a semana é o padrão e não precisa de sufixo. */
+function periodSuffix(results: RankingResults) {
+  return results.mode === "vote" && results.view !== "week" ? ` (${upper(results.period.label)})` : "";
 }
 
 /** Há um resultado de verdade para mostrar? (votos, ou ordem definida no ranking estático) */
@@ -29,9 +34,10 @@ export function participantHeadline(slug: RankingSlug, entry: RankedEntry, resul
   const copy = RANKINGS[slug];
   const name = entry.participant.name;
   if (!hasResult(results) || entry.state === "neutral") return upper(`${copy.title}: ainda está tudo empatado!`);
-  if (entry.position === 1 && !entry.tied) return upper(copy.leaderMessage(name));
-  if (entry.position === 1) return upper(`${name} divide a liderança do ${copy.title}!`);
-  return upper(`${name} está em ${entry.position}º no ${copy.title}.`);
+  const suffix = periodSuffix(results);
+  if (entry.position === 1 && !entry.tied) return upper(copy.leaderMessage(name)) + suffix;
+  if (entry.position === 1) return upper(`${name} divide a liderança do ${copy.title}!`) + suffix;
+  return upper(`${name} está em ${entry.position}º no ${copy.title}.`) + suffix;
 }
 
 export function whatsappUrl(text: string, url: string) {

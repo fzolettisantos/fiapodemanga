@@ -1,6 +1,6 @@
 import "server-only";
 import { DEMO_PARTICIPANTS, DEMO_SEED_VOTES } from "@/papo-reto/config/demo";
-import type { RankingSlug, VoteStatus } from "@/papo-reto/types";
+import type { RankingSlug, RankingView, VoteStatus } from "@/papo-reto/types";
 
 /**
  * Armazenamento em memória do MODO DEMONSTRAÇÃO. Os números partem de valores simulados,
@@ -21,23 +21,25 @@ function state(): DemoState {
 
 const totalKey = (slug: string, period: string, participant: string) => `${slug}|${period}|${participant}`;
 
-export function demoTotals(slug: RankingSlug, periodKey: string): Record<string, number> {
+/** Placar de um recorte (semana, mês ou temporada) identificado pela chave do período. */
+export function demoTotals(slug: RankingSlug, periodKey: string, view: RankingView = "week"): Record<string, number> {
   const s = state();
   return Object.fromEntries(
     DEMO_PARTICIPANTS.map((p) => [
       p.id,
-      s.totals.get(totalKey(slug, periodKey, p.id)) ?? DEMO_SEED_VOTES[slug][p.id] ?? 0,
+      s.totals.get(totalKey(slug, periodKey, p.id)) ?? DEMO_SEED_VOTES[slug][view][p.id] ?? 0,
     ]),
   );
 }
 
-export function demoMyVote(slug: RankingSlug, periodKey: string, voterKey: string): string | null {
-  return state().voters.get(`${slug}|${periodKey}|${voterKey}`) ?? null;
+export function demoMyVote(slug: RankingSlug, weekKey: string, voterKey: string): string | null {
+  return state().voters.get(`${slug}|${weekKey}|${voterKey}`) ?? null;
 }
 
+/** Mesmas regras do banco: 1 voto por semana; o voto soma na semana, no mês e na temporada. */
 export function demoCastVote(input: {
   slug: RankingSlug;
-  periodKey: string;
+  keys: Record<RankingView, string>;
   participantId: string;
   voterKey: string;
   ipHash: string;
@@ -45,13 +47,16 @@ export function demoCastVote(input: {
 }): VoteStatus {
   const s = state();
   if (!DEMO_PARTICIPANTS.some((p) => p.id === input.participantId)) return "invalid";
-  const voterKey = `${input.slug}|${input.periodKey}|${input.voterKey}`;
+  const voterKey = `${input.slug}|${input.keys.week}|${input.voterKey}`;
   if (s.voters.has(voterKey)) return "duplicate";
-  const ipKey = `${input.slug}|${input.periodKey}|${input.ipHash}`;
+  const ipKey = `${input.slug}|${input.keys.week}|${input.ipHash}`;
   if ((s.perIp.get(ipKey) ?? 0) >= input.ipLimit) return "ip_limit";
 
-  const current = demoTotals(input.slug, input.periodKey)[input.participantId] ?? 0;
-  s.totals.set(totalKey(input.slug, input.periodKey, input.participantId), current + 1);
+  for (const view of ["week", "month", "season"] as const) {
+    const key = input.keys[view];
+    const current = demoTotals(input.slug, key, view)[input.participantId] ?? 0;
+    s.totals.set(totalKey(input.slug, key, input.participantId), current + 1);
+  }
   s.voters.set(voterKey, input.participantId);
   s.perIp.set(ipKey, (s.perIp.get(ipKey) ?? 0) + 1);
   return "ok";

@@ -1,13 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { AlertTriangle, Megaphone, RefreshCw, Users } from "lucide-react";
+import { AlertTriangle, CalendarClock, Megaphone, RefreshCw, Trophy, Users } from "lucide-react";
 import illustrations from "@/papo-reto/generated/ranking-illustrations.json";
 import { LayoutGroup } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { RANKINGS } from "@/papo-reto/config/rankings";
 import { computeMoves, formatNumber, mergeLiveNumbers, sameStanding } from "@/papo-reto/lib/ranking";
-import type { RankedEntry, RankingResults, RankingSlug } from "@/papo-reto/types";
+import { daysUntil } from "@/papo-reto/lib/period";
+import type { RankedEntry, RankingResults, RankingSlug, RankingView } from "@/papo-reto/types";
+import { PeriodSwitcher } from "./PeriodSwitcher";
 import type { Move } from "./RankingPosition";
 import { RankingCard } from "./RankingCard";
 import type { VoteButtonState } from "./VoteButton";
@@ -17,6 +19,8 @@ const IDLE_MS = 5_000;
 
 export function RankingBoard({
   slug,
+  view,
+  onViewChange,
   results,
   error,
   pendingVote,
@@ -25,6 +29,8 @@ export function RankingBoard({
   onRetry,
 }: {
   slug: RankingSlug;
+  view: RankingView;
+  onViewChange: (view: RankingView) => void;
   results: RankingResults | null;
   error: boolean;
   pendingVote: string | null;
@@ -141,18 +147,26 @@ export function RankingBoard({
               <span className="rounded bg-yellow px-1.5 py-0.5 text-[11px] font-extrabold uppercase text-ink">Ordem simulada</span>
             ) : null}
           </p>
-        ) : results ? (
-          <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] font-semibold text-muted">
-            <span className="inline-flex items-center gap-1">
-              <Users aria-hidden className="size-4" />
-              <span className="tabular text-white">{formatNumber(results.totalVotes)}</span> votos
-            </span>
-            <span aria-hidden>·</span>
-            <span>{results.period.label}</span>
-            {results.isDemo ? (
-              <span className="rounded bg-yellow px-1.5 py-0.5 text-[11px] font-extrabold uppercase text-ink">Dados simulados</span>
-            ) : null}
-          </p>
+        ) : null}
+        {!isStatic ? <PeriodSwitcher value={view} onChange={onViewChange} /> : null}
+        {!isStatic && results ? (
+          <div className="mt-3 space-y-1.5 text-[13px] font-semibold text-muted">
+            <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <span className="inline-flex items-center gap-1 text-white">
+                {view === "season" ? <Trophy aria-hidden className="size-4 text-yellow" /> : <CalendarClock aria-hidden className="size-4" />}
+                {results.period.label}
+              </span>
+              <span aria-hidden>·</span>
+              <span className="inline-flex items-center gap-1">
+                <Users aria-hidden className="size-4" />
+                <span className="tabular text-white">{formatNumber(results.totalVotes)}</span> votos
+              </span>
+              {results.isDemo ? (
+                <span className="rounded bg-yellow px-1.5 py-0.5 text-[11px] font-extrabold uppercase text-ink">Dados simulados</span>
+              ) : null}
+            </p>
+            {results.period.endsOn ? <PeriodEnd view={view} endsOn={results.period.endsOn} /> : null}
+          </div>
         ) : null}
         {results && !results.active && !isStatic ? (
           <p className="mt-3 rounded-xl border border-line bg-surface px-3 py-2 text-sm font-semibold" role="note">
@@ -251,11 +265,32 @@ export function RankingBoard({
           <p className="mt-3 text-xs text-muted">
             {isStatic
               ? "Brincadeira interna do programa: a ordem é definida pelo Papo Reto, não por votação."
-              : "Um voto por ranking a cada período. As posições se reorganizam após o seu voto ou a cada poucos segundos, sem pular cards enquanto você escolhe."}
+              : "Você vota uma vez por semana em cada ranking, e o voto conta na semana, no mês e na temporada. As posições se reorganizam após o seu voto ou a cada poucos segundos, sem pular cards enquanto você escolhe."}
           </p>
         </>
       )}
       </div>
     </div>
+  );
+}
+
+const noopSubscribe = () => () => {};
+const fmtDay = (iso: string) => `${iso.slice(8, 10)}/${iso.slice(5, 7)}`;
+
+/** Quanto falta para o fim do período. Na temporada, o fim do ano define o campeão. */
+function PeriodEnd({ view, endsOn }: { view: RankingView; endsOn: string }) {
+  // Calculado só no navegador (o HTML em cache não sabe a data de hoje).
+  const days = useSyncExternalStore(
+    noopSubscribe,
+    () => daysUntil(endsOn),
+    () => null,
+  );
+  const left = days === null ? "" : days === 0 ? " · último dia!" : ` · faltam ${days} ${days === 1 ? "dia" : "dias"}`;
+  return (
+    <p className={view === "season" ? "text-yellow" : undefined}>
+      {view === "season"
+        ? `Fim da temporada em ${fmtDay(endsOn)}/${endsOn.slice(0, 4)}: quem estiver no topo leva o título do ano${left}.`
+        : `Fecha em ${fmtDay(endsOn)}${left}.`}
+    </p>
   );
 }

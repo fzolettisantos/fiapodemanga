@@ -55,6 +55,7 @@ describe("textos do ranking estático", () => {
   const results = (isDemo: boolean): RankingResults => ({
     slug: "bala-do-veio",
     mode: "static",
+    view: "season",
     active: true,
     period: { kind: "all_time", key: "STATIC", label: "" },
     totalVotes: 0,

@@ -10,6 +10,7 @@ import { formatNumber, formatPercent } from "@/papo-reto/lib/ranking";
 import { participantHeadline } from "@/papo-reto/lib/share";
 import { isParticipantId, isRankingSlug } from "@/papo-reto/lib/validation";
 import { getRankingResults } from "@/papo-reto/lib/server/data";
+import { parseViewParam, VIEW_PARAM } from "@/papo-reto/lib/period";
 import type { RankedEntry, RankingSlug } from "@/papo-reto/types";
 
 export const runtime = "nodejs";
@@ -49,7 +50,8 @@ export async function GET(request: NextRequest) {
   }
 
   // Os números vêm sempre do banco — nunca da URL — para impedir cards falsos.
-  const [results] = await getRankingResults([ranking]);
+  const view = parseViewParam(request.nextUrl.searchParams.get("periodo"));
+  const [results] = await getRankingResults([ranking], { view });
   const entry = participant ? results?.entries.find((e) => e.participant.id === participant) : results?.entries[0];
   if (!results || !entry) return new Response("Participante não encontrado.", { status: 404 });
 
@@ -77,6 +79,9 @@ export async function GET(request: NextRequest) {
         <div style={{ display: "flex", fontFamily: "Anton", fontSize: 84, lineHeight: 1.02, marginTop: 24, textTransform: "uppercase" }}>
           {copy.title}
         </div>
+        {results.mode === "vote" ? (
+          <div style={{ display: "flex", fontSize: 34, color: "#FFD23F", marginTop: 8 }}>{results.period.label}</div>
+        ) : null}
         <div style={{ display: "flex", alignItems: "center", marginTop: 56 }}>
           <div style={{ display: "flex", fontFamily: "Anton", fontSize: 220, color: "#FFD23F", lineHeight: 1, width: 300 }}>
             {`${entry.position}º`}
@@ -96,7 +101,7 @@ export async function GET(request: NextRequest) {
           {`“${participantHeadline(ranking, entry, results)}”`}
         </div>
         <div style={{ display: "flex", flexDirection: "column", marginTop: "auto", fontSize: 28, color: "#9AA3B2" }}>
-          <span style={{ color: "#fff" }}>{`${results.mode === "static" ? "Confira" : "Vote também"}: ${host}${BASE_PATH}/${ranking}`}</span>
+          <span style={{ color: "#fff" }}>{`${results.mode === "static" ? "Confira" : "Vote também"}: ${host}${BASE_PATH}/${ranking}${view === "week" ? "" : `?periodo=${VIEW_PARAM[view]}`}`}</span>
           <span>
             {results.isDemo
               ? results.mode === "static"

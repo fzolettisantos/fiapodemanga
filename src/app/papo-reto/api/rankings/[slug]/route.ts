@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { parseViewParam } from "@/papo-reto/lib/period";
 import { isRankingSlug } from "@/papo-reto/lib/validation";
 import { getRankingResults } from "@/papo-reto/lib/server/data";
 import { readVoterKey, VOTER_COOKIE } from "@/papo-reto/lib/server/voter";
@@ -15,7 +16,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     } catch {
       voterKey = null;
     }
-    const [results] = await getRankingResults([slug], { voterKey });
+    const view = parseViewParam(request.nextUrl.searchParams.get("periodo"));
+    const [results] = await getRankingResults([slug], { voterKey, view });
     // Resposta personalizada (myVote): nada de cache compartilhado.
     return NextResponse.json(results, { headers: { "Cache-Control": "private, no-store" } });
   } catch (error) {

@@ -64,6 +64,10 @@ create table if not exists public.votes (
 );
 create index if not exists votes_ip_idx on public.votes (ranking_id, period_key, ip_hash);
 
+-- O voto é semanal (period_key = semana) e soma também no mês e na temporada (ano) da data do voto.
+alter table public.votes add column if not exists month_key text check (length(month_key) <= 20);
+alter table public.votes add column if not exists season_key text check (length(season_key) <= 20);
+
 -- Placar agregado (leitura pública e Realtime, sem expor os votos individuais).
 create table if not exists public.vote_totals (
   ranking_id     uuid not null references public.rankings(id) on delete cascade,
@@ -98,15 +102,19 @@ create index if not exists charges_published_idx on public.charges (published, p
 create or replace function public.apply_vote_total() returns trigger
 language plpgsql security definer set search_path = public as $$
 begin
+  -- Placar da semana, do mês e da temporada (cada um é uma chave em vote_totals).
   if tg_op = 'INSERT' then
     insert into vote_totals (ranking_id, participant_id, period_key, votes)
-    values (new.ranking_id, new.participant_id, new.period_key, 1)
+    select new.ranking_id, new.participant_id, k, 1
+    from unnest(array[new.period_key, new.month_key, new.season_key]) as k
+    where k is not null
     on conflict (ranking_id, period_key, participant_id)
     do update set votes = vote_totals.votes + 1, updated_at = now();
     return new;
   elsif tg_op = 'DELETE' then
     update vote_totals set votes = greatest(votes - 1, 0), updated_at = now()
-    where ranking_id = old.ranking_id and period_key = old.period_key and participant_id = old.participant_id;
+    where ranking_id = old.ranking_id and participant_id = old.participant_id
+      and period_key = any (array[old.period_key, old.month_key, old.season_key]);
     return old;
   end if;
   return null;
@@ -120,13 +128,17 @@ for each row execute function public.apply_vote_total();
 -- Voto: validação no banco. Só a service role (servidor do site) pode chamar.
 -- Retorna: ok | duplicate | ip_limit | invalid | closed | not_votable
 -- ---------------------------------------------------------------------
+drop function if exists public.cast_vote(text, uuid, text, text, text, integer);
+
 create or replace function public.cast_vote(
   p_ranking_slug   text,
   p_participant_id uuid,
   p_period_key     text,
   p_voter_key      text,
   p_ip_hash        text,
-  p_ip_limit       integer default 20
+  p_ip_limit       integer default 20,
+  p_month_key      text default null,
+  p_season_key     text default null
 ) returns text
 language plpgsql security definer set search_path = public as $$
 declare
@@ -152,16 +164,16 @@ begin
   where ranking_id = v_ranking.id and period_key = p_period_key and ip_hash = p_ip_hash;
   if v_count >= greatest(p_ip_limit, 1) then return 'ip_limit'; end if;
 
-  insert into votes (ranking_id, participant_id, period_key, voter_key, ip_hash)
-  values (v_ranking.id, p_participant_id, p_period_key, p_voter_key, p_ip_hash)
+  insert into votes (ranking_id, participant_id, period_key, month_key, season_key, voter_key, ip_hash)
+  values (v_ranking.id, p_participant_id, p_period_key, p_month_key, p_season_key, p_voter_key, p_ip_hash)
   on conflict (ranking_id, period_key, voter_key) do nothing
   returning id into v_id;
 
   return case when v_id is null then 'duplicate' else 'ok' end;
 end $$;
 
-revoke all on function public.cast_vote(text, uuid, text, text, text, integer) from public, anon, authenticated;
-grant execute on function public.cast_vote(text, uuid, text, text, text, integer) to service_role;
+revoke all on function public.cast_vote(text, uuid, text, text, text, integer, text, text) from public, anon, authenticated;
+grant execute on function public.cast_vote(text, uuid, text, text, text, integer, text, text) to service_role;
 revoke all on function public.apply_vote_total() from public, anon, authenticated;
 
 -- ---------------------------------------------------------------------

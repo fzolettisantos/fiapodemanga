@@ -1,6 +1,8 @@
 "use client";
 
 import { withBase } from "@/papo-reto/config/site";
+import { VIEW_PARAM } from "@/papo-reto/lib/period";
+import type { RankingView } from "@/papo-reto/types";
 
 export type ShareOutcome = "shared" | "copied" | "downloaded" | "cancelled" | "failed";
 
@@ -42,8 +44,9 @@ export async function shareLink(data: { title: string; text: string; url: string
 }
 
 /** Compartilha o card em imagem (arquivo) ou faz o download quando o aparelho não aceita arquivos. */
-export async function shareCardImage(params: { ranking: string; participantId?: string; text: string; url: string }): Promise<ShareOutcome> {
+export async function shareCardImage(params: { ranking: string; participantId?: string; view?: RankingView; text: string; url: string }): Promise<ShareOutcome> {
   const query = new URLSearchParams({ ranking: params.ranking });
+  if (params.view && params.view !== "week") query.set("periodo", VIEW_PARAM[params.view]);
   if (params.participantId) query.set("participant", params.participantId);
   try {
     const response = await fetch(withBase(`/api/share-card?${query}`));

@@ -1,4 +1,4 @@
-import type { Participant, RankingSlug } from "@/papo-reto/types";
+import type { Participant, RankingSlug, RankingView } from "@/papo-reto/types";
 
 /** Participantes do Papo Reto, na ordem administrativa. Também estão na carga inicial do banco. */
 export const PAPO_RETO_CAST: Participant[] = [
@@ -16,11 +16,22 @@ export const PAPO_RETO_CAST: Participant[] = [
  */
 export const DEMO_PARTICIPANTS: Participant[] = PAPO_RETO_CAST;
 
-/** Votos SIMULADOS iniciais do modo demonstração (só rankings com votação). */
-export const DEMO_SEED_VOTES: Record<RankingSlug, Record<string, number>> = {
-  "falou-merda": { benja: 1284, mano: 978, joneta: 623, kleber: 412, carabina: 341, gadu: 118 },
-  sabio: { mano: 515, benja: 402, kleber: 233, joneta: 233, gadu: 150, carabina: 87 },
-  "bala-do-veio": {},
+/**
+ * Votos SIMULADOS iniciais do modo demonstração, por recorte (só rankings com votação).
+ * Ordens diferentes em cada recorte para mostrar que semana, mês e temporada são rankings próprios.
+ */
+export const DEMO_SEED_VOTES: Record<RankingSlug, Record<RankingView, Record<string, number>>> = {
+  "falou-merda": {
+    week: { benja: 1284, mano: 978, joneta: 623, kleber: 412, carabina: 341, gadu: 118 },
+    month: { mano: 4120, benja: 3876, joneta: 2210, carabina: 1534, kleber: 1302, gadu: 640 },
+    season: { benja: 38210, mano: 35990, carabina: 21455, joneta: 19870, gadu: 12004, kleber: 9876 },
+  },
+  sabio: {
+    week: { mano: 515, benja: 402, kleber: 233, joneta: 233, gadu: 150, carabina: 87 },
+    month: { kleber: 1980, mano: 1745, benja: 1502, joneta: 990, gadu: 610, carabina: 402 },
+    season: { kleber: 21340, benja: 19870, mano: 18011, gadu: 9120, joneta: 8705, carabina: 5230 },
+  },
+  "bala-do-veio": { week: {}, month: {}, season: {} },
 };
 
 /** Ordem SIMULADA do ranking estático Bala do Véio (no ar, quem define é o programa pelo painel). */

@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { rateLimit } from "@/papo-reto/lib/rate-limit";
 import { parseVoteRequest } from "@/papo-reto/lib/validation";
 import { getRankingResults } from "@/papo-reto/lib/server/data";
+import { isRankingView } from "@/papo-reto/lib/period";
 import { ConfigError, isSupabaseConfigured } from "@/papo-reto/lib/server/env";
 import { clientIp, isSameOrigin } from "@/papo-reto/lib/server/request";
 import { castVote } from "@/papo-reto/lib/server/vote";
@@ -59,7 +60,10 @@ export async function POST(request: NextRequest) {
   try {
     const voter = getOrCreateVoter(request.cookies.get(VOTER_COOKIE)?.value);
     const status = await castVote({ ...vote, voterKey: voter.voterKey, ipHash: hashIp(ip) });
-    const [results] = await getRankingResults([vote.ranking], { voterKey: voter.voterKey }).catch(() => [null]);
+    // Devolve o placar no recorte que a pessoa está vendo (semana, mês ou temporada).
+    const requested = (body as { view?: unknown }).view;
+    const view = isRankingView(requested) ? requested : "week";
+    const [results] = await getRankingResults([vote.ranking], { voterKey: voter.voterKey, view }).catch(() => [null]);
     const response = reply(status, { results });
     if (voter.newCookie) response.cookies.set(voter.newCookie.name, voter.newCookie.value, voter.newCookie.options);
     return response;

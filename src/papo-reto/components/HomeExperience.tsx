@@ -1,21 +1,31 @@
 "use client";
 
 import { MotionConfig, motion } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { CHARGES_COPY, RANKINGS } from "@/papo-reto/config/rankings";
 import { site, withBase } from "@/papo-reto/config/site";
 import { shareCardImage } from "@/papo-reto/lib/client/share";
 import { hasResult, participantHeadline, rankingShareText } from "@/papo-reto/lib/share";
+import { VIEW_PARAM, parseViewParam } from "@/papo-reto/lib/period";
 import { absoluteUrl } from "@/papo-reto/config/site";
 import { useLiveRanking } from "@/papo-reto/hooks/useLiveRanking";
-import type { Charge, RankedEntry, RankingResults, RankingSlug, TabSlug, VoteStatus } from "@/papo-reto/types";
+import type { Charge, RankedEntry, RankingResults, RankingSlug, RankingView, TabSlug, VoteStatus } from "@/papo-reto/types";
 import { ChargeGallery } from "./ChargeGallery";
 import { RankingBoard } from "./RankingBoard";
 import { PANEL_ID, RankingTabs, tabId } from "./RankingTabs";
 import { ShareRanking } from "./ShareRanking";
 import { Toast } from "./Toast";
 
-type ResultsMap = Partial<Record<RankingSlug, RankingResults>>;
+/** Resultados por ranking e recorte: "falou-merda:week", "sabio:season"… (estáticos: "bala-do-veio:static"). */
+const noopSubscribe = () => () => {};
+
+type ResultsMap = Partial<Record<string, RankingResults>>;
+const resultKey = (slug: RankingSlug, view: RankingView) =>
+  RANKINGS[slug].mode === "static" ? `${slug}:static` : `${slug}:${view}`;
+
+/** Endereço da aba, com o recorte quando não for a semana (?periodo=mes | temporada). */
+const tabPath = (tab: TabSlug, view: RankingView) =>
+  tab !== "charges" && RANKINGS[tab].mode === "vote" && view !== "week" ? `/${tab}?periodo=${VIEW_PARAM[view]}` : `/${tab}`;
 
 export function HomeExperience({
   initialTab,
@@ -31,9 +41,15 @@ export function HomeExperience({
   chargesError: boolean;
 }) {
   const [tab, setTab] = useState<TabSlug>(initialTab);
+  // Recorte: o escolhido pela pessoa ou, até ela escolher, o do link (?periodo=mes | temporada).
+  const urlSearch = useSyncExternalStore(noopSubscribe, () => window.location.search, () => "");
+  const [chosenView, setView] = useState<RankingView | null>(null);
+  const view = chosenView ?? parseViewParam(new URLSearchParams(urlSearch).get("periodo"));
   const [results, setResults] = useState<ResultsMap>(() =>
-    Object.fromEntries(initialResults.map((r) => [r.slug, r])),
+    Object.fromEntries(initialResults.map((r) => [resultKey(r.slug, r.view), r])),
   );
+  /** Em quem a pessoa votou na semana atual, por ranking (vale para os três recortes). */
+  const [myVotes, setMyVotes] = useState<Partial<Record<RankingSlug, { week: string; id: string | null }>>>({});
   const [errors, setErrors] = useState<Partial<Record<RankingSlug, boolean>>>(() =>
     initialError ? { "falou-merda": true, sabio: true, "bala-do-veio": true } : {},
   );
@@ -50,21 +66,26 @@ export function HomeExperience({
   const rankingSlug = tab === "charges" ? null : tab;
 
   const storeResults = useCallback((next: RankingResults) => {
-    setResults((current) => {
-      const previous = current[next.slug];
-      // Respostas sem cookie (SSR/ISR) não sabem em quem a pessoa votou: preserva o que já sabemos.
-      const myVote = next.myVote !== undefined ? next.myVote : previous?.period.key === next.period.key ? previous.myVote : undefined;
-      return { ...current, [next.slug]: { ...next, myVote } };
-    });
+    setResults((current) => ({ ...current, [resultKey(next.slug, next.view)]: next }));
+    // Respostas sem cookie (SSR/ISR) não sabem em quem a pessoa votou: preserva o que já sabemos.
+    if (next.myVote !== undefined && next.votingPeriod) {
+      const week = next.votingPeriod.key;
+      setMyVotes((current) => ({ ...current, [next.slug]: { week, id: next.myVote ?? null } }));
+    }
     setErrors((current) => (current[next.slug] ? { ...current, [next.slug]: false } : current));
   }, []);
 
   const markError = useCallback((slug: RankingSlug) => setErrors((current) => ({ ...current, [slug]: true })), []);
-  const refresh = useLiveRanking(rankingSlug, storeResults, markError);
+  const refresh = useLiveRanking(rankingSlug, view, storeResults, markError);
 
   const changeTab = (next: TabSlug) => {
     setTab(next);
-    window.history.replaceState(window.history.state, "", withBase(`/${next}`));
+    window.history.replaceState(window.history.state, "", withBase(tabPath(next, view)));
+  };
+
+  const changeView = (next: RankingView) => {
+    setView(next);
+    window.history.replaceState(window.history.state, "", withBase(tabPath(tab, next)));
   };
 
   useEffect(() => {
@@ -78,7 +99,7 @@ export function HomeExperience({
       const response = await fetch(withBase("/api/vote"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ranking: slug, participantId }),
+        body: JSON.stringify({ ranking: slug, participantId, view }),
       });
       const data = (await response.json().catch(() => ({}))) as { status?: VoteStatus; message?: string; results?: RankingResults | null };
       if (data.results) storeResults(data.results);
@@ -98,14 +119,15 @@ export function HomeExperience({
   };
 
   const shareParticipant = async (slug: RankingSlug, entry: RankedEntry) => {
-    const current = results[slug];
+    const current = results[resultKey(slug, view)];
     if (!current) return;
     notify("Gerando o card…");
     const outcome = await shareCardImage({
       ranking: slug,
       participantId: entry.participant.id,
+      view: current.mode === "vote" ? view : "week",
       text: participantHeadline(slug, entry, current),
-      url: absoluteUrl(`/${slug}`),
+      url: absoluteUrl(tabPath(slug, view)),
     });
     if (outcome === "downloaded") notify("Card baixado! Agora é só postar.");
     else if (outcome === "failed") notify("Não foi possível gerar o card agora.");
@@ -113,7 +135,10 @@ export function HomeExperience({
     else setToast((t) => ({ ...t, message: null }));
   };
 
-  const activeResults = rankingSlug ? results[rankingSlug] ?? null : null;
+  const stored = rankingSlug ? results[resultKey(rankingSlug, view)] ?? null : null;
+  const mine = rankingSlug ? myVotes[rankingSlug] : undefined;
+  const activeResults: RankingResults | null =
+    stored && mine && stored.votingPeriod?.key === mine.week ? { ...stored, myVote: mine.id } : stored;
   const shareText = rankingSlug
     ? rankingShareText(rankingSlug, activeResults)
     : "As charges do Oberdan no Papo Reto Ranking. Se virou charge, virou história!";
@@ -136,7 +161,10 @@ export function HomeExperience({
           >
             {rankingSlug ? (
               <RankingBoard
+                key={resultKey(rankingSlug, view)}
                 slug={rankingSlug}
+                view={view}
+                onViewChange={changeView}
                 results={activeResults}
                 error={Boolean(errors[rankingSlug])}
                 pendingVote={pendingVote}
@@ -150,7 +178,7 @@ export function HomeExperience({
           </motion.section>
 
           <ShareRanking
-            path={`/${tab}`}
+            path={tabPath(tab, view)}
             title={shareTitle}
             text={shareText}
             canShareCard={Boolean(rankingSlug && leader && activeResults && hasResult(activeResults))}

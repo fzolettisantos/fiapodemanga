@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import { withBase } from "@/papo-reto/config/site";
-import type { RankingResults, RankingSlug } from "@/papo-reto/types";
+import { VIEW_PARAM } from "@/papo-reto/lib/period";
+import type { RankingResults, RankingSlug, RankingView } from "@/papo-reto/types";
 
 const POLL_MS = 20_000;
 const POLL_WITH_REALTIME_MS = 60_000;
@@ -13,6 +14,7 @@ const POLL_WITH_REALTIME_MS = 60_000;
  */
 export function useLiveRanking(
   slug: RankingSlug | null,
+  view: RankingView,
   onResults: (results: RankingResults) => void,
   onError: (slug: RankingSlug) => void,
 ) {
@@ -24,13 +26,13 @@ export function useLiveRanking(
   const refresh = useCallback(async () => {
     if (!slug) return;
     try {
-      const response = await fetch(withBase(`/api/rankings/${slug}`), { cache: "no-store" });
+      const response = await fetch(withBase(`/api/rankings/${slug}?periodo=${VIEW_PARAM[view]}`), { cache: "no-store" });
       if (!response.ok) throw new Error(String(response.status));
       handlers.current.onResults((await response.json()) as RankingResults);
     } catch {
       handlers.current.onError(slug);
     }
-  }, [slug]);
+  }, [slug, view]);
 
   useEffect(() => {
     if (!slug) return;
@@ -54,7 +56,7 @@ export function useLiveRanking(
         const client = createClient(url!, anonKey!, { auth: { persistSession: false } });
         let timer: number | undefined;
         const channel = client
-          .channel(`vote_totals:${slug}`)
+          .channel(`vote_totals:${slug}:${view}`)
           .on("postgres_changes", { event: "*", schema: "public", table: "vote_totals" }, () => {
             window.clearTimeout(timer);
             timer = window.setTimeout(() => void refresh(), 1_500);
@@ -73,7 +75,7 @@ export function useLiveRanking(
       document.removeEventListener("visibilitychange", onVisible);
       channelCleanup?.();
     };
-  }, [slug, refresh]);
+  }, [slug, view, refresh]);
 
   return refresh;
 }

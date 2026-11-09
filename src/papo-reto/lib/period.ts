@@ -1,4 +1,4 @@
-import type { PeriodKind, VotingPeriod } from "@/papo-reto/types";
+import type { PeriodKind, RankingView, VotingPeriod } from "@/papo-reto/types";
 
 export const PERIOD_KINDS: PeriodKind[] = ["daily", "weekly", "monthly", "all_time"];
 export const DEFAULT_TIME_ZONE = "America/Sao_Paulo";
@@ -44,7 +44,14 @@ export function getVotingPeriod(
     case "daily":
       return { kind, key: `D${iso(today)}`, label: `Votação de hoje (${short(today)})` };
     case "monthly":
-      return { kind, key: `M${year}-${pad(month)}`, label: `Votação de ${MONTHS[month - 1]} de ${year}` };
+      return {
+        kind,
+        key: `M${year}-${pad(month)}`,
+        label: `${MONTHS[month - 1]![0]!.toUpperCase()}${MONTHS[month - 1]!.slice(1)} de ${year}`,
+        endsOn: iso(new Date(Date.UTC(year, month, 0))),
+      };
+    case "season":
+      return { kind, key: `S${year}`, label: `Temporada ${year}`, endsOn: `${year}-12-31` };
     case "all_time":
       return { kind, key: "ALL", label: "Votação permanente" };
     case "weekly":
@@ -54,7 +61,46 @@ export function getVotingPeriod(
       start.setUTCDate(start.getUTCDate() - offset);
       const end = new Date(start);
       end.setUTCDate(end.getUTCDate() + 6);
-      return { kind: "weekly", key: `W${iso(start)}`, label: `Votação da semana · ${short(start)} a ${short(end)}` };
+      return { kind: "weekly", key: `W${iso(start)}`, label: `Semana de ${short(start)} a ${short(end)}`, endsOn: iso(end) };
     }
   }
+}
+
+const VIEW_KIND: Record<RankingView, PeriodKind> = { week: "weekly", month: "monthly", season: "season" };
+
+export function isRankingView(value: unknown): value is RankingView {
+  return value === "week" || value === "month" || value === "season";
+}
+
+/** Período exibido para um recorte (semana, mês ou temporada). */
+export function getViewPeriod(view: RankingView, now: Date = new Date(), options: { weekStartsOn?: number } = {}) {
+  return getVotingPeriod(VIEW_KIND[view], now, options);
+}
+
+/**
+ * Chaves em que um voto é contado: a semana (que também limita a 1 voto),
+ * o mês e a temporada da data do voto.
+ */
+export function getVoteKeys(now: Date = new Date(), options: { weekStartsOn?: number } = {}) {
+  return {
+    week: getVotingPeriod("weekly", now, options).key,
+    month: getVotingPeriod("monthly", now, options).key,
+    season: getVotingPeriod("season", now, options).key,
+  };
+}
+
+/** Dias inteiros até o fim do período (0 = último dia), contando no fuso do programa. */
+export function daysUntil(endsOn: string, now: Date = new Date()) {
+  const today = getVotingPeriod("daily", now).key.slice(1);
+  const diff = Date.parse(`${endsOn}T00:00:00Z`) - Date.parse(`${today}T00:00:00Z`);
+  return Math.max(0, Math.round(diff / 86_400_000));
+}
+
+/** Recorte na URL, em português: ?periodo=semana | mes | temporada. */
+export const VIEW_PARAM: Record<RankingView, string> = { week: "semana", month: "mes", season: "temporada" };
+export const VIEW_LABEL: Record<RankingView, string> = { week: "Semana", month: "Mês", season: "Temporada" };
+
+export function parseViewParam(value: string | null | undefined): RankingView {
+  const found = (Object.keys(VIEW_PARAM) as RankingView[]).find((view) => VIEW_PARAM[view] === value);
+  return found ?? "week";
 }

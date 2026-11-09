@@ -17,7 +17,6 @@ const button = "min-h-11 rounded-lg bg-yellow px-4 text-sm font-extrabold upperc
 const ghost = "min-h-11 rounded-lg border border-line px-4 text-sm font-bold";
 const card = "rounded-2xl border border-line bg-surface p-4";
 const WEEKDAYS = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
-const PERIODS = { daily: "Diário", weekly: "Semanal", monthly: "Mensal", all_time: "Permanente" };
 
 export default async function AdminPage({ searchParams }: { searchParams: Promise<{ ok?: string; erro?: string }> }) {
   await requireAdmin();
@@ -37,7 +36,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     sb.from("participants").select("id, slug, name, nickname, sort_order, avatar_paths, active").order("sort_order"),
     sb.from("rankings").select("id, slug, status, period_kind, week_starts_on, mode"),
     sb.from("charges").select("id, title, published, published_on, credits").order("published_on", { ascending: false }),
-    getRankingResults(),
+    Promise.all((["week", "month", "season"] as const).map((view) => getRankingResults(undefined, { view }))).then((all) => all.flat()),
     sb.from("static_standings").select("ranking_id, participant_id, position"),
   ]);
   const standings = standingsRes.data ?? [];
@@ -58,8 +57,8 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
       <section aria-labelledby="h-results">
         <h2 id="h-results" className="font-display text-2xl uppercase">Resultados do período</h2>
         <div className="mt-3 grid gap-3 md:grid-cols-3">
-          {results.map((r) => (
-            <div key={r.slug} className={card}>
+          {results.filter((r, i, all) => r.mode === "vote" || all.findIndex((x) => x.slug === r.slug) === i).map((r) => (
+            <div key={`${r.slug}:${r.view}`} className={card}>
               <h3 className="font-bold">{RANKINGS[r.slug].title}</h3>
               <p className="text-xs text-muted">
                 {r.mode === "static" ? "Definido pelo programa" : `${r.period.label} · ${formatNumber(r.totalVotes)} votos`}
@@ -115,11 +114,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
               <input type="hidden" name="id" value={r.id} />
               <p className="w-full font-bold">{isRankingSlugKnown(r.slug) ? RANKINGS[r.slug].title : r.slug}</p>
               <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="active" defaultChecked={r.status === "active"} className="size-5" /> Ativo</label>
-              <label className="text-sm">Período<br />
-                <select name="period_kind" defaultValue={r.period_kind} className={input}>
-                  {Object.entries(PERIODS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-                </select>
-              </label>
+              <input type="hidden" name="period_kind" value="weekly" />
               <label className="text-sm">Semana começa
                 <br />
                 <select name="week_starts_on" defaultValue={r.week_starts_on ?? 1} className={input}>
@@ -129,7 +124,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
               <button className={button}>Salvar</button>
             </form>
           ))}
-          <p className="text-xs text-muted">Mudar o período inicia uma nova contagem (os votos antigos ficam guardados no período anterior).</p>
+          <p className="text-xs text-muted">Voto semanal: cada voto conta na semana, no mês e na temporada (ano, termina em 31/12). A semana define quando a pessoa pode votar de novo.</p>
         </div>
       </section>
 

@@ -1,9 +1,9 @@
 import "server-only";
 import { DEMO_PARTICIPANTS, DEMO_STATIC_POSITIONS } from "@/papo-reto/config/demo";
 import { RANKINGS } from "@/papo-reto/config/rankings";
-import { getVotingPeriod, isPeriodKind } from "@/papo-reto/lib/period";
+import { getViewPeriod, getVotingPeriod, isPeriodKind } from "@/papo-reto/lib/period";
 import { rankEntries, rankStatic } from "@/papo-reto/lib/ranking";
-import type { AvatarPaths, Charge, Participant, PeriodKind, RankingResults, RankingSlug, VotingPeriod } from "@/papo-reto/types";
+import type { AvatarPaths, Charge, Participant, PeriodKind, RankingResults, RankingSlug, RankingView, VotingPeriod } from "@/papo-reto/types";
 import { RANKING_SLUGS } from "@/papo-reto/types";
 import { demoMyVote, demoTotals } from "./demo-store";
 import { isSupabaseConfigured } from "./env";
@@ -77,12 +77,16 @@ export async function getRankingConfigs(slugs: readonly RankingSlug[] = RANKING_
   });
 }
 
-/** Resultados de um ou mais rankings no período atual. */
+/**
+ * Resultados de um ou mais rankings. Rankings com votação: recorte `view` (semana, mês ou temporada),
+ * com o voto do visitante na semana atual. Rankings estáticos ignoram o recorte.
+ */
 export async function getRankingResults(
   slugs: readonly RankingSlug[] = RANKING_SLUGS,
-  options: { voterKey?: string | null; now?: Date } = {},
+  options: { voterKey?: string | null; now?: Date; view?: RankingView } = {},
 ): Promise<RankingResults[]> {
   const now = options.now ?? new Date();
+  const view = options.view ?? "week";
   const updatedAt = now.toISOString();
   const configs = await getRankingConfigs(slugs);
 
@@ -93,6 +97,7 @@ export async function getRankingResults(
         return {
           slug: config.slug,
           mode: "static",
+          view: "season",
           active: config.active,
           period: STATIC_PERIOD,
           totalVotes: 0,
@@ -102,19 +107,22 @@ export async function getRankingResults(
           standingsUpdatedAt: null,
         } satisfies RankingResults;
       }
-      const period = getVotingPeriod(config.periodKind, now, { weekStartsOn: config.weekStartsOn });
-      const totals = demoTotals(config.slug, period.key);
+      const votingPeriod = getVotingPeriod("weekly", now, { weekStartsOn: config.weekStartsOn });
+      const period = getViewPeriod(view, now, { weekStartsOn: config.weekStartsOn });
+      const totals = demoTotals(config.slug, period.key, view);
       const entries = rankEntries(DEMO_PARTICIPANTS.map((p) => ({ participant: p, votes: totals[p.id] ?? 0 })));
       return {
         slug: config.slug,
         mode: "vote" as const,
+        view,
         active: config.active,
         period,
+        votingPeriod,
         totalVotes: entries.reduce((s, e) => s + e.votes, 0),
         entries,
         isDemo: true,
         updatedAt,
-        myVote: options.voterKey ? demoMyVote(config.slug, period.key, options.voterKey) : undefined,
+        myVote: options.voterKey ? demoMyVote(config.slug, votingPeriod.key, options.voterKey) : undefined,
       };
     });
   }
@@ -144,6 +152,7 @@ export async function getRankingResults(
         return {
           slug: config.slug,
           mode: "static",
+          view: "season",
           active: config.active,
           period: STATIC_PERIOD,
           totalVotes: 0,
@@ -153,7 +162,8 @@ export async function getRankingResults(
           standingsUpdatedAt: latest,
         } satisfies RankingResults;
       }
-      const period = getVotingPeriod(config.periodKind, now, { weekStartsOn: config.weekStartsOn });
+      const votingPeriod = getVotingPeriod("weekly", now, { weekStartsOn: config.weekStartsOn });
+      const period = getViewPeriod(view, now, { weekStartsOn: config.weekStartsOn });
       const totals = new Map<string, number>();
       let myVote: string | null | undefined;
       if (config.id) {
@@ -164,7 +174,7 @@ export async function getRankingResults(
                 .from("votes")
                 .select("participant_id")
                 .eq("ranking_id", config.id)
-                .eq("period_key", period.key)
+                .eq("period_key", votingPeriod.key)
                 .eq("voter_key", options.voterKey)
                 .maybeSingle()
             : Promise.resolve(null),
@@ -179,8 +189,10 @@ export async function getRankingResults(
       return {
         slug: config.slug,
         mode: "vote",
+        view,
         active: config.active,
         period,
+        votingPeriod,
         totalVotes: entries.reduce((s, e) => s + e.votes, 0),
         entries,
         isDemo: false,

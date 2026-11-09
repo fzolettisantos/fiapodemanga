@@ -124,8 +124,13 @@ public/papo-reto/characters/benja/bala-do-veio/…
 ## Votação
 
 - Só **Falou Mais Merda** e **O Mais Sábio** têm votação.
-- **Um voto por ranking, por período** (diário, semanal, mensal ou permanente; padrão semanal, começando na segunda,
-  no fuso de São Paulo). Período configurável por ranking no painel.
+- **Semana, mês e temporada.** Cada ranking com votação tem três recortes, escolhidos no seletor
+  "Semana · Mês · Temporada" (e no link: `?periodo=mes` ou `?periodo=temporada`). A pessoa vota **uma vez por
+  semana** em cada ranking, e esse voto soma ao mesmo tempo na semana, no mês e na temporada da data do voto.
+- **A temporada é o ano** e termina em 31/12: quem estiver no topo da temporada leva o título do ano. O site mostra
+  quantos dias faltam. A semana começa na segunda (configurável no painel), no fuso de São Paulo.
+- No banco, cada voto guarda as três chaves (`period_key` = semana, `month_key`, `season_key`) e o placar
+  `vote_totals` tem uma linha por recorte (`W2026-11-09`, `M2026-11`, `S2026`).
 - A validação acontece **no servidor e no banco** (`cast_vote`): ranking ativo, participante ativo,
   voto único por votante/ranking/período (restrição `unique`) e limite de votos por IP no período.
 - O votante é identificado por um cookie `httpOnly` assinado (HMAC). No banco ficam só hashes (`voter_key`, `ip_hash`), nunca o IP ou o cookie.
@@ -170,9 +175,9 @@ de login e `noindex`. Permite:
 
 - cadastrar, editar, ordenar e ativar/desativar participantes;
 - enviar e remover caricaturas por ranking e expressão;
-- ativar/pausar rankings e configurar o período de votação;
+- ativar/pausar rankings e escolher o dia em que a semana começa;
+- consultar os resultados da semana, do mês e da temporada;
 - cadastrar, publicar, despublicar e excluir charges;
-- consultar os resultados do período.
 
 Sem Supabase o painel avisa que o site está em modo demonstração.
 

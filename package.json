@@ -4,7 +4,10 @@
   "private": true,
   "description": "Site institucional da Fiapo de Manga — consultoria de design, pesquisa e experiência digital.",
   "scripts": {
+    "papo:characters": "node scripts/papo-reto-characters.mjs",
+    "predev": "npm run papo:characters",
     "dev": "next dev",
+    "prebuild": "npm run papo:characters",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
@@ -16,8 +19,10 @@
     "node": ">=20.9.0"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
     "geist": "^1.9.1",
     "lucide-react": "^1.69.0",
+    "motion": "^14.11.1",
     "next": "^16.4.5",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

@@ -7,6 +7,12 @@ Site da **Fiapo de Manga**, consultoria de design, pesquisa e experiência digit
 Stack: **Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Geist · Lucide**.
 Todas as páginas são geradas estaticamente (SSG); apenas `/api/contato` roda no servidor.
 
+## Papo Reto Ranking (`/papo-reto`)
+
+O site também hospeda, na subpasta `/papo-reto`, o **Papo Reto Ranking**: rankings humorísticos com votação,
+feitos por fãs do Papo Reto (sem vínculo oficial com o Canal do Benja). É isolado do resto do site (layout,
+CSS e tema próprios, fora do roteamento de idiomas). Configuração, Supabase e painel: [`docs/papo-reto.md`](docs/papo-reto.md).
+
 ## Idiomas
 
 O site está em **português do Brasil** (padrão), **inglês** e **espanhol**.

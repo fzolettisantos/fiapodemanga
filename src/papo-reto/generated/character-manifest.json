@@ -18,5 +18,25 @@
       "bottom": "/papo-reto/characters/benja/bala-do-veio/bottom.webp",
       "neutral": "/papo-reto/characters/benja/bala-do-veio/neutral.webp"
     }
+  },
+  "mano": {
+    "falou-merda": {
+      "top": "/papo-reto/characters/mano/falou-merda/top.webp",
+      "middle": "/papo-reto/characters/mano/falou-merda/middle.webp",
+      "bottom": "/papo-reto/characters/mano/falou-merda/bottom.webp",
+      "neutral": "/papo-reto/characters/mano/falou-merda/neutral.webp"
+    },
+    "sabio": {
+      "top": "/papo-reto/characters/mano/sabio/top.webp",
+      "middle": "/papo-reto/characters/mano/sabio/middle.webp",
+      "bottom": "/papo-reto/characters/mano/sabio/bottom.webp",
+      "neutral": "/papo-reto/characters/mano/sabio/neutral.webp"
+    },
+    "bala-do-veio": {
+      "top": "/papo-reto/characters/mano/bala-do-veio/top.webp",
+      "middle": "/papo-reto/characters/mano/bala-do-veio/middle.webp",
+      "bottom": "/papo-reto/characters/mano/bala-do-veio/bottom.webp",
+      "neutral": "/papo-reto/characters/mano/bala-do-veio/neutral.webp"
+    }
   }
 }

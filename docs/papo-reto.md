@@ -109,7 +109,7 @@ A ilustração grande abaixo do título de cada ranking (ex.: o troféu do Falou
 
 ### Arte de fundo das laterais
 
-O Troféu Falou Merda e O Sábio da Resenha têm arte de fundo nas laterais da tela
+Os três rankings (Falou Merda, Sábio e Bala do Véio) têm arte de fundo nas laterais da tela
 (`public/papo-reto/rankings/<ranking>-bg-left.webp` e `-bg-right.webp`), fixa nas bordas e trocada com uma
 transição curta ao mudar de aba. Ela só aparece em telas a partir de 1280px e ocupa apenas o espaço livre ao
 lado do conteúdo, para não ficar atrás de textos; no celular nada é carregado. Para outro ranking, adicione os dois

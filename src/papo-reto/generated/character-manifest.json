@@ -19,6 +19,26 @@
       "neutral": "/papo-reto/characters/benja/bala-do-veio/neutral.webp"
     }
   },
+  "carabina": {
+    "falou-merda": {
+      "top": "/papo-reto/characters/carabina/falou-merda/top.webp",
+      "middle": "/papo-reto/characters/carabina/falou-merda/middle.webp",
+      "bottom": "/papo-reto/characters/carabina/falou-merda/bottom.webp",
+      "neutral": "/papo-reto/characters/carabina/falou-merda/neutral.webp"
+    },
+    "sabio": {
+      "top": "/papo-reto/characters/carabina/sabio/top.webp",
+      "middle": "/papo-reto/characters/carabina/sabio/middle.webp",
+      "bottom": "/papo-reto/characters/carabina/sabio/bottom.webp",
+      "neutral": "/papo-reto/characters/carabina/sabio/neutral.webp"
+    },
+    "bala-do-veio": {
+      "top": "/papo-reto/characters/carabina/bala-do-veio/top.webp",
+      "middle": "/papo-reto/characters/carabina/bala-do-veio/middle.webp",
+      "bottom": "/papo-reto/characters/carabina/bala-do-veio/bottom.webp",
+      "neutral": "/papo-reto/characters/carabina/bala-do-veio/neutral.webp"
+    }
+  },
   "kleber": {
     "falou-merda": {
       "top": "/papo-reto/characters/kleber/falou-merda/top.webp",

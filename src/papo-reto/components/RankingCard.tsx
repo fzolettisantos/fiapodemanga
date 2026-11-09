@@ -33,6 +33,17 @@ export function RankingCard({
   const badge = entry.state === "top" ? copy.badges.top : entry.state === "bottom" ? copy.badges.bottom : null;
   const barColor = leader ? "#FFD23F" : copy.kind === "positive" ? "#32D583" : "#F04438";
   const { participant } = entry;
+  const isStatic = copy.mode === "static";
+  const shareButton = (
+    <button
+      type="button"
+      onClick={onShare}
+      className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl border border-line bg-surface-2 text-white transition-colors hover:border-yellow"
+      aria-label={`Compartilhar card de ${participant.name}`}
+    >
+      <Share2 aria-hidden className="size-5" />
+    </button>
+  );
 
   return (
     <motion.li
@@ -72,23 +83,21 @@ export function RankingCard({
             <h3 className="truncate font-display text-[22px] uppercase leading-tight sm:text-2xl">{participant.name}</h3>
             <p className="text-[14px] leading-snug text-muted">“{pickPhrase(slug, entry.state, participant.slug, entry.position)}”</p>
           </div>
+          {/* Ranking estático: sem votos nem botão de voto, só compartilhar. */}
+          {isStatic ? shareButton : null}
         </div>
 
-        <VoteProgress votes={entry.votes} percent={entry.percent} color={barColor} />
-
-        <div className="mt-3 flex gap-2">
-          <div className="flex-1">
-            <VoteButton state={voteState} label={copy.cta} participantName={participant.name} onVote={onVote} />
-          </div>
-          <button
-            type="button"
-            onClick={onShare}
-            className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl border border-line bg-surface-2 text-white transition-colors hover:border-yellow"
-            aria-label={`Compartilhar card de ${participant.name}`}
-          >
-            <Share2 aria-hidden className="size-5" />
-          </button>
-        </div>
+        {isStatic ? null : (
+          <>
+            <VoteProgress votes={entry.votes} percent={entry.percent} color={barColor} />
+            <div className="mt-3 flex gap-2">
+              <div className="flex-1">
+                <VoteButton state={voteState} label={copy.cta ?? "Votar"} participantName={participant.name} onVote={onVote} />
+              </div>
+              {shareButton}
+            </div>
+          </>
+        )}
       </article>
     </motion.li>
   );

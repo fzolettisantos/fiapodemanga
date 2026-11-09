@@ -64,7 +64,7 @@ O resto do site não depende dessas variáveis.
 | --- | --- | --- | --- | --- |
 | Falou Mais Merda (`falou-merda`) | negativo | assustado | olhando pra cima, desconfiado | sorrindo, aliviado |
 | O Mais Sábio (`sabio`) | positivo | orgulhoso, confiante | pensativo | confuso, sem graça |
-| Bala do Véio (`bala-do-veio`) | negativo | apavorado | apreensivo | aliviado, rindo |
+| Bala do Véio (`bala-do-veio`) | negativo, **sem votação** | apavorado | apreensivo | aliviado, rindo |
 
 A expressão é escolhida automaticamente por **participante + ranking + posição** (`src/papo-reto/lib/ranking.ts`),
 sem nenhuma regra ligada a nomes.
@@ -85,6 +85,21 @@ sem nenhuma regra ligada a nomes.
 A posição nunca é comunicada só pela caricatura ou pela cor: há numeração, selos em texto
 ("Líder da vergonha", "Cérebro do Papo Reto", "Na mira do Véio"…), "Subiu/Caiu", texto alternativo
 descrevendo a expressão e `aria-label` em cada card.
+
+### Bala do Véio: ranking do programa
+
+É uma brincadeira interna do programa: **o público não vota**. A ordem é definida no painel
+(`/papo-reto/admin` → "ordem do programa": 1 = mais na mira; posições iguais empatam; campo vazio tira a
+pessoa da lista). As expressões seguem as mesmas regras de posição. A aba não mostra votos, porcentagem nem
+botão de votar, e o voto é recusado na API (`not_votable`) e no banco (`rankings.mode = 'static'`).
+No modo demonstração a ordem é simulada e sinalizada como "Ordem simulada".
+
+## Ilustrações dos rankings
+
+A ilustração ao lado do título de cada ranking (ex.: o troféu do Falou Merda) fica em
+`public/papo-reto/rankings/<ranking>.webp` (ou `.png`/`.avif`), quadrada (ex.: 640×640).
+É detectada sozinha no `dev`/`build`; sem arquivo, nada aparece. O texto alternativo fica em
+`illustrationAlt` (`src/papo-reto/config/rankings.ts`).
 
 ## Caricaturas
 
@@ -108,6 +123,7 @@ public/papo-reto/characters/benja/bala-do-veio/…
 
 ## Votação
 
+- Só **Falou Mais Merda** e **O Mais Sábio** têm votação.
 - **Um voto por ranking, por período** (diário, semanal, mensal ou permanente; padrão semanal, começando na segunda,
   no fuso de São Paulo). Período configurável por ranking no painel.
 - A validação acontece **no servidor e no banco** (`cast_vote`): ranking ativo, participante ativo,

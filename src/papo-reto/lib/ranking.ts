@@ -73,6 +73,26 @@ export function rankEntries(counts: VoteCount[]): RankedEntry[] {
   });
 }
 
+export interface StaticPosition {
+  participant: Participant;
+  /** Posição definida pelo programa (1 = topo). Valores iguais = empate. */
+  position: number;
+}
+
+/**
+ * Ranking estático (definido pelo programa, sem votos). Mesmas regras de posição e expressão
+ * do ranking votado: posições iguais empatam, buracos na numeração são normalizados (1, 3, 7 → 1, 2, 3)
+ * e quem não tem posição definida fica fora da lista.
+ */
+export function rankStatic(items: StaticPosition[]): RankedEntry[] {
+  const valid = items.filter((i) => Number.isFinite(i.position) && i.position >= 1);
+  const max = Math.max(0, ...valid.map((i) => Math.floor(i.position)));
+  // Reaproveita a classificação por votos: posição menor vira "pontuação" maior.
+  return rankEntries(valid.map((i) => ({ participant: i.participant, votes: max + 1 - Math.floor(i.position) }))).map(
+    (entry) => ({ ...entry, votes: 0, percent: 0 }),
+  );
+}
+
 /** Percentual para exibição: inteiro, mas nunca "0%" para quem tem votos. */
 export function formatPercent(percent: number): string {
   if (percent <= 0) return "0%";

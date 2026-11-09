@@ -19,6 +19,7 @@ const MESSAGES: Record<VoteStatus, string> = {
   rate_limited: "Calma, craque! Muitos votos em pouco tempo. Tente de novo em instantes.",
   invalid: "Voto inválido.",
   closed: "A votação deste ranking está pausada.",
+  not_votable: "Esse ranking não tem votação: quem decide é o programa.",
   error: "Não foi possível registrar o voto agora. Tente novamente.",
 };
 const HTTP: Record<VoteStatus, number> = {
@@ -28,6 +29,7 @@ const HTTP: Record<VoteStatus, number> = {
   rate_limited: 429,
   invalid: 400,
   closed: 403,
+  not_votable: 403,
   error: 500,
 };
 

@@ -1,12 +1,13 @@
 import "server-only";
 import type { RankingSlug, VoteStatus } from "@/papo-reto/types";
+import { RANKINGS } from "@/papo-reto/config/rankings";
 import { getVotingPeriod } from "@/papo-reto/lib/period";
 import { getRankingConfigs } from "./data";
 import { demoCastVote } from "./demo-store";
 import { getIpVoteLimit, isSupabaseConfigured } from "./env";
 import { getServiceClient } from "./supabase";
 
-const STATUSES: VoteStatus[] = ["ok", "duplicate", "ip_limit", "invalid", "closed"];
+const STATUSES: VoteStatus[] = ["ok", "duplicate", "ip_limit", "invalid", "closed", "not_votable"];
 
 /**
  * Registra um voto. Toda a validação acontece no servidor/banco:
@@ -19,6 +20,8 @@ export async function castVote(input: {
   ipHash: string;
   now?: Date;
 }): Promise<VoteStatus> {
+  // Rankings estáticos (ex.: Bala do Véio) são definidos pelo programa: não aceitam votos.
+  if (RANKINGS[input.ranking].mode !== "vote") return "not_votable";
   const [config] = await getRankingConfigs([input.ranking]);
   if (!config) return "invalid";
   if (!config.active) return "closed";

@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { CHARGES_COPY, RANKINGS } from "@/papo-reto/config/rankings";
 import { site, withBase } from "@/papo-reto/config/site";
 import { shareCardImage } from "@/papo-reto/lib/client/share";
-import { participantHeadline, rankingShareText } from "@/papo-reto/lib/share";
+import { hasResult, participantHeadline, rankingShareText } from "@/papo-reto/lib/share";
 import { absoluteUrl } from "@/papo-reto/config/site";
 import { useLiveRanking } from "@/papo-reto/hooks/useLiveRanking";
 import type { Charge, RankedEntry, RankingResults, RankingSlug, TabSlug, VoteStatus } from "@/papo-reto/types";
@@ -153,7 +153,8 @@ export function HomeExperience({
             path={`/${tab}`}
             title={shareTitle}
             text={shareText}
-            canShareCard={Boolean(rankingSlug && leader && activeResults && activeResults.totalVotes > 0)}
+            canShareCard={Boolean(rankingSlug && leader && activeResults && hasResult(activeResults))}
+            variant={rankingSlug && RANKINGS[rankingSlug].mode === "static" ? "static" : "vote"}
             onShareCard={() => rankingSlug && leader && shareParticipant(rankingSlug, leader)}
             notify={notify}
           />

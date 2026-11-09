@@ -1,14 +1,17 @@
-import type { ExpressionState, PeriodKind, RankingKind, RankingSlug, TabSlug } from "@/papo-reto/types";
+import type { ExpressionState, PeriodKind, RankingKind, RankingMode, RankingSlug, TabSlug } from "@/papo-reto/types";
 
 export interface RankingCopy {
   slug: RankingSlug;
   kind: RankingKind;
+  /** `static`: brincadeira interna do programa — sem votação do público. */
+  mode: RankingMode;
   /** Rótulo curto da aba. */
   tabLabel: string;
   title: string;
   subtitle: string;
   description: string;
-  cta: string;
+  /** Texto do botão de voto (só rankings com votação). */
+  cta?: string;
   /** Período padrão (pode ser alterado no banco). */
   defaultPeriod: PeriodKind;
   /** Selo exibido para quem está no topo e na lanterna — não depende de cor. */
@@ -17,7 +20,9 @@ export interface RankingCopy {
   expressions: Record<ExpressionState, string>;
   /** Frases humorísticas por estado. A escolha é estável por participante. */
   phrases: Record<ExpressionState, string[]>;
-  /** Mensagem de compartilhamento quando há um líder isolado e votos reais. */
+  /** Texto alternativo da ilustração ao lado do título (arquivo em public/papo-reto/rankings). */
+  illustrationAlt?: string;
+  /** Mensagem de compartilhamento quando há um líder isolado e resultado real. */
   leaderMessage: (name: string) => string;
 }
 
@@ -25,12 +30,14 @@ export const RANKINGS: Record<RankingSlug, RankingCopy> = {
   "falou-merda": {
     slug: "falou-merda",
     kind: "negative",
+    mode: "vote",
     tabLabel: "Falou Mais Merda",
     title: "Troféu Falou Merda",
     subtitle: "Aqui o primeiro lugar é uma vergonha.",
     description:
       "Tem opinião ruim, tem opinião péssima e tem aquelas que deveriam ser proibidas pelo Estatuto do Torcedor. Vote em quem mais falou besteira com a confiança de quem sabe tudo.",
     cta: "Votar nessa figura",
+    illustrationAlt: "Troféu Falou Merda: um cocô sorridente, de coroa, no alto de um troféu dourado com louros",
     defaultPeriod: "weekly",
     badges: { top: "Líder da vergonha", bottom: "Escapou (por enquanto)" },
     expressions: {
@@ -62,6 +69,7 @@ export const RANKINGS: Record<RankingSlug, RankingCopy> = {
   sabio: {
     slug: "sabio",
     kind: "positive",
+    mode: "vote",
     tabLabel: "O Mais Sábio",
     title: "O Sábio da Resenha",
     subtitle: "Milagrosamente, alguém falou algo que presta.",
@@ -99,13 +107,13 @@ export const RANKINGS: Record<RankingSlug, RankingCopy> = {
   "bala-do-veio": {
     slug: "bala-do-veio",
     kind: "negative",
+    mode: "static",
     tabLabel: "Bala do Véio",
     title: "Quem vai levar Bala do Véio?",
     subtitle: "Falou demais? Agora aguenta a bronca.",
     description:
-      "Tem gente que não perde a oportunidade de provocar. Escolha quem mais merece entrar na mira da corneta do Véio.",
-    cta: "Botar na mira",
-    defaultPeriod: "weekly",
+      "Tem gente que não perde a oportunidade de provocar. Aqui não tem votação: quem entra na mira da corneta do Véio é decidido pelo próprio programa.",
+    defaultPeriod: "all_time",
     badges: { top: "Na mira do Véio", bottom: "Longe da bronca" },
     expressions: {
       top: "apavorado e tenso, esperando a bronca",
@@ -131,7 +139,7 @@ export const RANKINGS: Record<RankingSlug, RankingCopy> = {
       ],
       neutral: ["O Véio ainda está escolhendo o alvo."],
     },
-    leaderMessage: (name) => `Segundo o povo, ${name} tá pedindo uma bronca do Véio!`,
+    leaderMessage: (name) => `Tá decidido: ${name} é quem mais tá pedindo uma bronca do Véio!`,
   },
 };
 

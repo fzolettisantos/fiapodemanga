@@ -9,6 +9,9 @@ export type TabSlug = (typeof TAB_SLUGS)[number];
 /** Negativo: estar no topo é ruim. Positivo: estar no topo é bom. */
 export type RankingKind = "positive" | "negative";
 
+/** `vote`: o público vota. `static`: a ordem é definida pelo programa (sem votação). */
+export type RankingMode = "vote" | "static";
+
 /** Estados de expressão das caricaturas. `neutral` só aparece quando ninguém se destaca. */
 export const EXPRESSION_STATES = ["top", "middle", "bottom", "neutral"] as const;
 export type ExpressionState = (typeof EXPRESSION_STATES)[number];
@@ -48,9 +51,11 @@ export interface VotingPeriod {
 
 export interface RankingResults {
   slug: RankingSlug;
+  mode: RankingMode;
   /** `false` quando o ranking foi desativado na administração. */
   active: boolean;
   period: VotingPeriod;
+  /** Sempre 0 em rankings estáticos. */
   totalVotes: number;
   entries: RankedEntry[];
   /** Dados simulados (modo demonstração, sem Supabase). */
@@ -58,6 +63,8 @@ export interface RankingResults {
   updatedAt: string;
   /** Participante em quem este visitante votou no período, quando conhecido. */
   myVote?: string | null;
+  /** Rankings estáticos: quando o programa atualizou a ordem pela última vez. */
+  standingsUpdatedAt?: string | null;
 }
 
 export interface Charge {
@@ -71,4 +78,4 @@ export interface Charge {
   height?: number | null;
 }
 
-export type VoteStatus = "ok" | "duplicate" | "ip_limit" | "rate_limited" | "invalid" | "closed" | "error";
+export type VoteStatus = "ok" | "duplicate" | "ip_limit" | "rate_limited" | "invalid" | "closed" | "not_votable" | "error";

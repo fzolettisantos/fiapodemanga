@@ -16,7 +16,12 @@ export default async function Image({ params }: { params: Promise<{ tab: string 
   if (isRankingSlug(tab)) {
     const copy = RANKINGS[tab];
     return renderOgImage({
-      eyebrow: copy.kind === "positive" ? "Ranking positivo · vote agora" : "Ranking da vergonha · vote agora",
+      eyebrow:
+        copy.mode === "static"
+          ? "Ranking do programa · quem tá na mira?"
+          : copy.kind === "positive"
+            ? "Ranking positivo · vote agora"
+            : "Ranking da vergonha · vote agora",
       title: copy.title,
       subtitle: copy.subtitle,
       accent: copy.kind === "positive" ? "#32D583" : "#F04438",

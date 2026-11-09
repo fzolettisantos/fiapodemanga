@@ -7,7 +7,7 @@ import { getServiceClient } from "@/papo-reto/lib/server/supabase";
 import { EXPRESSION_STATES, RANKING_SLUGS } from "@/papo-reto/types";
 import {
   createCharge, createParticipant, deleteCharge, logout, removeCaricature,
-  setChargePublished, updateParticipant, updateRanking, uploadCaricature,
+  saveStaticStandings, setChargePublished, updateParticipant, updateRanking, uploadCaricature,
 } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -33,12 +33,15 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   }
 
   const sb = getServiceClient();
-  const [participantsRes, rankingsRes, chargesRes, results] = await Promise.all([
+  const [participantsRes, rankingsRes, chargesRes, results, standingsRes] = await Promise.all([
     sb.from("participants").select("id, slug, name, nickname, sort_order, avatar_paths, active").order("sort_order"),
-    sb.from("rankings").select("id, slug, status, period_kind, week_starts_on"),
+    sb.from("rankings").select("id, slug, status, period_kind, week_starts_on, mode"),
     sb.from("charges").select("id, title, published, published_on, credits").order("published_on", { ascending: false }),
     getRankingResults(),
+    sb.from("static_standings").select("ranking_id, participant_id, position"),
   ]);
+  const standings = standingsRes.data ?? [];
+  const staticRankings = (rankingsRes.data ?? []).filter((r) => r.mode === "static");
   const participants = (participantsRes.data ?? []).map((row) => ({ ...mapParticipant(row), active: row.active as boolean }));
   const rankings = rankingsRes.data ?? [];
   const charges = chargesRes.data ?? [];
@@ -58,12 +61,17 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           {results.map((r) => (
             <div key={r.slug} className={card}>
               <h3 className="font-bold">{RANKINGS[r.slug].title}</h3>
-              <p className="text-xs text-muted">{r.period.label} · {formatNumber(r.totalVotes)} votos {r.active ? "" : "· PAUSADO"}</p>
+              <p className="text-xs text-muted">
+                {r.mode === "static" ? "Definido pelo programa" : `${r.period.label} · ${formatNumber(r.totalVotes)} votos`}
+                {r.active ? "" : " · PAUSADO"}
+              </p>
               <ol className="mt-2 space-y-1 text-sm">
                 {r.entries.map((e) => (
                   <li key={e.participant.id} className="flex justify-between gap-2">
                     <span>{e.position}º {e.participant.name}</span>
-                    <span className="tabular text-muted">{formatNumber(e.votes)} · {formatPercent(e.percent)}</span>
+                    {r.mode === "static" ? null : (
+                      <span className="tabular text-muted">{formatNumber(e.votes)} · {formatPercent(e.percent)}</span>
+                    )}
                   </li>
                 ))}
               </ol>
@@ -72,10 +80,37 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         </div>
       </section>
 
+      {staticRankings.map((ranking) => (
+        <section key={ranking.id} aria-labelledby={`h-static-${ranking.slug}`}>
+          <h2 id={`h-static-${ranking.slug}`} className="font-display text-2xl uppercase">
+            {isRankingSlugKnown(ranking.slug) ? RANKINGS[ranking.slug].title : ranking.slug} — ordem do programa
+          </h2>
+          <form action={saveStaticStandings} className={`${card} mt-3 space-y-2`}>
+            <input type="hidden" name="id" value={ranking.id} />
+            <p className="text-sm text-muted">Sem votação do público. 1 = topo (mais na mira). Posições iguais empatam; deixe vazio para tirar do ranking.</p>
+            {participants.filter((p) => p.active).map((p) => (
+              <label key={p.id} className="flex items-center justify-between gap-3">
+                <span>{p.name}</span>
+                <input
+                  type="number"
+                  min={1}
+                  max={99}
+                  name={`pos_${p.id}`}
+                  defaultValue={standings.find((s) => s.ranking_id === ranking.id && s.participant_id === p.id)?.position ?? ""}
+                  className={`${input} w-24`}
+                  aria-label={`Posição de ${p.name}`}
+                />
+              </label>
+            ))}
+            <button className={button}>Salvar ordem</button>
+          </form>
+        </section>
+      ))}
+
       <section aria-labelledby="h-rankings">
         <h2 id="h-rankings" className="font-display text-2xl uppercase">Rankings e períodos</h2>
         <div className="mt-3 space-y-3">
-          {rankings.map((r) => (
+          {rankings.filter((r) => r.mode !== "static").map((r) => (
             <form key={r.id} action={updateRanking} className={`${card} flex flex-wrap items-end gap-3`}>
               <input type="hidden" name="id" value={r.id} />
               <p className="w-full font-bold">{isRankingSlugKnown(r.slug) ? RANKINGS[r.slug].title : r.slug}</p>

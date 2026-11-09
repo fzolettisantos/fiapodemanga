@@ -125,6 +125,34 @@ export async function updateRanking(form: FormData) {
   done("Ranking atualizado.");
 }
 
+/** Ranking estático (ex.: Bala do Véio): o programa define a ordem. Campo vazio = fora do ranking. */
+export async function saveStaticStandings(form: FormData) {
+  await requireAdmin();
+  const rankingId = id(form);
+  const sb = getServiceClient();
+  const { data: ranking } = await sb.from("rankings").select("mode").eq("id", rankingId).single();
+  if (ranking?.mode !== "static") done("Esse ranking é de votação.", true);
+
+  const rows: { ranking_id: string; participant_id: string; position: number }[] = [];
+  for (const [key, value] of form.entries()) {
+    if (!key.startsWith("pos_") || typeof value !== "string" || value.trim() === "") continue;
+    const participantId = key.slice(4);
+    const position = Number(value);
+    if (!UUID.test(participantId) || !Number.isInteger(position) || position < 1 || position > 99) {
+      done("Posições devem ser números inteiros de 1 a 99.", true);
+    }
+    rows.push({ ranking_id: rankingId, participant_id: participantId, position });
+  }
+
+  const removed = await sb.from("static_standings").delete().eq("ranking_id", rankingId);
+  if (removed.error) done(`Erro ao salvar: ${removed.error.message}`, true);
+  if (rows.length > 0) {
+    const { error } = await sb.from("static_standings").insert(rows);
+    if (error) done(`Erro ao salvar: ${error.message}`, true);
+  }
+  done("Ordem do ranking atualizada.");
+}
+
 export async function createCharge(form: FormData) {
   await requireAdmin();
   const title = text(form, "title", 120);

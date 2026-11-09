@@ -1,6 +1,8 @@
 "use client";
 
-import { AlertTriangle, RefreshCw, Users } from "lucide-react";
+import Image from "next/image";
+import { AlertTriangle, Megaphone, RefreshCw, Users } from "lucide-react";
+import illustrations from "@/papo-reto/generated/ranking-illustrations.json";
 import { LayoutGroup } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RANKINGS } from "@/papo-reto/config/rankings";
@@ -97,19 +99,59 @@ export function RankingBoard({
   const entries = displayed ?? live ?? [];
   const pendingReorder = Boolean(live && shown && !sameStanding(shown, live));
   const accent = copy.kind === "positive" ? "text-green" : "text-red";
+  const isStatic = copy.mode === "static";
+  const illustration = (illustrations as Partial<Record<RankingSlug, string>>)[slug];
+  const kicker = isStatic
+    ? "Ranking do programa · sem votação do público"
+    : copy.kind === "positive"
+      ? "Ranking positivo · topo é moral"
+      : "Ranking negativo · topo é vergonha";
 
   return (
     <div className="lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-10">
       <header className="mb-4 lg:sticky lg:top-24 lg:self-start">
-        <p className={`text-xs font-extrabold uppercase tracking-[0.18em] ${accent}`}>
-          {copy.kind === "positive" ? "Ranking positivo · topo é moral" : "Ranking negativo · topo é vergonha"}
-        </p>
-        <h2 id={`title-${slug}`} className="mt-1 font-display text-[34px] uppercase leading-none sm:text-5xl lg:text-6xl">
-          {copy.title}
-        </h2>
-        <p className="mt-1.5 text-lg font-bold leading-snug text-yellow">{copy.subtitle}</p>
+        <div className="flex items-start gap-3 sm:gap-5">
+          <div className="min-w-0 flex-1">
+            <p className={`text-xs font-extrabold uppercase tracking-[0.18em] ${accent}`}>
+              {kicker}
+            </p>
+            <h2 id={`title-${slug}`} className="mt-1 font-display text-[34px] uppercase leading-none sm:text-5xl lg:text-6xl">
+              {copy.title}
+            </h2>
+            <p className="mt-1.5 text-lg font-bold leading-snug text-yellow">{copy.subtitle}</p>
+          </div>
+          {illustration ? (
+            <Image
+              src={illustration}
+              alt={copy.illustrationAlt ?? ""}
+              width={320}
+              height={320}
+              sizes="(min-width: 640px) 144px, 104px"
+              loading="eager"
+              className="size-[104px] shrink-0 rounded-2xl object-cover sm:size-36"
+            />
+          ) : null}
+        </div>
         <p className="mt-1.5 max-w-2xl text-[15px] leading-snug text-muted">{copy.description}</p>
-        {results ? (
+        {results && isStatic ? (
+          <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] font-semibold text-muted">
+            <span className="inline-flex items-center gap-1">
+              <Megaphone aria-hidden className="size-4" /> Quem define é o programa
+            </span>
+            {results.standingsUpdatedAt ? (
+              <>
+                <span aria-hidden>·</span>
+                <span>
+                  Atualizado em{" "}
+                  {new Date(results.standingsUpdatedAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", timeZone: "America/Sao_Paulo" })}
+                </span>
+              </>
+            ) : null}
+            {results.isDemo ? (
+              <span className="rounded bg-yellow px-1.5 py-0.5 text-[11px] font-extrabold uppercase text-ink">Ordem simulada</span>
+            ) : null}
+          </p>
+        ) : results ? (
           <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] font-semibold text-muted">
             <span className="inline-flex items-center gap-1">
               <Users aria-hidden className="size-4" />
@@ -122,7 +164,7 @@ export function RankingBoard({
             ) : null}
           </p>
         ) : null}
-        {results && !results.active ? (
+        {results && !results.active && !isStatic ? (
           <p className="mt-3 rounded-xl border border-line bg-surface px-3 py-2 text-sm font-semibold" role="note">
             A votação deste ranking está pausada. Os resultados continuam visíveis.
           </p>
@@ -151,8 +193,10 @@ export function RankingBoard({
         </ul>
       ) : entries.length === 0 ? (
         <div className="rounded-2xl border border-line bg-surface p-6 text-center">
-          <p className="font-bold">Ainda não tem ninguém escalado neste ranking.</p>
-          <p className="text-sm text-muted">Os participantes aparecem aqui assim que forem cadastrados.</p>
+          <p className="font-bold">{isStatic ? "O Véio ainda está escolhendo o alvo." : "Ainda não tem ninguém escalado neste ranking."}</p>
+          <p className="text-sm text-muted">
+            {isStatic ? "A ordem aparece aqui assim que o programa definir." : "Os participantes aparecem aqui assim que forem cadastrados."}
+          </p>
         </div>
       ) : (
         <>
@@ -197,8 +241,9 @@ export function RankingBoard({
             </ol>
           </LayoutGroup>
           <p className="mt-3 text-xs text-muted">
-            Um voto por ranking a cada período. As posições se reorganizam após o seu voto ou a cada poucos segundos,
-            sem pular cards enquanto você escolhe.
+            {isStatic
+              ? "Brincadeira interna do programa: a ordem é definida pelo Papo Reto, não por votação."
+              : "Um voto por ranking a cada período. As posições se reorganizam após o seu voto ou a cada poucos segundos, sem pular cards enquanto você escolhe."}
           </p>
         </>
       )}

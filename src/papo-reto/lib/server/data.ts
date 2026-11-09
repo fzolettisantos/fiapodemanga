@@ -1,13 +1,16 @@
 import "server-only";
-import { DEMO_PARTICIPANTS } from "@/papo-reto/config/demo";
+import { DEMO_PARTICIPANTS, DEMO_STATIC_POSITIONS } from "@/papo-reto/config/demo";
 import { RANKINGS } from "@/papo-reto/config/rankings";
 import { getVotingPeriod, isPeriodKind } from "@/papo-reto/lib/period";
-import { rankEntries } from "@/papo-reto/lib/ranking";
-import type { AvatarPaths, Charge, Participant, PeriodKind, RankingResults, RankingSlug } from "@/papo-reto/types";
+import { rankEntries, rankStatic } from "@/papo-reto/lib/ranking";
+import type { AvatarPaths, Charge, Participant, PeriodKind, RankingResults, RankingSlug, VotingPeriod } from "@/papo-reto/types";
 import { RANKING_SLUGS } from "@/papo-reto/types";
 import { demoMyVote, demoTotals } from "./demo-store";
 import { isSupabaseConfigured } from "./env";
 import { getServiceClient } from "./supabase";
+
+/** Rankings estáticos não têm período de votação. */
+const STATIC_PERIOD: VotingPeriod = { kind: "all_time", key: "STATIC", label: "Ranking definido pelo programa" };
 
 export interface RankingConfig {
   id: string | null;
@@ -85,11 +88,26 @@ export async function getRankingResults(
 
   if (!isSupabaseConfigured()) {
     return configs.map((config) => {
+      if (RANKINGS[config.slug].mode === "static") {
+        const positions = DEMO_STATIC_POSITIONS[config.slug] ?? {};
+        return {
+          slug: config.slug,
+          mode: "static",
+          active: config.active,
+          period: STATIC_PERIOD,
+          totalVotes: 0,
+          entries: rankStatic(DEMO_PARTICIPANTS.map((p) => ({ participant: p, position: positions[p.id] ?? 0 }))),
+          isDemo: true,
+          updatedAt,
+          standingsUpdatedAt: null,
+        } satisfies RankingResults;
+      }
       const period = getVotingPeriod(config.periodKind, now, { weekStartsOn: config.weekStartsOn });
       const totals = demoTotals(config.slug, period.key);
       const entries = rankEntries(DEMO_PARTICIPANTS.map((p) => ({ participant: p, votes: totals[p.id] ?? 0 })));
       return {
         slug: config.slug,
+        mode: "vote" as const,
         active: config.active,
         period,
         totalVotes: entries.reduce((s, e) => s + e.votes, 0),
@@ -111,6 +129,30 @@ export async function getRankingResults(
 
   return Promise.all(
     configs.map(async (config) => {
+      if (RANKINGS[config.slug].mode === "static") {
+        let rows: { participant_id: string; position: number; updated_at: string }[] = [];
+        if (config.id) {
+          const { data, error } = await sb
+            .from("static_standings")
+            .select("participant_id, position, updated_at")
+            .eq("ranking_id", config.id);
+          if (error) throw new Error(`Erro ao carregar o ranking do programa: ${error.message}`);
+          rows = data ?? [];
+        }
+        const positions = new Map(rows.map((r) => [r.participant_id, r.position]));
+        const latest = rows.map((r) => r.updated_at).sort().at(-1) ?? null;
+        return {
+          slug: config.slug,
+          mode: "static",
+          active: config.active,
+          period: STATIC_PERIOD,
+          totalVotes: 0,
+          entries: rankStatic(participants.map((p) => ({ participant: p, position: positions.get(p.id) ?? 0 }))),
+          isDemo: false,
+          updatedAt,
+          standingsUpdatedAt: latest,
+        } satisfies RankingResults;
+      }
       const period = getVotingPeriod(config.periodKind, now, { weekStartsOn: config.weekStartsOn });
       const totals = new Map<string, number>();
       let myVote: string | null | undefined;
@@ -136,6 +178,7 @@ export async function getRankingResults(
       const entries = rankEntries(participants.map((p) => ({ participant: p, votes: totals.get(p.id) ?? 0 })));
       return {
         slug: config.slug,
+        mode: "vote",
         active: config.active,
         period,
         totalVotes: entries.reduce((s, e) => s + e.votes, 0),

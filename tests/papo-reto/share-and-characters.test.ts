@@ -9,6 +9,7 @@ const results = (votes: Record<string, number>, isDemo = false): RankingResults 
   const entries = rank(votes);
   return {
     slug: "falou-merda",
+    mode: "vote",
     active: true,
     period: { kind: "weekly", key: "W", label: "" },
     totalVotes: entries.reduce((s, e) => s + e.votes, 0),

@@ -15,6 +15,7 @@ export function ShareRanking({
   canShareCard,
   onShareCard,
   notify,
+  variant = "vote",
 }: {
   path: string;
   title: string;
@@ -22,6 +23,8 @@ export function ShareRanking({
   canShareCard: boolean;
   onShareCard: () => void;
   notify: (message: string) => void;
+  /** Ranking sem votação: o texto não fala em "voz do povo". */
+  variant?: "vote" | "static";
 }) {
   const url = absoluteUrl(path);
 
@@ -33,10 +36,20 @@ export function ShareRanking({
   return (
     <section aria-labelledby="share-title" className="mt-8 rounded-2xl border border-line bg-surface p-4 sm:p-6">
       <h2 id="share-title" className="font-display text-[26px] uppercase leading-tight sm:text-3xl">
-        A voz do povo. <span className="text-yellow">A vergonha dos participantes.</span>
+        {variant === "static" ? (
+          <>
+            A mira é do Véio. <span className="text-yellow">A zoeira é de todo mundo.</span>
+          </>
+        ) : (
+          <>
+            A voz do povo. <span className="text-yellow">A vergonha dos participantes.</span>
+          </>
+        )}
       </h2>
       <p className="mt-2 max-w-2xl text-[15px] leading-snug text-muted">
-        Os votos estão aí. Agora queremos ver quem vai ter coragem de assumir o resultado no próximo programa.
+        {variant === "static"
+          ? "Esse ranking quem define é o programa. Agora manda pros amigos e vê quem vai reclamar no próximo episódio."
+          : "Os votos estão aí. Agora queremos ver quem vai ter coragem de assumir o resultado no próximo programa."}
       </p>
       <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         <a

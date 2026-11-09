@@ -30,6 +30,21 @@ if (existsSync(CHAR_DIR)) {
   }
 }
 
+// Ilustrações dos rankings (ao lado do título): public/papo-reto/rankings/<ranking>.<ext>
+const RANKING_DIR = join(ROOT, "public", "papo-reto", "rankings");
+const illustrations = {};
+if (existsSync(RANKING_DIR)) {
+  const files = await readdir(RANKING_DIR);
+  for (const ranking of RANKINGS) {
+    const ext = EXTENSIONS.find((e) => files.includes(`${ranking}.${e}`));
+    if (ext) illustrations[ranking] = `/papo-reto/rankings/${ranking}.${ext}`;
+  }
+}
+await writeFile(
+  join(ROOT, "src", "papo-reto", "generated", "ranking-illustrations.json"),
+  JSON.stringify(illustrations, null, 2) + "\n",
+);
+
 await mkdir(join(ROOT, "src", "papo-reto", "generated"), { recursive: true });
 await writeFile(OUT, JSON.stringify(manifest, null, 2) + "\n");
 const count = Object.values(manifest).flatMap((r) => Object.values(r).flatMap((s) => Object.keys(s))).length;

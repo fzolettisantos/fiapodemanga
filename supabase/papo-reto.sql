@@ -38,6 +38,20 @@ create table if not exists public.rankings (
 -- Votos: um por votante, por ranking, por período.
 -- voter_key e ip_hash são HMACs gerados no servidor (nenhum IP ou cookie cru é guardado).
 -- ---------------------------------------------------------------------
+-- Rankings estáticos (ex.: Bala do Véio) não têm votação: a ordem é definida pelo programa.
+alter table public.rankings add column if not exists mode text not null default 'vote';
+do $$ begin
+  alter table public.rankings add constraint rankings_mode_check check (mode in ('vote', 'static'));
+exception when duplicate_object then null; end $$;
+
+create table if not exists public.static_standings (
+  ranking_id     uuid not null references public.rankings(id) on delete cascade,
+  participant_id uuid not null references public.participants(id) on delete cascade,
+  position       smallint not null check (position between 1 and 99),
+  updated_at     timestamptz not null default now(),
+  primary key (ranking_id, participant_id)
+);
+
 create table if not exists public.votes (
   id             bigint generated always as identity primary key,
   ranking_id     uuid not null references public.rankings(id) on delete cascade,
@@ -104,7 +118,7 @@ for each row execute function public.apply_vote_total();
 
 -- ---------------------------------------------------------------------
 -- Voto: validação no banco. Só a service role (servidor do site) pode chamar.
--- Retorna: ok | duplicate | ip_limit | invalid | closed
+-- Retorna: ok | duplicate | ip_limit | invalid | closed | not_votable
 -- ---------------------------------------------------------------------
 create or replace function public.cast_vote(
   p_ranking_slug   text,
@@ -122,6 +136,7 @@ declare
 begin
   select * into v_ranking from rankings where slug = p_ranking_slug;
   if not found then return 'invalid'; end if;
+  if v_ranking.mode <> 'vote' then return 'not_votable'; end if;
   if v_ranking.status <> 'active' then return 'closed'; end if;
   if not exists (select 1 from participants where id = p_participant_id and active) then return 'invalid'; end if;
   if p_voter_key is null or p_ip_hash is null or p_period_key is null then return 'invalid'; end if;
@@ -157,6 +172,10 @@ alter table public.rankings     enable row level security;
 alter table public.votes        enable row level security;
 alter table public.vote_totals  enable row level security;
 alter table public.charges      enable row level security;
+alter table public.static_standings enable row level security;
+
+drop policy if exists "ranking do programa é público" on public.static_standings;
+create policy "ranking do programa é público" on public.static_standings for select to anon, authenticated using (true);
 
 drop policy if exists "participantes ativos são públicos" on public.participants;
 create policy "participantes ativos são públicos" on public.participants for select to anon, authenticated using (active);
@@ -172,7 +191,7 @@ create policy "charges publicadas são públicas" on public.charges for select t
 
 -- votes: sem nenhuma policy → anon/authenticated não leem nem escrevem.
 revoke all on public.votes from anon, authenticated;
-revoke insert, update, delete on public.participants, public.rankings, public.vote_totals, public.charges from anon, authenticated;
+revoke insert, update, delete on public.participants, public.rankings, public.vote_totals, public.charges, public.static_standings from anon, authenticated;
 
 -- ---------------------------------------------------------------------
 -- Realtime do placar
@@ -203,8 +222,11 @@ on conflict (id) do nothing;
 insert into public.rankings (slug, name, description, kind, period_kind) values
   ('falou-merda', 'Troféu Falou Merda', 'Aqui o primeiro lugar é uma vergonha.', 'negative', 'weekly'),
   ('sabio', 'O Sábio da Resenha', 'Milagrosamente, alguém falou algo que presta.', 'positive', 'weekly'),
-  ('bala-do-veio', 'Quem vai levar Bala do Véio?', 'Falou demais? Agora aguenta a bronca.', 'negative', 'weekly')
+  ('bala-do-veio', 'Quem vai levar Bala do Véio?', 'Falou demais? Agora aguenta a bronca.', 'negative', 'all_time')
 on conflict (slug) do nothing;
+
+-- Bala do Véio é estático (brincadeira interna do programa, sem votação do público).
+update public.rankings set mode = 'static' where slug = 'bala-do-veio';
 
 -- Cadastre os demais participantes pelo painel /admin (ou com inserts como este).
 insert into public.participants (slug, name, nickname, sort_order) values

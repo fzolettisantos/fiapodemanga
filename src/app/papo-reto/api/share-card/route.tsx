@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
           </div>
           {results.isDemo ? (
             <div style={{ display: "flex", background: "#FFD23F", color: "#111318", fontSize: 26, padding: "8px 18px", borderRadius: 10 }}>
-              DADOS SIMULADOS
+              {results.mode === "static" ? "ORDEM SIMULADA" : "DADOS SIMULADOS"}
             </div>
           ) : null}
         </div>
@@ -84,14 +84,22 @@ export async function GET(request: NextRequest) {
           {entry.participant.name}
         </div>
         <div style={{ display: "flex", fontSize: 44, color: "#C9CED8", marginTop: 4 }}>
-          {`${formatNumber(entry.votes)} ${entry.votes === 1 ? "voto" : "votos"} · ${formatPercent(entry.percent)}`}
+          {results.mode === "static"
+            ? "Ranking definido pelo programa"
+            : `${formatNumber(entry.votes)} ${entry.votes === 1 ? "voto" : "votos"} · ${formatPercent(entry.percent)}`}
         </div>
         <div style={{ display: "flex", fontSize: 46, lineHeight: 1.2, marginTop: 36, color: "#FFD23F" }}>
           {`“${participantHeadline(ranking, entry, results)}”`}
         </div>
         <div style={{ display: "flex", flexDirection: "column", marginTop: "auto", fontSize: 28, color: "#9AA3B2" }}>
-          <span style={{ color: "#fff" }}>{`Vote também: ${host}${BASE_PATH}/${ranking}`}</span>
-          <span>{results.isDemo ? "Modo demonstração — números simulados, não são votos reais." : site.disclaimer}</span>
+          <span style={{ color: "#fff" }}>{`${results.mode === "static" ? "Confira" : "Vote também"}: ${host}${BASE_PATH}/${ranking}`}</span>
+          <span>
+            {results.isDemo
+              ? results.mode === "static"
+                ? "Modo demonstração — ordem simulada, não é a do programa."
+                : "Modo demonstração — números simulados, não são votos reais."
+              : site.disclaimer}
+          </span>
         </div>
       </div>
     ),

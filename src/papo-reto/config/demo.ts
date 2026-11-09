@@ -13,9 +13,14 @@ export const DEMO_PARTICIPANTS: Participant[] = [
   { id: "participante-5", slug: "participante-5", name: "Participante 5", nickname: "Nome a definir", sortOrder: 5, avatarPaths: {} },
 ];
 
-/** Votos SIMULADOS iniciais do modo demonstração. */
+/** Votos SIMULADOS iniciais do modo demonstração (só rankings com votação). */
 export const DEMO_SEED_VOTES: Record<RankingSlug, Record<string, number>> = {
   "falou-merda": { benja: 1284, "participante-2": 978, "participante-3": 623, "participante-4": 341, "participante-5": 118 },
   sabio: { benja: 402, "participante-2": 515, "participante-3": 233, "participante-4": 233, "participante-5": 87 },
-  "bala-do-veio": { benja: 356, "participante-2": 702, "participante-3": 801, "participante-4": 129, "participante-5": 264 },
+  "bala-do-veio": {},
+};
+
+/** Ordem SIMULADA do ranking estático Bala do Véio (no ar, quem define é o programa pelo painel). */
+export const DEMO_STATIC_POSITIONS: Partial<Record<RankingSlug, Record<string, number>>> = {
+  "bala-do-veio": { "participante-3": 1, "participante-2": 2, benja: 3, "participante-5": 4, "participante-4": 5 },
 };

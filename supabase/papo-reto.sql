@@ -38,6 +38,9 @@ create table if not exists public.rankings (
 -- Votos: um por votante, por ranking, por período.
 -- voter_key e ip_hash são HMACs gerados no servidor (nenhum IP ou cookie cru é guardado).
 -- ---------------------------------------------------------------------
+-- Rankings em que cada participante aparece (null = todos).
+alter table public.participants add column if not exists rankings text[];
+
 -- Rankings estáticos (ex.: Bala do Véio) não têm votação: a ordem é definida pelo programa.
 alter table public.rankings add column if not exists mode text not null default 'vote';
 do $$ begin
@@ -165,7 +168,10 @@ begin
   if not found then return 'invalid'; end if;
   if v_ranking.mode <> 'vote' then return 'not_votable'; end if;
   if v_ranking.status <> 'active' then return 'closed'; end if;
-  if not exists (select 1 from participants where id = p_participant_id and active) then return 'invalid'; end if;
+  if not exists (
+    select 1 from participants
+    where id = p_participant_id and active and (rankings is null or p_ranking_slug = any(rankings))
+  ) then return 'invalid'; end if;
   if p_voter_key is null or p_ip_hash is null or p_period_key is null then return 'invalid'; end if;
 
   -- Evita corrida entre votos do mesmo IP no mesmo ranking/período.
@@ -267,4 +273,9 @@ insert into public.participants (slug, name, nickname, sort_order) values
   ('joneta', 'Joneta', null, 4),
   ('carabina', 'Carabina', null, 5),
   ('gadu', 'Gadu Boyceta', 'Caique Silva', 6)
+on conflict (slug) do nothing;
+
+-- Véio Fanático Tricolor: só no Falou Merda e no Sábio.
+insert into public.participants (slug, name, nickname, sort_order, rankings) values
+  ('veio-tricolor', 'Véio Fanático Tricolor', null, 7, array['falou-merda', 'sabio'])
 on conflict (slug) do nothing;

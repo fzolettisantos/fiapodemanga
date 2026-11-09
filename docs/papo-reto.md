@@ -128,7 +128,7 @@ public/papo-reto/characters/benja/sabio/…
 public/papo-reto/characters/benja/bala-do-veio/…
 ```
 
-- A pasta é o **slug** do participante: `kleber`, `benja`, `mano`, `joneta`, `carabina`, `gadu` (já criadas); aceita `.avif`, `.webp` ou `.png` (quadrado, ex.: 512×512, fundo transparente, rosto centralizado com a mesma margem).
+- A pasta é o **slug** do participante: `kleber`, `benja`, `mano`, `joneta`, `carabina`, `gadu`, `veio-tricolor` (já criadas); aceita `.avif`, `.webp` ou `.png` (quadrado, ex.: 512×512, fundo transparente, rosto centralizado com a mesma margem).
 - O manifesto é gerado sozinho no `dev`/`build`. Também dá para enviar pelo painel `/papo-reto/admin` (Supabase Storage), que tem prioridade sobre a pasta.
 - Enquanto um arquivo não existir, aparece um **placeholder ilustrado genérico** (não retrata ninguém) com a expressão certa daquele estado. O sistema **nunca** usa outra expressão no lugar.
 - Só as caricaturas da aba aberta são carregadas, e fora da tela com lazy loading.
@@ -171,7 +171,8 @@ em ciclos de 8 s com a pessoa sem interagir, ou ao tocar em "atualizar posiçõe
    - a função `cast_vote` (executável só pela service role) e o trigger que mantém o placar;
    - o placar na publicação do **Realtime**;
    - os buckets públicos `characters` e `charges` (upload só pelo servidor);
-   - os três rankings e os participantes (Kleber o Gladiador, Benja, Mano, Joneta, Carabina e Gadu Boyceta). Novos pelo `/papo-reto/admin`.
+   - os três rankings e os participantes (Kleber o Gladiador, Benja, Mano, Joneta, Carabina, Gadu Boyceta e Véio Fanático Tricolor). Novos pelo `/papo-reto/admin`.
+   - cada participante pode entrar só em alguns rankings (`participants.rankings`; vazio = todos). O Véio Fanático Tricolor está só no Falou Merda e no Sábio.
 3. Em **Project Settings → API**, copie a URL, a chave `anon` e a `service_role` para o `.env.local`.
 4. Gere os segredos:
    ```bash

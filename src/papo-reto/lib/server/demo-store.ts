@@ -1,6 +1,6 @@
 import "server-only";
 import { DEMO_PARTICIPANTS, DEMO_SEED_VOTES } from "@/papo-reto/config/demo";
-import type { RankingSlug, RankingView, VoteStatus } from "@/papo-reto/types";
+import { inRanking, type RankingSlug, type RankingView, type VoteStatus } from "@/papo-reto/types";
 
 /**
  * Armazenamento em memória do MODO DEMONSTRAÇÃO. Os números partem de valores simulados,
@@ -46,7 +46,7 @@ export function demoCastVote(input: {
   ipLimit: number;
 }): VoteStatus {
   const s = state();
-  if (!DEMO_PARTICIPANTS.some((p) => p.id === input.participantId)) return "invalid";
+  if (!DEMO_PARTICIPANTS.some((p) => p.id === input.participantId && inRanking(p, input.slug))) return "invalid";
   const voterKey = `${input.slug}|${input.keys.week}|${input.voterKey}`;
   if (s.voters.has(voterKey)) return "duplicate";
   const ipKey = `${input.slug}|${input.keys.week}|${input.ipHash}`;

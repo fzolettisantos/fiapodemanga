@@ -65,6 +65,11 @@ export async function updateParticipant(form: FormData) {
       nickname: text(form, "nickname", 80) || null,
       sort_order: Number(text(form, "sort_order", 4)) || 0,
       active: form.get("active") === "on",
+      // Nenhum ranking marcado = aparece em todos.
+      rankings: (() => {
+        const picked = form.getAll("rankings").filter((r): r is string => typeof r === "string" && isRankingSlug(r));
+        return picked.length ? picked : null;
+      })(),
     })
     .eq("id", id(form));
   if (error) done(`Erro ao salvar: ${error.message}`, true);

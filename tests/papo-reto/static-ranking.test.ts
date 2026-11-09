@@ -84,3 +84,13 @@ describe("textos do ranking estático", () => {
     expect(participantHeadline("bala-do-veio", r.entries[0]!, r)).toContain("BENJA");
   });
 });
+
+describe("participante só em alguns rankings", () => {
+  it("Véio Fanático Tricolor aparece no Falou Merda e no Sábio, não no Bala do Véio", async () => {
+    const [fm, sabio, bala] = await getRankingResults(["falou-merda", "sabio", "bala-do-veio"]);
+    const has = (r: typeof fm) => r!.entries.some((e) => e.participant.id === "veio-tricolor");
+    expect(has(fm)).toBe(true);
+    expect(has(sabio)).toBe(true);
+    expect(has(bala)).toBe(false);
+  });
+});

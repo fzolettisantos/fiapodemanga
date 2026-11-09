@@ -65,3 +65,12 @@ describe("rate limit", () => {
     expect(rateLimit("ip", opts, 1001).allowed).toBe(true);
   });
 });
+
+describe("participante fora do ranking", () => {
+  beforeEach(() => __resetDemoStore());
+  it("não recebe voto em ranking em que não entra", () => {
+    const k = { week: "W2026-11-09", month: "M2026-11", season: "S2026" };
+    expect(demoCastVote({ slug: "bala-do-veio", keys: k, participantId: "veio-tricolor", voterKey: "x", ipHash: "i", ipLimit: 9 })).toBe("invalid");
+    expect(demoCastVote({ slug: "sabio", keys: k, participantId: "veio-tricolor", voterKey: "x", ipHash: "i", ipLimit: 9 })).toBe("ok");
+  });
+});

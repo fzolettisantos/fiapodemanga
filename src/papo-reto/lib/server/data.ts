@@ -4,7 +4,7 @@ import { RANKINGS } from "@/papo-reto/config/rankings";
 import { getViewPeriod, getVotingPeriod, isPeriodKind } from "@/papo-reto/lib/period";
 import { rankEntries, rankStatic } from "@/papo-reto/lib/ranking";
 import type { BalaShot, AvatarPaths, Charge, Participant, PeriodKind, RankingResults, RankingSlug, RankingView, VotingPeriod } from "@/papo-reto/types";
-import { RANKING_SLUGS } from "@/papo-reto/types";
+import { inRanking, RANKING_SLUGS } from "@/papo-reto/types";
 import { demoMyVote, demoTotals } from "./demo-store";
 import { isSupabaseConfigured } from "./env";
 import { getServiceClient } from "./supabase";
@@ -37,6 +37,7 @@ interface ParticipantRow {
   nickname: string | null;
   sort_order: number;
   avatar_paths: AvatarPaths | null;
+  rankings?: string[] | null;
 }
 
 export function mapParticipant(row: ParticipantRow): Participant {
@@ -47,6 +48,7 @@ export function mapParticipant(row: ParticipantRow): Participant {
     nickname: row.nickname,
     sortOrder: row.sort_order,
     avatarPaths: row.avatar_paths ?? {},
+    rankings: row.rankings?.length ? (row.rankings.filter((r) => (RANKING_SLUGS as readonly string[]).includes(r)) as RankingSlug[]) : null,
   };
 }
 
@@ -104,7 +106,7 @@ export async function getRankingResults(
           active: config.active,
           period: STATIC_PERIOD,
           totalVotes: 0,
-          entries: rankStatic(DEMO_PARTICIPANTS.map((p) => ({ participant: p, position: positions[p.id] ?? 0 }))),
+          entries: rankStatic(DEMO_PARTICIPANTS.filter((p) => inRanking(p, config.slug)).map((p) => ({ participant: p, position: positions[p.id] ?? 0 }))),
           isDemo: true,
           updatedAt,
           standingsUpdatedAt: null,
@@ -115,7 +117,7 @@ export async function getRankingResults(
       const votingPeriod = getVotingPeriod("weekly", now, { weekStartsOn: config.weekStartsOn });
       const period = getViewPeriod(view, now, { weekStartsOn: config.weekStartsOn });
       const totals = demoTotals(config.slug, period.key, view);
-      const entries = rankEntries(DEMO_PARTICIPANTS.map((p) => ({ participant: p, votes: totals[p.id] ?? 0 })));
+      const entries = rankEntries(DEMO_PARTICIPANTS.filter((p) => inRanking(p, config.slug)).map((p) => ({ participant: p, votes: totals[p.id] ?? 0 })));
       return {
         slug: config.slug,
         mode: "vote" as const,
@@ -135,7 +137,7 @@ export async function getRankingResults(
   const sb = getServiceClient();
   const { data: participantRows, error: participantError } = await sb
     .from("participants")
-    .select("id, slug, name, nickname, sort_order, avatar_paths")
+    .select("id, slug, name, nickname, sort_order, avatar_paths, rankings")
     .eq("active", true);
   if (participantError) throw new Error(`Erro ao carregar participantes: ${participantError.message}`);
   const participants = ((participantRows ?? []) as ParticipantRow[]).map(mapParticipant);
@@ -175,7 +177,7 @@ export async function getRankingResults(
           active: config.active,
           period: STATIC_PERIOD,
           totalVotes: 0,
-          entries: rankStatic(participants.map((p) => ({ participant: p, position: positions.get(p.id) ?? 0 }))),
+          entries: rankStatic(participants.filter((p) => inRanking(p, config.slug)).map((p) => ({ participant: p, position: positions.get(p.id) ?? 0 }))),
           isDemo: false,
           updatedAt,
           standingsUpdatedAt: latest,
@@ -206,7 +208,7 @@ export async function getRankingResults(
         }
         if (mineRes) myVote = (mineRes.data as { participant_id: string } | null)?.participant_id ?? null;
       }
-      const entries = rankEntries(participants.map((p) => ({ participant: p, votes: totals.get(p.id) ?? 0 })));
+      const entries = rankEntries(participants.filter((p) => inRanking(p, config.slug)).map((p) => ({ participant: p, votes: totals.get(p.id) ?? 0 })));
       return {
         slug: config.slug,
         mode: "vote",

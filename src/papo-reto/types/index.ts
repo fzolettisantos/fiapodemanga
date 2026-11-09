@@ -36,6 +36,13 @@ export interface Participant {
   /** Ordem administrativa; também desempata a exibição. */
   sortOrder: number;
   avatarPaths: AvatarPaths;
+  /** Rankings em que o participante aparece. `null`/ausente = todos. */
+  rankings?: RankingSlug[] | null;
+}
+
+/** O participante entra neste ranking? */
+export function inRanking(participant: Pick<Participant, "rankings">, slug: RankingSlug) {
+  return !participant.rankings || participant.rankings.length === 0 || participant.rankings.includes(slug);
 }
 
 export interface RankedEntry {

@@ -4,7 +4,7 @@ import { requireAdmin } from "@/papo-reto/lib/server/admin-auth";
 import { getRankingResults, mapParticipant } from "@/papo-reto/lib/server/data";
 import { isSupabaseConfigured } from "@/papo-reto/lib/server/env";
 import { getServiceClient } from "@/papo-reto/lib/server/supabase";
-import { EXPRESSION_STATES, RANKING_SLUGS } from "@/papo-reto/types";
+import { EXPRESSION_STATES, inRanking, RANKING_SLUGS, type RankingSlug } from "@/papo-reto/types";
 import {
   createCharge, createParticipant, deleteCharge, logout, removeCaricature,
   addShot, deleteShot, saveStaticStandings, setChargePublished, updateParticipant, updateRanking, uploadCaricature,
@@ -33,7 +33,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
 
   const sb = getServiceClient();
   const [participantsRes, rankingsRes, chargesRes, results, standingsRes] = await Promise.all([
-    sb.from("participants").select("id, slug, name, nickname, sort_order, avatar_paths, active").order("sort_order"),
+    sb.from("participants").select("id, slug, name, nickname, sort_order, avatar_paths, active, rankings").order("sort_order"),
     sb.from("rankings").select("id, slug, status, period_kind, week_starts_on, mode"),
     sb.from("charges").select("id, title, published, published_on, credits").order("published_on", { ascending: false }),
     Promise.all((["week", "month", "season"] as const).map((view) => getRankingResults(undefined, { view }))).then((all) => all.flat()),
@@ -92,7 +92,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           <form action={saveStaticStandings} className={`${card} mt-3 space-y-2`}>
             <input type="hidden" name="id" value={ranking.id} />
             <p className="text-sm text-muted">Sem votação do público. 1 = topo (mais na mira). Posições iguais empatam; deixe vazio para tirar do ranking.</p>
-            {participants.filter((p) => p.active).map((p) => (
+            {participants.filter((p) => p.active && inRanking(p, ranking.slug as RankingSlug)).map((p) => (
               <label key={p.id} className="flex items-center justify-between gap-3">
                 <span>{p.name}</span>
                 <input
@@ -111,7 +111,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
 
           <h3 className="mt-5 font-bold">Tiros (quantidade · local do tiro · localidade · tipo de arma)</h3>
           <div className="mt-2 space-y-3">
-            {participants.filter((p) => p.active).map((p) => {
+            {participants.filter((p) => p.active && inRanking(p, ranking.slug as RankingSlug)).map((p) => {
               const mine = shots.filter((s) => s.ranking_id === ranking.id && s.participant_id === p.id);
               const total = mine.reduce((t, s) => t + s.quantity, 0);
               return (
@@ -188,6 +188,15 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                 <input name="sort_order" type="number" defaultValue={p.sortOrder} className={input} aria-label="Ordem" />
                 <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="active" defaultChecked={p.active} className="size-5" /> Ativo</label>
                 <button className={button}>Salvar</button>
+                <fieldset className="flex flex-wrap gap-3 text-sm sm:col-span-5">
+                  <legend className="mb-1 text-muted">Aparece nos rankings (nenhum marcado = todos):</legend>
+                  {RANKING_SLUGS.map((slug) => (
+                    <label key={slug} className="flex items-center gap-2">
+                      <input type="checkbox" name="rankings" value={slug} defaultChecked={p.rankings?.includes(slug) ?? false} className="size-5" />
+                      {RANKINGS[slug].tabLabel}
+                    </label>
+                  ))}
+                </fieldset>
               </form>
               <table className="mt-4 w-full text-left text-sm">
                 <thead><tr><th className="py-1">Ranking</th>{EXPRESSION_STATES.map((s) => <th key={s} className="py-1">{s}</th>)}</tr></thead>

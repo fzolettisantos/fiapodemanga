@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { AlertTriangle, CalendarClock, Megaphone, RefreshCw, Trophy, Users } from "lucide-react";
+import { AlertTriangle, CalendarClock, Crosshair, Megaphone, RefreshCw, Trophy, Users } from "lucide-react";
 import illustrations from "@/papo-reto/generated/ranking-illustrations.json";
 import { LayoutGroup } from "motion/react";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
@@ -10,6 +10,7 @@ import { computeMoves, formatNumber, mergeLiveNumbers, sameStanding } from "@/pa
 import { daysUntil } from "@/papo-reto/lib/period";
 import type { RankedEntry, RankingResults, RankingSlug, RankingView } from "@/papo-reto/types";
 import { PeriodSwitcher } from "./PeriodSwitcher";
+import { shotsLabel } from "./ShotsTable";
 import type { Move } from "./RankingPosition";
 import { RankingCard } from "./RankingCard";
 import type { VoteButtonState } from "./VoteButton";
@@ -230,6 +231,19 @@ export function RankingBoard({
               <RefreshCw aria-hidden className="size-4" /> O ranking mudou — atualizar posições
             </button>
           ) : null}
+          {isStatic && results.totalShots !== undefined ? (
+            // Total de tiros somando todos os participantes, acima dos boxes.
+            <div className="mb-3 flex items-center gap-3 rounded-2xl border border-red/60 bg-gradient-to-r from-red/20 to-surface p-3 sm:p-4" role="status" aria-live="polite">
+              <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-red/25 text-red">
+                <Crosshair aria-hidden className="size-7" />
+              </span>
+              <div className="min-w-0">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-muted">Total de tiros do Véio</p>
+                <p className="font-display text-[34px] uppercase leading-none tabular">{shotsLabel(results.totalShots)}</p>
+                <p className="text-[12px] font-semibold text-muted">somando todos os participantes</p>
+              </div>
+            </div>
+          ) : null}
           <LayoutGroup id={slug}>
             <ol
               className="space-y-3"
@@ -255,6 +269,7 @@ export function RankingBoard({
                     move={moves[id]}
                     eager={index < 2}
                     index={index}
+                    shots={results.shots ? results.shots[id] ?? [] : undefined}
                     onVote={() => handleVote(id)}
                     onShare={() => onShareParticipant(entry)}
                   />

@@ -58,6 +58,16 @@ export interface VotingPeriod {
   endsOn?: string;
 }
 
+/** Registro de "tiros" do Bala do Véio (brincadeira do programa), cadastrado no painel. */
+export interface BalaShot {
+  id: string;
+  quantity: number;
+  /** Local do tiro (ex.: "No ego"). */
+  location: string;
+  /** Tipo de arma (ex.: "Berinjela"). */
+  weapon: string;
+}
+
 export interface RankingResults {
   slug: RankingSlug;
   mode: RankingMode;
@@ -78,6 +88,9 @@ export interface RankingResults {
   votingPeriod?: VotingPeriod;
   /** Rankings estáticos: quando o programa atualizou a ordem pela última vez. */
   standingsUpdatedAt?: string | null;
+  /** Bala do Véio: tiros por participante (id → registros) e total de todos. */
+  shots?: Record<string, BalaShot[]>;
+  totalShots?: number;
 }
 
 export interface Charge {

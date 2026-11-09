@@ -3,8 +3,9 @@
 import { Share2 } from "lucide-react";
 import { motion } from "motion/react";
 import { pickPhrase, RANKINGS } from "@/papo-reto/config/rankings";
-import type { RankedEntry, RankingSlug } from "@/papo-reto/types";
+import type { BalaShot, RankedEntry, RankingSlug } from "@/papo-reto/types";
 import { CharacterAvatar } from "./CharacterAvatar";
+import { ShotsTable } from "./ShotsTable";
 import { RankingPosition, type Move } from "./RankingPosition";
 import { VoteButton, type VoteButtonState } from "./VoteButton";
 import { VoteProgress } from "./VoteProgress";
@@ -17,6 +18,7 @@ export function RankingCard({
   move,
   eager,
   index,
+  shots,
   onVote,
   onShare,
 }: {
@@ -28,6 +30,8 @@ export function RankingCard({
   eager?: boolean;
   /** Ordem do card na lista (varia as frases mesmo entre empatados). */
   index: number;
+  /** Bala do Véio: tiros do participante (tabela no box). */
+  shots?: BalaShot[];
   onVote: () => void;
   onShare: () => void;
 }) {
@@ -92,6 +96,8 @@ export function RankingCard({
           {/* Ranking estático: sem votos nem botão de voto, só compartilhar. */}
           {isStatic ? shareButton : null}
         </div>
+
+        {isStatic && shots ? <ShotsTable shots={shots} name={participant.name} /> : null}
 
         {isStatic ? null : (
           <>

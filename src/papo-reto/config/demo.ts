@@ -1,4 +1,4 @@
-import type { Participant, RankingSlug, RankingView } from "@/papo-reto/types";
+import type { BalaShot, Participant, RankingSlug, RankingView } from "@/papo-reto/types";
 
 /** Participantes do Papo Reto, na ordem administrativa. Também estão na carga inicial do banco. */
 export const PAPO_RETO_CAST: Participant[] = [
@@ -37,4 +37,19 @@ export const DEMO_SEED_VOTES: Record<RankingSlug, Record<RankingView, Record<str
 /** Ordem SIMULADA do ranking estático Bala do Véio (no ar, quem define é o programa pelo painel). */
 export const DEMO_STATIC_POSITIONS: Partial<Record<RankingSlug, Record<string, number>>> = {
   "bala-do-veio": { carabina: 1, mano: 2, benja: 3, gadu: 4, joneta: 5, kleber: 6 },
+};
+
+/** Tiros SIMULADOS do Bala do Véio (no ar, quem cadastra é o programa pelo painel). */
+const shot = (id: string, quantity: number, location: string, weapon: string): BalaShot => ({ id, quantity, location, weapon });
+export const DEMO_SHOTS: Record<string, BalaShot[]> = {
+  carabina: [
+    shot("c1", 12, "No ego", "Berinjela"),
+    shot("c2", 7, "Na moral", "Chinelo de dedo"),
+    shot("c3", 4, "No orgulho", "Corneta"),
+  ],
+  mano: [shot("m1", 9, "Na careca", "Berinjela"), shot("m2", 5, "Na paciência", "Bola murcha")],
+  benja: [shot("b1", 6, "No microfone", "Corneta"), shot("b2", 3, "Na gravata", "Chinelo de dedo")],
+  gadu: [shot("g1", 5, "Na tiara", "Estilingue de pipoca")],
+  joneta: [shot("j1", 2, "No fone de ouvido", "Bolinha de papel"), shot("j2", 1, "Na resenha", "Berinjela")],
+  kleber: [shot("k1", 1, "Na canela", "Chinelo de dedo")],
 };

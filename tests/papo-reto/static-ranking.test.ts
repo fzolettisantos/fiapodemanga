@@ -6,6 +6,7 @@ import { getRankingResults } from "@/papo-reto/lib/server/data";
 import { castVote } from "@/papo-reto/lib/server/vote";
 import type { RankingResults } from "@/papo-reto/types";
 import { participant } from "./helpers";
+import { shotsLabel, shotsTotal } from "@/papo-reto/components/ShotsTable";
 
 const ranked = (positions: Record<string, number>) =>
   rankStatic(Object.entries(positions).map(([slug, position], i) => ({ participant: participant(slug, i), position })));
@@ -21,6 +22,16 @@ describe("Bala do Véio é estático", () => {
 
   it("recusa votos no servidor", async () => {
     expect(await castVote({ ranking: "bala-do-veio", participantId: "benja", voterKey: "v", ipHash: "i" })).toBe("not_votable");
+  });
+
+  it("tiros: total de cada participante e total geral batem", async () => {
+    const [results] = await getRankingResults(["bala-do-veio"]);
+    const shots = results!.shots!;
+    const perPerson = Object.values(shots).map((list) => list.reduce((t, s) => t + s.quantity, 0));
+    expect(results!.totalShots).toBe(perPerson.reduce((a, b) => a + b, 0));
+    expect(shotsTotal(shots.carabina!)).toBe(23);
+    expect(shotsLabel(1)).toBe("1 tiro");
+    expect(shotsLabel(1234)).toBe("1.234 tiros");
   });
 
   it("modo demonstração devolve a ordem simulada, sem votos", async () => {

@@ -1,13 +1,16 @@
 import "server-only";
-import { DEMO_PARTICIPANTS, DEMO_STATIC_POSITIONS } from "@/papo-reto/config/demo";
+import { DEMO_PARTICIPANTS, DEMO_SHOTS, DEMO_STATIC_POSITIONS } from "@/papo-reto/config/demo";
 import { RANKINGS } from "@/papo-reto/config/rankings";
 import { getViewPeriod, getVotingPeriod, isPeriodKind } from "@/papo-reto/lib/period";
 import { rankEntries, rankStatic } from "@/papo-reto/lib/ranking";
-import type { AvatarPaths, Charge, Participant, PeriodKind, RankingResults, RankingSlug, RankingView, VotingPeriod } from "@/papo-reto/types";
+import type { BalaShot, AvatarPaths, Charge, Participant, PeriodKind, RankingResults, RankingSlug, RankingView, VotingPeriod } from "@/papo-reto/types";
 import { RANKING_SLUGS } from "@/papo-reto/types";
 import { demoMyVote, demoTotals } from "./demo-store";
 import { isSupabaseConfigured } from "./env";
 import { getServiceClient } from "./supabase";
+
+const sumShots = (shots: Record<string, BalaShot[]>) =>
+  Object.values(shots).reduce((total, list) => total + list.reduce((s, x) => s + x.quantity, 0), 0);
 
 /** Rankings estáticos não têm período de votação. */
 const STATIC_PERIOD: VotingPeriod = { kind: "all_time", key: "STATIC", label: "Ranking definido pelo programa" };
@@ -105,6 +108,8 @@ export async function getRankingResults(
           isDemo: true,
           updatedAt,
           standingsUpdatedAt: null,
+          shots: DEMO_SHOTS,
+          totalShots: sumShots(DEMO_SHOTS),
         } satisfies RankingResults;
       }
       const votingPeriod = getVotingPeriod("weekly", now, { weekStartsOn: config.weekStartsOn });
@@ -148,7 +153,21 @@ export async function getRankingResults(
           rows = data ?? [];
         }
         const positions = new Map(rows.map((r) => [r.participant_id, r.position]));
-        const latest = rows.map((r) => r.updated_at).sort().at(-1) ?? null;
+        const shots: Record<string, BalaShot[]> = {};
+        const stamps = rows.map((r) => r.updated_at);
+        if (config.id) {
+          const { data, error } = await sb
+            .from("static_shots")
+            .select("id, participant_id, quantity, location, weapon, updated_at")
+            .eq("ranking_id", config.id)
+            .order("created_at");
+          if (error) throw new Error(`Erro ao carregar os tiros: ${error.message}`);
+          for (const row of (data ?? []) as { id: string; participant_id: string; quantity: number; location: string; weapon: string; updated_at: string }[]) {
+            (shots[row.participant_id] ??= []).push({ id: row.id, quantity: row.quantity, location: row.location, weapon: row.weapon });
+            stamps.push(row.updated_at);
+          }
+        }
+        const latest = stamps.sort().at(-1) ?? null;
         return {
           slug: config.slug,
           mode: "static",
@@ -160,6 +179,8 @@ export async function getRankingResults(
           isDemo: false,
           updatedAt,
           standingsUpdatedAt: latest,
+          shots,
+          totalShots: sumShots(shots),
         } satisfies RankingResults;
       }
       const votingPeriod = getVotingPeriod("weekly", now, { weekStartsOn: config.weekStartsOn });

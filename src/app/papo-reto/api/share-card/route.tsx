@@ -94,7 +94,10 @@ export async function GET(request: NextRequest) {
         </div>
         <div style={{ display: "flex", fontSize: 44, color: "#C9CED8", marginTop: 4 }}>
           {results.mode === "static"
-            ? "Ranking definido pelo programa"
+            ? (() => {
+                const n = (results.shots?.[entry.participant.id] ?? []).reduce((t, s) => t + s.quantity, 0);
+                return `${formatNumber(n)} ${n === 1 ? "tiro" : "tiros"} do Véio`;
+              })()
             : `${formatNumber(entry.votes)} ${entry.votes === 1 ? "voto" : "votos"} · ${formatPercent(entry.percent)}`}
         </div>
         <div style={{ display: "flex", fontSize: 46, lineHeight: 1.2, marginTop: 36, color: "#FFD23F" }}>

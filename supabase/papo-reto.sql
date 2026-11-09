@@ -52,6 +52,19 @@ create table if not exists public.static_standings (
   primary key (ranking_id, participant_id)
 );
 
+-- Bala do Véio: "tiros" cadastrados pelo programa (quantidade, local do tiro e tipo de arma).
+create table if not exists public.static_shots (
+  id             uuid primary key default gen_random_uuid(),
+  ranking_id     uuid not null references public.rankings(id) on delete cascade,
+  participant_id uuid not null references public.participants(id) on delete cascade,
+  quantity       integer not null check (quantity between 1 and 9999),
+  location       text not null check (length(location) between 1 and 60),
+  weapon         text not null check (length(weapon) between 1 and 60),
+  created_at     timestamptz not null default now(),
+  updated_at     timestamptz not null default now()
+);
+create index if not exists static_shots_ranking_idx on public.static_shots (ranking_id, participant_id);
+
 create table if not exists public.votes (
   id             bigint generated always as identity primary key,
   ranking_id     uuid not null references public.rankings(id) on delete cascade,
@@ -186,6 +199,10 @@ alter table public.vote_totals  enable row level security;
 alter table public.charges      enable row level security;
 alter table public.static_standings enable row level security;
 
+alter table public.static_shots enable row level security;
+drop policy if exists "tiros do Véio são públicos" on public.static_shots;
+create policy "tiros do Véio são públicos" on public.static_shots for select to anon, authenticated using (true);
+
 drop policy if exists "ranking do programa é público" on public.static_standings;
 create policy "ranking do programa é público" on public.static_standings for select to anon, authenticated using (true);
 
@@ -203,7 +220,7 @@ create policy "charges publicadas são públicas" on public.charges for select t
 
 -- votes: sem nenhuma policy → anon/authenticated não leem nem escrevem.
 revoke all on public.votes from anon, authenticated;
-revoke insert, update, delete on public.participants, public.rankings, public.vote_totals, public.charges, public.static_standings from anon, authenticated;
+revoke insert, update, delete on public.participants, public.rankings, public.vote_totals, public.charges, public.static_standings, public.static_shots from anon, authenticated;
 
 -- ---------------------------------------------------------------------
 -- Realtime do placar

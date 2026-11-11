@@ -51,10 +51,13 @@ Prévia publicada em `/painel/propostas/nova` (montar a proposta) e `/proposta/d
 Regras e contrato: documento "Fiapo de Manga — Regras dos planos e minuta de contrato".
 Código: `src/lib/proposals/` (catálogo, valores, contrato e Termo) e `src/components/proposals/`.
 
+Feito: área admin em `/admin` (ver `docs/admin.md`) com login por link mágico, propostas salvas com código aleatório,
+aceite registrado (data, hora, IP, navegador, versão), clientes, cobranças, histórico e relatório com exportação CSV.
+
 Falta para usar com clientes reais:
-- Login no painel e banco de dados (Supabase) para salvar propostas, aceites e pagamentos; link com código aleatório.
+- Criar o projeto no Supabase e configurar as variáveis (o admin roda em modo demonstração até lá).
 - Mercado Pago: checkout (anual e mensal por Pix/boleto) e assinatura no cartão (mensal), com webhook de confirmação.
-- Registro do aceite (data, hora, IP, e-mail, versão) e envio da cópia do contrato por e-mail.
+- Envio da cópia do contrato por e-mail (o registro do aceite já está feito).
 - Régua de cobrança automática, suspensão com 15 dias e reativação após pagamento.
 - Dados da empresa no contrato e revisão jurídica.
 

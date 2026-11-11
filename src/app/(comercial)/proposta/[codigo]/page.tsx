@@ -5,6 +5,8 @@ import { contractPending, contractSections, plainRules, termRows } from "@/lib/p
 import { decodeProposal, demoProposal } from "@/lib/proposals/proposal";
 import { brl } from "@/lib/proposals/pricing";
 import { ProposalCheckout } from "@/components/proposals/ProposalCheckout";
+import { getRepo } from "@/lib/admin/repo";
+import { acceptProposal } from "@/app/(comercial)/admin/actions";
 
 type Props = {
   params: Promise<{ codigo: string }>;
@@ -19,24 +21,32 @@ export default async function ProposalPage({ params, searchParams }: Props) {
   const { codigo } = await params;
   const { p } = await searchParams;
 
-  // Prévia: só o código "demo" existe; a proposta vem no link ou usa o exemplo.
-  // Na versão final, o código será buscado no banco de dados.
-  if (codigo !== "demo") notFound();
-  const fromLink = decodeProposal(p);
-  const proposal = fromLink ?? demoProposal();
+  // "demo": prévia (a proposta vem no link ou usa o exemplo). Outros códigos: proposta salva no admin.
+  const preview = codigo === "demo";
+  const fromLink = preview ? decodeProposal(p) : null;
+  let proposal = fromLink ?? demoProposal();
+  let acceptedAt: string | null = null;
+  if (!preview) {
+    if (!/^[a-z0-9-]{4,40}$/.test(codigo)) notFound();
+    const repo = getRepo();
+    const record = await repo.getProposalByCode(codigo);
+    if (!record || record.status === "canceled") notFound();
+    proposal = record.data;
+    acceptedAt = record.acceptedAt ?? null;
+    if (record.status !== "accepted") await repo.markOpened(record);
+  }
   const type = getSiteType(proposal.siteTypeId)!;
   const plan = plans[type.plan];
   const expired = proposal.validUntil < new Date().toISOString().slice(0, 10);
 
   return (
     <div className="container-site py-12 md:py-20">
-      <p
-        role="note"
-        className="mb-10 rounded-sm border border-line-strong px-4 py-3 text-sm text-muted"
-      >
-        <strong className="text-heading">Prévia.</strong> Esta página mostra como a proposta aparece para o cliente.
-        Nenhum pagamento é feito por aqui ainda{fromLink ? "" : "; os dados abaixo são de exemplo"}.
-      </p>
+      {preview ? (
+        <p role="note" className="mb-10 rounded-sm border border-line-strong px-4 py-3 text-sm text-muted">
+          <strong className="text-heading">Prévia.</strong> Esta página mostra como a proposta aparece para o cliente.
+          Nada é registrado aqui{fromLink ? "" : "; os dados abaixo são de exemplo"}.
+        </p>
+      ) : null}
 
       <header className="max-w-3xl">
         <p className="eyebrow">Proposta · válida até {dateBR(proposal.validUntil)}</p>
@@ -101,6 +111,9 @@ export default async function ProposalPage({ params, searchParams }: Props) {
             terms={termRows(proposal)}
             contract={contractSections(proposal)}
             contractPending={contractPending}
+            code={preview ? undefined : codigo}
+            acceptedAt={acceptedAt}
+            onAccept={preview ? undefined : acceptProposal}
           />
         </div>
       </div>

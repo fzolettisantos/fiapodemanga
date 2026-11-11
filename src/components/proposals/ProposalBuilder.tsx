@@ -25,10 +25,19 @@ function toggle<T>(list: T[], item: T): T[] {
   return list.includes(item) ? list.filter((x) => x !== item) : [...list, item];
 }
 
-export function ProposalBuilder() {
+type SaveResult = { ok: true; id: string; code: string } | { ok: false; message: string };
+
+/**
+ * Montagem da proposta. Com `onSave` (área admin), a proposta é salva e ganha um link com código;
+ * sem ele, funciona como prévia (a proposta vai dentro do link).
+ */
+export function ProposalBuilder({ onSave }: { onSave?: (json: string) => Promise<SaveResult> }) {
   const [p, setP] = useState<Proposal>(() => proposalForType(getSiteType(DEFAULT_TYPE_ID)!));
   const [specialText, setSpecialText] = useState("");
   const [copied, setCopied] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState<{ id: string; code: string } | null>(null);
+  const [saveError, setSaveError] = useState("");
 
   const type = getSiteType(p.siteTypeId)!;
   const plan = plans[type.plan];
@@ -38,12 +47,14 @@ export function ProposalBuilder() {
   );
   const warnings = proposalWarnings(proposal);
   if (!proposal.client.name) warnings.unshift("Preencha o nome do cliente.");
-  const link = `/proposta/demo?p=${encodeProposal(proposal)}`;
+  const previewLink = `/proposta/demo?p=${encodeProposal(proposal)}`;
+  const link = saved ? `/proposta/${saved.code}` : previewLink;
   const savings = annualSavings(proposal);
   const isReference = p.monthly === type.monthly && p.annual === type.annual && p.setup === type.setup;
 
   const set = <K extends keyof Proposal>(key: K, value: Proposal[K]) => {
     setCopied(false);
+    setSaved(null);
     setP((prev) => ({ ...prev, [key]: value }));
   };
   const setClient = (key: keyof Proposal["client"], value: string) =>
@@ -52,13 +63,30 @@ export function ProposalBuilder() {
 
   function chooseType(id: string) {
     setCopied(false);
+    setSaved(null);
     setP((prev) => proposalForType(getSiteType(id)!, prev));
   }
 
   function setMonthly(value: number) {
     setCopied(false);
+    setSaved(null);
     // Enquanto o anual seguir a regra 12 por 10, ele acompanha o mensal.
     setP((prev) => ({ ...prev, monthly: value, annual: prev.annual === prev.monthly * 10 ? value * 10 : prev.annual }));
+  }
+
+  async function save() {
+    if (!onSave) return;
+    setSaving(true);
+    setSaveError("");
+    try {
+      const res = await onSave(JSON.stringify(proposal));
+      if (res.ok) setSaved({ id: res.id, code: res.code });
+      else setSaveError(res.message);
+    } catch {
+      setSaveError("Não foi possível salvar agora. Tente de novo.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   async function copy() {
@@ -220,6 +248,7 @@ export function ProposalBuilder() {
                 value={specialText}
                 onChange={(e) => {
                   setCopied(false);
+                  setSaved(null);
                   setSpecialText(e.target.value);
                 }}
               />
@@ -278,23 +307,52 @@ export function ProposalBuilder() {
 
           <div className="space-y-3 border-t border-line pt-6">
             <p className={groupTitle}>Link da proposta</p>
-            <div className="flex flex-wrap gap-3">
-              <Button type="button" onClick={copy}>
-                <span className="inline-flex items-center gap-2">
-                  <Copy aria-hidden="true" className="size-4" /> {copied ? "Link copiado" : "Copiar link"}
-                </span>
-              </Button>
-              <a
-                href={link}
-                target="_blank"
-                rel="noopener"
-                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line-strong px-5 text-heading transition-colors hover:border-accent hover:text-accent"
-              >
-                <ExternalLink aria-hidden="true" className="size-4" /> Abrir como cliente
-              </a>
-            </div>
+            {onSave && !saved ? (
+              <>
+                <Button type="button" onClick={save} disabled={saving || !proposal.client.name}>
+                  {saving ? "Salvando…" : "Salvar e gerar link"}
+                </Button>
+                <a href={previewLink} target="_blank" rel="noopener" className="link-underline block text-sm text-heading">
+                  Ver prévia antes de salvar
+                </a>
+                {saveError ? (
+                  <p role="alert" className="text-sm text-danger">
+                    {saveError}
+                  </p>
+                ) : null}
+              </>
+            ) : (
+              <>
+                <div className="flex flex-wrap gap-3">
+                  <Button type="button" onClick={copy}>
+                    <span className="inline-flex items-center gap-2">
+                      <Copy aria-hidden="true" className="size-4" /> {copied ? "Link copiado" : "Copiar link"}
+                    </span>
+                  </Button>
+                  <a
+                    href={link}
+                    target="_blank"
+                    rel="noopener"
+                    className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line-strong px-5 text-heading transition-colors hover:border-accent hover:text-accent"
+                  >
+                    <ExternalLink aria-hidden="true" className="size-4" /> Abrir como cliente
+                  </a>
+                </div>
+                {saved ? (
+                  <a href={`/admin/propostas/${saved.id}`} className="link-underline block text-sm text-heading">
+                    Proposta salva. Acompanhar no admin
+                  </a>
+                ) : null}
+              </>
+            )}
             <p className="text-sm text-muted" aria-live="polite">
-              {copied ? "Pronto para enviar pelo WhatsApp." : "Prévia: a proposta vai dentro do link e nada é salvo."}
+              {copied
+                ? "Pronto para enviar pelo WhatsApp."
+                : saved
+                  ? "Salva. Qualquer mudança aqui cria uma nova proposta ao salvar de novo."
+                  : onSave
+                    ? "Os valores e condições ficam gravados como estão ao salvar."
+                    : "Prévia: a proposta vai dentro do link e nada é salvo."}
             </p>
           </div>
         </div>

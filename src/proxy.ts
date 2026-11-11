@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { defaultLocale, isLocale } from "@/i18n/config";
+import { updateAdminSession } from "@/lib/admin/session-proxy";
 
 /**
  * Roteamento de idiomas.
@@ -9,11 +10,12 @@ import { defaultLocale, isLocale } from "@/i18n/config";
  * Não há redirecionamento automático por Accept-Language, para não atrapalhar buscadores;
  * a pessoa escolhe o idioma no seletor.
  */
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const first = pathname.split("/")[1] ?? "";
 
-  // Área comercial (propostas e painel): só em português, fora do roteamento de idiomas.
+  // Área comercial (propostas e admin): só em português, fora do roteamento de idiomas.
+  if (first === "admin") return updateAdminSession(request);
   if (first === "proposta" || first === "painel") return NextResponse.next();
 
   if (first === defaultLocale) {

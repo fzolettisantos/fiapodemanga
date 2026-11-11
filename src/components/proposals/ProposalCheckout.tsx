@@ -23,22 +23,28 @@ type Props = {
   terms: { label: string; value: string }[];
   contract: ContractSection[];
   contractPending: boolean;
+  /** Proposta salva (sem código = prévia, nada é registrado) */
+  code?: string;
+  acceptedAt?: string | null;
+  onAccept?: (code: string, period: string, method: string, accepted: boolean) => Promise<{ ok: true; acceptedAt: string } | { ok: false; message: string }>;
 };
 
 const optionCard =
   "relative flex cursor-pointer flex-col gap-1 rounded-sm border border-line-strong p-5 transition-colors hover:border-accent has-[:checked]:border-accent has-[:checked]:bg-surface has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--color-focus)]";
 
-export function ProposalCheckout({ proposal, expired, rules, terms, contract, contractPending }: Props) {
+export function ProposalCheckout({ proposal, expired, rules, terms, contract, contractPending, code, acceptedAt, onAccept }: Props) {
   const [period, setPeriod] = useState<Period>(proposal.periods[0]!);
   const [method, setMethod] = useState<Method>(proposal.methods[0]!);
   const [accepted, setAccepted] = useState(false);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
+  const [sending, setSending] = useState(false);
+  const [doneAt, setDoneAt] = useState<string | null>(acceptedAt ?? null);
   const errorId = useId();
   const savings = annualSavings(proposal);
   const showSavings = savings.amount > 0 && proposal.periods.includes("monthly");
 
-  function submit(event: React.FormEvent<HTMLFormElement>) {
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus("");
     if (!accepted) {
@@ -46,8 +52,34 @@ export function ProposalCheckout({ proposal, expired, rules, terms, contract, co
       return;
     }
     setError("");
-    setStatus(
-      `Prévia: aqui você seria levado ao Mercado Pago para pagar — ${paymentDescription(proposal, period, method)} O pagamento ainda não está ligado.`,
+    if (!code || !onAccept) {
+      setStatus(`Prévia: nada foi registrado. Na proposta real, o aceite fica gravado — ${paymentDescription(proposal, period, method)}`);
+      return;
+    }
+    setSending(true);
+    try {
+      const res = await onAccept(code, period, method, accepted);
+      if (res.ok) setDoneAt(res.acceptedAt);
+      else setStatus(res.message);
+    } catch {
+      setStatus("Não foi possível registrar agora. Tente de novo em instantes.");
+    } finally {
+      setSending(false);
+    }
+  }
+
+  if (doneAt) {
+    const when = new Date(doneAt).toLocaleString("pt-BR", { dateStyle: "long", timeStyle: "short", timeZone: "America/Sao_Paulo" });
+    return (
+      <section aria-labelledby="aceito" className="rounded-sm border-2 border-accent p-8">
+        <p className="eyebrow">Tudo certo</p>
+        <h2 id="aceito" className="type-heading mt-5" tabIndex={-1}>
+          Contrato aceito em {when}.
+        </h2>
+        <p className="type-lead mt-6 text-muted">
+          A Fiapo de Manga já recebeu o seu aceite. Em seguida você recebe o link de pagamento e a cópia do contrato.
+        </p>
+      </section>
     );
   }
 
@@ -189,8 +221,8 @@ export function ProposalCheckout({ proposal, expired, rules, terms, contract, co
             {error}
           </p>
         ) : null}
-        <Button type="submit" size="lg" arrow className="mt-6 w-full sm:w-auto" disabled={expired}>
-          Ir para o pagamento
+        <Button type="submit" size="lg" arrow className="mt-6 w-full sm:w-auto" disabled={expired || sending}>
+          {sending ? "Registrando…" : code ? "Aceitar e continuar" : "Ir para o pagamento"}
         </Button>
         {expired ? <p className="mt-3 text-sm text-danger">Esta proposta expirou. Peça uma nova à Fiapo de Manga.</p> : null}
         <p aria-live="polite" className="mt-4 text-sm text-muted">

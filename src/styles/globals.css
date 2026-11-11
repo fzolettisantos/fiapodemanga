@@ -11,7 +11,7 @@
 ------------------------------------------------------------------- */
 :root {
   /* Paleta de marca */
-  --brand-graphite: #3f3f3f;
+  --brand-graphite: #191919;
   --brand-green: #ccff7b;
   --brand-yellow: #fff04a;
   --brand-ink: #222222;
@@ -47,7 +47,7 @@
 
 :root[data-theme="dark"] {
   --color-bg: var(--brand-graphite);
-  --color-surface: #383838;
+  --color-surface: #242424;
   --color-heading: #cfcfcf;
   --color-text: #ffffff;
   --color-text-muted: #dcdcdc;
@@ -1426,7 +1426,7 @@ h3.eyebrow {
 =================================================================== */
 .hero {
   --wf-line: rgb(255 255 255 / 0.2);
-  --wf-fill: rgb(63 63 63 / 0.55);
+  --wf-fill: rgb(42 42 42 / 0.6);
   --wf-accent: rgb(204 255 123 / 0.22);
 }
 :root:not([data-theme="dark"]) .hero {
@@ -1525,7 +1525,7 @@ h3.eyebrow {
 }
 .hero-bubble-next:hover {
   rotate: 180deg;
-  background: #3f3f3f;
+  background: #2b2b2b;
 }
 .hero-sparkle path {
   fill: var(--brand-lime);

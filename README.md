@@ -104,7 +104,7 @@ vem das classes `type-display`, `type-title`, `type-heading`, `type-subheading`,
 
 | Token           | Dark      | Light     |
 | --------------- | --------- | --------- |
-| Fundo           | `#3F3F3F` | `#F7F7F3` |
+| Fundo           | `#191919` | `#F7F7F3` |
 | Superfície      | `#383838` | `#FFFFFF` |
 | Títulos         | `#CFCFCF` | `#252525` |
 | Texto           | `#FFFFFF` | `#252525` |

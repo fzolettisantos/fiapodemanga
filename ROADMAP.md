@@ -44,3 +44,16 @@ Próximas evoluções planejadas. Itens que dependem de informações externas e
   WAF/Cloudflare Turnstile, quando o site rodar em várias instâncias.
 - Página de categoria em `/insights/categoria/[slug]`, quando houver artigos suficientes.
 - Medição real de Core Web Vitals após o deploy (Vercel Speed Insights ou Search Console).
+
+## Propostas e pagamento recorrente (em andamento)
+
+Prévia publicada em `/painel/propostas/nova` (montar a proposta) e `/proposta/demo` (página do cliente).
+Regras e contrato: documento "Fiapo de Manga — Regras dos planos e minuta de contrato".
+Código: `src/lib/proposals/` (catálogo, valores, contrato e Termo) e `src/components/proposals/`.
+
+Falta para usar com clientes reais:
+- Login no painel e banco de dados (Supabase) para salvar propostas, aceites e pagamentos; link com código aleatório.
+- Mercado Pago: checkout (anual e mensal por Pix/boleto) e assinatura no cartão (mensal), com webhook de confirmação.
+- Registro do aceite (data, hora, IP, e-mail, versão) e envio da cópia do contrato por e-mail.
+- Régua de cobrança automática, suspensão com 15 dias e reativação após pagamento.
+- Dados da empresa no contrato e revisão jurídica.

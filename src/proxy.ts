@@ -13,6 +13,9 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const first = pathname.split("/")[1] ?? "";
 
+  // Área comercial (propostas e painel): só em português, fora do roteamento de idiomas.
+  if (first === "proposta" || first === "painel") return NextResponse.next();
+
   if (first === defaultLocale) {
     const url = request.nextUrl.clone();
     url.pathname = pathname.slice(defaultLocale.length + 1) || "/";

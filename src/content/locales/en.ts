@@ -171,6 +171,12 @@ export const en: SiteContent = {
     mascot: {
       label: "Luli, Fiapo de Manga’s mascot",
       next: "Another line",
+      scene: [
+        { line1: "Leave it to me.", line2: "Hard hat on." },
+        { line1: "Building your site…", line2: "Piece by piece." },
+        { line1: "It’s live!", line2: "Ready to grow?" },
+      ],
+      live: "Live",
       phrases: [
         { line1: "A good question?", line2: "I’ll sniff it out." },
         { line1: "Complex problem?", line2: "Let’s unpack it." },

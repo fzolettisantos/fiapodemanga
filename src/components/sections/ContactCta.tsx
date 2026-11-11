@@ -37,6 +37,7 @@ export async function ContactCta({ ctaHref }: ContactCtaProps = {}) {
           </div>
           <ConversationBadge
             src="/brand/vamos-conversar-sentada.svg"
+            hat
             label={t.ui.badgeAria}
             href={href("/contato")}
             className="w-full max-w-[16rem] sm:max-w-[19rem] lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:-mt-16 lg:max-w-[22rem]" />

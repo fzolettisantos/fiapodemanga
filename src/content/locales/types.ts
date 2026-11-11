@@ -152,6 +152,10 @@ export type SiteContent = {
       label: string;
       next: string;
       phrases: { line1: string; line2: string }[];
+      /** Falas da cena "Luli monta o site" (ao rolar): começo, montagem e site no ar */
+      scene: { line1: string; line2: string }[];
+      /** Selo do site pronto */
+      live: string;
     };
     notFound: { eyebrow: string; title: string; description: string; home: string; services: string };
   };

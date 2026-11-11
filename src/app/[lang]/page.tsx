@@ -46,9 +46,11 @@ export default async function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section aria-labelledby="hero-title" className="hero relative isolate overflow-hidden">
+      <section aria-labelledby="hero-title" className="hero hero--scene relative isolate">
+        {/* No computador o hero fica fixo por um trecho da rolagem enquanto a Luli monta o site */}
+        <div className="hero-stage relative isolate overflow-hidden">
         <HeroBackdrop />
-        <div className="container-site grid items-center gap-12 pt-16 pb-20 md:pt-24 md:pb-28 lg:grid-cols-12 lg:gap-8">
+        <div className="container-site grid w-full items-center gap-12 pt-16 pb-20 md:pt-24 md:pb-28 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-7">
             <p className="eyebrow">{c.hero.eyebrow}</p>
             <WordReveal
@@ -74,8 +76,15 @@ export default async function HomePage() {
             </div>
           </div>
           <div className="hero-mascot-col lg:col-span-5">
-            <HeroMascot label={t.ui.mascot.label} next={t.ui.mascot.next} phrases={t.ui.mascot.phrases} />
+            <HeroMascot
+              label={t.ui.mascot.label}
+              next={t.ui.mascot.next}
+              phrases={t.ui.mascot.phrases}
+              scene={t.ui.mascot.scene}
+              live={t.ui.mascot.live}
+            />
           </div>
+        </div>
         </div>
       </section>
 

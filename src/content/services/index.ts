@@ -159,6 +159,7 @@ export const services: Service[] = [
       "Pronto para o Google",
       "Rápido no celular",
       "Renovação de sites antigos",
+      "Textos com apoio de IA",
     ],
     cta: { label: "Vamos criar seu site", href: "/contato?tipo=site" },
     page: {
@@ -192,7 +193,7 @@ export const services: Service[] = [
     headline: "Quando o seu negócio precisa de algo sob medida.",
     description: [
       "Criamos aplicativos, sistemas e plataformas para quem precisa ir além do site: área do cliente, agendamentos, painéis e ferramentas internas.",
-      "Começamos entendendo como o seu negócio funciona, para entregar algo simples de usar desde o primeiro dia.",
+      "Começamos entendendo como o seu negócio funciona, para entregar algo simples de usar desde o primeiro dia, com inteligência artificial onde ela poupa trabalho.",
     ],
     skills: [
       "Aplicativos",
@@ -203,6 +204,7 @@ export const services: Service[] = [
       "Automação de processos",
       "Primeira versão (MVP)",
       "Modernização de sistemas",
+      "Automação com IA",
     ],
     cta: { label: "Conte sua ideia", href: "/contato?tipo=sistema" },
     page: {
@@ -247,6 +249,7 @@ export const services: Service[] = [
       "Painel de pedidos",
       "Produtos digitais",
       "Checkout simples",
+      "Descrições de produtos com IA",
     ],
     cta: { label: "Quero vender on-line", href: "/contato?tipo=ecommerce" },
     page: {
@@ -276,46 +279,46 @@ export const services: Service[] = [
   {
     number: "07",
     slug: "design-tecnologia-ia",
-    name: "Design, Tecnologia e IA",
-    headline: "A tecnologia acelera. O entendimento faz a diferença.",
+    name: "Inteligência Artificial",
+    headline: "IA trabalhando pelo seu negócio, todos os dias.",
     description: [
-      "Incorporamos inteligência artificial ao processo de criação para explorar alternativas, acelerar protótipos e apoiar o desenvolvimento de produtos digitais.",
-      "Utilizamos a tecnologia para reduzir atividades operacionais e abrir mais espaço para o trabalho estratégico.",
-      "Na criação de sites, aplicativos e plataformas, a IA pode ajudar a encurtar ciclos de desenvolvimento, permitindo testar e aprimorar soluções com mais agilidade.",
-      "As decisões continuam fundamentadas em pesquisa, validação e experiência profissional.",
+      "Colocamos inteligência artificial onde ela faz diferença de verdade: no atendimento, no conteúdo e nas tarefas que tomam o seu tempo.",
+      "Um assistente que responde clientes no site a qualquer hora, descrições de produtos escritas em minutos, automações que tiram o trabalho repetitivo das suas mãos.",
+      "Tudo configurado para o seu negócio, com revisão de gente de verdade antes de ir ao ar.",
     ],
     skills: [
-      "IA aplicada ao Design",
-      "Prototipação Acelerada",
-      "Desenvolvimento Assistido",
-      "Automação",
-      "Análise de Informações",
-      "Exploração de Interfaces",
-      "Apoio a Testes",
-      "Otimização",
+      "Assistente virtual no site",
+      "Atendimento automático",
+      "Descrições de produtos com IA",
+      "Textos para o Google com IA",
+      "Automação de tarefas",
+      "Respostas a dúvidas frequentes",
+      "Resumos e relatórios automáticos",
+      "IA em sistemas e aplicativos",
     ],
+    cta: { label: "Quero IA no meu negócio", href: "/contato?tipo=ia" },
     page: {
-      h1: "Inteligência artificial aplicada ao design e ao desenvolvimento digital",
+      h1: "Inteligência artificial para pequenos e médios negócios",
       whenItHelps: [
-        "Quando é preciso testar várias alternativas de interface em pouco tempo.",
-        "Quando um volume grande de informações de pesquisa precisa ser organizado.",
-        "Quando tarefas repetitivas consomem o tempo que deveria ir para a estratégia.",
-        "Quando um site ou produto precisa sair do protótipo com mais agilidade.",
+        "Quando o WhatsApp não para e as mesmas perguntas chegam todos os dias.",
+        "Quando cadastrar produtos e escrever descrições toma horas.",
+        "Quando tarefas repetitivas ocupam o tempo que deveria ir para vender.",
+        "Quando você quer usar IA no negócio, mas não sabe por onde começar.",
       ],
       deliverables: [
-        "Protótipos acelerados com apoio de IA e revisão profissional",
-        "Exploração de alternativas de interface",
-        "Apoio à organização e análise de informações",
-        "Automação de etapas operacionais do processo",
-        "Desenvolvimento assistido com revisão técnica",
+        "Assistente virtual treinado com as informações do seu negócio",
+        "Conteúdo com apoio de IA, sempre revisado antes de publicar",
+        "Automações para tarefas repetitivas",
+        "Integração da IA ao seu site, loja ou sistema",
+        "Acompanhamento e ajustes depois que tudo estiver no ar",
       ],
-      related: ["criacao-de-sites", "product-design-ux-ui", "pesquisa-ux-discovery"],
+      related: ["criacao-de-sites", "ecommerce", "aplicativos-sistemas-plataformas"],
     },
     seo: {
-      title: "Inteligência Artificial aplicada ao Design",
+      title: "Inteligência Artificial para Negócios: Assistentes e Automação",
       description:
-        "IA aplicada ao design e ao desenvolvimento: prototipação acelerada, exploração de interfaces, automação e desenvolvimento assistido, com decisões orientadas por pesquisa.",
-      keywords: ["IA aplicada ao design", "inteligência artificial", "prototipação acelerada", "desenvolvimento assistido por IA"],
+        "Inteligência artificial para o seu negócio: assistente virtual no site, atendimento automático, descrições de produtos e automação de tarefas, com revisão humana.",
+      keywords: ["inteligência artificial para empresas", "chatbot para site", "assistente virtual", "automação com IA"],
     },
   },
 ];
@@ -358,7 +361,7 @@ export const practices = [
  * Especialidades listadas em português (posicionamento: sites e lojas virtuais).
  * As demais continuam com página própria e em inglês/espanhol, mas não aparecem nas listas em português.
  */
-export const ptListedServices = ["criacao-de-sites", "ecommerce", "aplicativos-sistemas-plataformas"] as const;
+export const ptListedServices = ["criacao-de-sites", "ecommerce", "design-tecnologia-ia", "aplicativos-sistemas-plataformas"] as const;
 
 export function listedServices<T extends { slug: string; number: string }>(locale: string, all: readonly T[]): T[] {
   if (locale !== "pt") return [...all];

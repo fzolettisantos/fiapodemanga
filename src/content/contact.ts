@@ -2,12 +2,12 @@
 export const projectTypes = [
   { value: "site", label: "Site ou Landing Page" },
   { value: "ecommerce", label: "E-commerce" },
+  { value: "ia", label: "Inteligência Artificial" },
   { value: "aplicativo", label: "Aplicativo" },
   { value: "sistema", label: "Sistema ou Plataforma" },
   { value: "product-design", label: "Product Design e UX/UI" },
   { value: "pesquisa", label: "Pesquisa e Discovery" },
   { value: "estrategia", label: "Estratégia de Produto" },
-  { value: "ia", label: "Inteligência Artificial" },
   { value: "outro", label: "Outro" },
 ] as const;
 

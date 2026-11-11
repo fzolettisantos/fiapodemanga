@@ -14,7 +14,7 @@ export const pt: SiteContent = {
   site: {
     name: "Fiapo de Manga",
     tagline: "Boas experiências começam com boas perguntas.",
-    centralMessage: "Sites, lojas virtuais e sistemas para o seu negócio crescer no digital.",
+    centralMessage: "Sites, lojas virtuais e IA para o seu negócio crescer no digital.",
     description:
       "Estúdio de design e tecnologia que cria sites, lojas virtuais e produtos digitais com cuidado de verdade e preço justo.",
     ogAlt: "Fiapo de Manga — Boas experiências começam com boas perguntas.",
@@ -43,12 +43,12 @@ export const pt: SiteContent = {
     home: {
       title: "Fiapo de Manga — Criação de sites e lojas virtuais com design de verdade",
       description:
-        "Criamos sites, lojas virtuais e landing pages modernos, rápidos e prontos para o celular, com o cuidado de quem faz design de produto e um preço que cabe no mês.",
+        "Criamos sites, lojas virtuais e landing pages modernos e prontos para o celular, com inteligência artificial no processo e um preço que cabe no mês.",
     },
     services: {
-      title: "O que fazemos — Sites, lojas virtuais e sistemas",
+      title: "O que fazemos — Sites, lojas virtuais, sistemas e IA",
       description:
-        "Criação de sites, landing pages, lojas virtuais, aplicativos e sistemas sob medida, modernos e prontos para o celular, com domínio, hospedagem e ajustes inclusos.",
+        "Criação de sites, landing pages, lojas virtuais, aplicativos e sistemas sob medida, e inteligência artificial para o seu negócio: assistentes virtuais e automação.",
     },
     about: {
       title: "Sobre nós — Estúdio de sites, lojas virtuais e sistemas",
@@ -117,7 +117,7 @@ export const pt: SiteContent = {
       next: "Próxima: {name}",
       ctaDefault: "Vamos conversar",
     },
-    home: { aiApplications: "Aplicações", aiLink: "Design, Tecnologia e IA" },
+    home: { aiApplications: "Aplicações", aiLink: "Veja o que a IA pode fazer pelo seu negócio" },
     about: { principles: "O que a gente valoriza", guides: "Por que a Fiapo" },
     projects: {
       selected: "Projetos selecionados",
@@ -178,6 +178,7 @@ export const pt: SiteContent = {
         { line1: "Site novo?", line2: "Eu farejo o caminho." },
         { line1: "Loja virtual?", line2: "Bora vender." },
         { line1: "No celular?", line2: "Fica lindo." },
+        { line1: "Inteligência artificial?", line2: "Tá no nosso faro." },
         { line1: "O café tá pronto.", line2: "Vamos conversar?" },
       ],
     },
@@ -244,7 +245,7 @@ export const pt: SiteContent = {
     aplicativo: "Aplicativo",
     sistema: "Sistema ou Plataforma",
     ecommerce: "Loja virtual (e-commerce)",
-    ia: "Inteligência Artificial",
+    ia: "Inteligência artificial para o meu negócio",
     outro: "Outro",
   },
   articleCategories: {

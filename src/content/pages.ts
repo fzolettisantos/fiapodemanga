@@ -3,7 +3,7 @@
 export const servicesPageContent = {
   intro: {
     eyebrow: "O que fazemos",
-    title: "Sites, lojas virtuais e sistemas que colocam o seu negócio para funcionar no digital.",
+    title: "Sites, lojas virtuais, sistemas e IA que colocam o seu negócio para funcionar no digital.",
     paragraphs: [
       "Do site da sua empresa à loja virtual completa, a gente cria, publica e cuida de tudo para você.",
       "Antes da primeira tela, entendemos quem é o seu cliente e o que ele procura. É por isso que os nossos sites não são só bonitos: eles funcionam.",
@@ -14,7 +14,7 @@ export const servicesPageContent = {
     eyebrow: "Tecnologia a seu favor",
     title: "Mais rápido, sem perder a qualidade.",
     paragraphs: [
-      "Usamos inteligência artificial e ferramentas atuais para criar e publicar o seu site em menos tempo.",
+      "Usamos inteligência artificial e ferramentas atuais para criar e publicar o seu site em menos tempo, e levamos a IA para dentro do seu negócio quando ela ajuda.",
       "O tempo que a tecnologia economiza vai para o que importa: deixar tudo claro e fácil para o seu cliente.",
     ],
     highlight: "Feito rápido, feito bem.",
@@ -27,7 +27,7 @@ export const aboutPageContent = {
     title: "A gente coloca negócios no digital, do jeito certo.",
     paragraphs: [
       "A Fiapo de Manga é um estúdio de design e tecnologia que cria sites, lojas virtuais e sistemas para empresas de todos os tamanhos.",
-      "Juntamos a experiência de quem já criou plataformas e aplicativos com ferramentas atuais, para entregar rápido e com preço justo.",
+      "Juntamos a experiência de quem já criou plataformas e aplicativos com inteligência artificial e ferramentas atuais, para entregar rápido e com preço justo.",
     ],
   },
   vision: {
@@ -51,7 +51,7 @@ export const aboutPageContent = {
     "Domínio, hospedagem e segurança inclusos.",
     "Sem comissão sobre as suas vendas.",
     "Ajustes todo mês, sem precisar pedir orçamento.",
-    "Inteligência artificial para entregar mais rápido.",
+    "Inteligência artificial para entregar mais rápido e trabalhar por você.",
     "Gente de verdade no atendimento.",
   ],
 } as const;

@@ -1,10 +1,10 @@
 /** Copy da Home em português (reposicionamento: sites e lojas virtuais, 11/2026). */
 export const homeContent = {
   hero: {
-    eyebrow: "Fiapo de Manga / Sites e lojas virtuais",
+    eyebrow: "Fiapo de Manga / Sites, lojas virtuais e IA",
     title: "Seu negócio com um site de verdade, por um preço que cabe no mês.",
     description:
-      "Criamos sites, lojas virtuais e landing pages modernos, rápidos e prontos para o celular. Com o cuidado de quem faz design de produto, sem o peso de um projeto de agência.",
+      "Criamos sites, lojas virtuais e landing pages modernos, rápidos e prontos para o celular. Com inteligência artificial no processo e o cuidado de quem faz design de produto, sem o peso de um projeto de agência.",
     primaryCta: { label: "Vamos conversar", href: "/contato" },
     secondaryCta: { label: "O que fazemos", href: "/servicos" },
   },
@@ -45,20 +45,21 @@ export const homeContent = {
     highlight: "Você cuida do negócio. A gente cuida do site.",
   },
   ai: {
-    eyebrow: "Design e Inteligência Artificial",
-    title: "Tecnologia de ponta para entregar mais rápido.",
+    eyebrow: "Inteligência Artificial",
+    title: "IA para criar mais rápido. IA para o seu negócio vender mais.",
     paragraphs: [
-      "Usamos inteligência artificial no dia a dia para acelerar a criação, explorar alternativas e automatizar o que é repetitivo.",
-      "É assim que um site com qualidade de estúdio chega com um preço justo.",
-      "A IA acelera o trabalho. As decisões continuam com pessoas.",
+      "Usamos inteligência artificial no dia a dia para criar e publicar o seu site em menos tempo. É assim que um site com qualidade de estúdio chega com um preço justo.",
+      "E a IA também pode trabalhar para você: um assistente que responde clientes no site a qualquer hora, descrições de produtos prontas em minutos e automações que tiram o trabalho repetitivo das suas mãos.",
+      "A IA acelera. As decisões continuam com pessoas.",
     ],
     highlight: "A tecnologia acelera o processo. O design dá direção.",
     applications: [
-      "Desenvolvimento de sites assistido por IA.",
-      "Criação mais rápida de páginas.",
-      "Apoio na escrita dos textos do site.",
+      "Assistente virtual que responde clientes no site.",
+      "Descrições de produtos escritas com IA.",
+      "Textos do site com apoio de IA.",
       "Automação de tarefas repetitivas.",
-      "Testes e revisões técnicas.",
+      "Sites criados e publicados mais rápido.",
+      "Testes e revisões técnicas automatizados.",
     ],
   },
   cases: {

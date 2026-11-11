@@ -66,8 +66,8 @@ export const projectsPageContent = {
 } as const;
 
 export const insightsPageContent = {
-  eyebrow: "Insights",
-  title: "Ideias, pesquisas e aprendizados sobre experiências digitais.",
+  eyebrow: "Blog",
+  title: "Guias simples para o seu negócio aparecer e vender mais na internet.",
 } as const;
 
 export const contactPageContent = {

@@ -2,11 +2,13 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { requireAdmin, supabaseAuthClient } from "@/lib/admin/auth";
 import { isAdminEmail, isLiveConfigured } from "@/lib/admin/env";
 import { getRepo } from "@/lib/admin/repo";
-import type { ClientStatus, PaymentStatus } from "@/lib/admin/types";
+import type { ArticleInput, ClientStatus, PaymentStatus } from "@/lib/admin/types";
+import { articleCategorySlugs, isArticleCategory } from "@/lib/articles/categories";
+import { slugify } from "@/lib/articles/markdown";
 import { rateLimit } from "@/lib/contact/rate-limit";
 import { parseProposal, type Method } from "@/lib/proposals/proposal";
 
@@ -135,4 +137,96 @@ export async function setClientStatus(clientId: string, form: FormData) {
   if (!["pending", "active", "late", "suspended", "canceled"].includes(status)) return;
   await getRepo().updateClient(clientId, { status }, admin.email);
   revalidatePath(`/admin/clientes/${clientId}`);
+}
+
+/* ------------------------------- Artigos ------------------------------ */
+
+export type SaveArticleResult = { ok: true; id: string; slug: string; status: "draft" | "published" } | { ok: false; message: string };
+
+const clean = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
+
+function refreshArticlePages(slug?: string) {
+  revalidateTag("articles", "max");
+  revalidatePath("/insights");
+  revalidatePath("/insights/categoria/[slug]", "page");
+  revalidatePath("/sitemap.xml");
+  if (slug) revalidatePath(`/insights/${slug}`);
+}
+
+export async function saveArticle(json: string): Promise<SaveArticleResult> {
+  const admin = await requireAdmin();
+  let raw: Record<string, unknown>;
+  try {
+    raw = JSON.parse(json);
+  } catch {
+    return { ok: false, message: "Dados inválidos." };
+  }
+  const title = clean(raw.title, 140);
+  const slug = slugify(clean(raw.slug, 100) || title);
+  const category = clean(raw.category, 40);
+  const status = raw.status === "published" ? "published" : "draft";
+  if (!title) return { ok: false, message: "Escreva o título." };
+  if (!slug) return { ok: false, message: "O endereço do artigo ficou vazio." };
+  if (!isArticleCategory(category)) return { ok: false, message: `Escolha uma categoria (${articleCategorySlugs.length} opções).` };
+  const body = typeof raw.body === "string" ? raw.body.slice(0, 120_000) : "";
+  const summary = clean(raw.summary, 300);
+  if (status === "published") {
+    if (!summary) return { ok: false, message: "Para publicar, escreva o resumo." };
+    if (body.trim().length < 200) return { ok: false, message: "Para publicar, o texto precisa ter pelo menos algumas frases." };
+  }
+  const publishedAtRaw = clean(raw.publishedAt, 40);
+  const publishedAt = status === "published" ? (publishedAtRaw && !Number.isNaN(Date.parse(publishedAtRaw)) ? new Date(publishedAtRaw).toISOString() : new Date().toISOString()) : null;
+  const input: ArticleInput = {
+    id: clean(raw.id, 60) || undefined,
+    slug,
+    title,
+    summary,
+    body,
+    category,
+    coverUrl: clean(raw.coverUrl, 600) || null,
+    coverAlt: clean(raw.coverAlt, 200) || null,
+    authorName: clean(raw.authorName, 80) || "Fiapo de Manga",
+    status,
+    publishedAt,
+    seoTitle: clean(raw.seoTitle, 120) || null,
+    seoDescription: clean(raw.seoDescription, 200) || null,
+    focusKeyword: clean(raw.focusKeyword, 80) || null,
+    relatedServices: Array.isArray(raw.relatedServices) ? raw.relatedServices.map((x) => clean(x, 60)).filter(Boolean).slice(0, 6) : [],
+  };
+  try {
+    const rec = await getRepo().saveArticle(input, admin.email);
+    refreshArticlePages(rec.slug);
+    revalidatePath("/admin/artigos");
+    return { ok: true, id: rec.id, slug: rec.slug, status: rec.status };
+  } catch (e) {
+    return { ok: false, message: e instanceof Error ? e.message : "Não foi possível salvar." };
+  }
+}
+
+export async function removeArticle(id: string) {
+  const admin = await requireAdmin();
+  const repo = getRepo();
+  const a = await repo.getArticle(id);
+  if (!a || a.status === "published") return; // artigo no ar: despublique antes de excluir
+  await repo.deleteArticle(id, admin.email);
+  refreshArticlePages(a.slug);
+  revalidatePath("/admin/artigos");
+  redirect("/admin/artigos");
+}
+
+export type UploadResult = { ok: true; url: string } | { ok: false; message: string };
+
+export async function uploadArticleImage(form: FormData): Promise<UploadResult> {
+  await requireAdmin();
+  const file = form.get("file");
+  if (!(file instanceof File) || file.size === 0) return { ok: false, message: "Escolha uma imagem." };
+  if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) return { ok: false, message: "Use uma imagem JPG, PNG ou WebP." };
+  if (file.size > 5 * 1024 * 1024) return { ok: false, message: "A imagem passa de 5 MB. Reduza e tente de novo." };
+  try {
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    const res = await getRepo().uploadArticleImage({ name: file.name, type: file.type, bytes });
+    return { ok: true, url: `${res.url}#${res.width}x${res.height}` };
+  } catch (e) {
+    return { ok: false, message: e instanceof Error ? e.message : "Não foi possível enviar a imagem." };
+  }
 }

@@ -75,15 +75,15 @@ export type Project = {
   seo: Seo;
 };
 
+/** Categorias dos artigos (slugs). Nomes e textos: src/lib/articles/categories.ts */
 export const articleCategories = [
-  "UX Research",
-  "Product Design",
-  "UX/UI",
-  "Estratégia de Produto",
-  "Desenvolvimento Digital",
-  "Inteligência Artificial",
-  "Sites e Plataformas",
-  "E-commerce",
+  "negocios",
+  "sites",
+  "lojas-virtuais",
+  "google-e-seo",
+  "whatsapp-e-vendas",
+  "inteligencia-artificial",
+  "design",
 ] as const;
 
 export type ArticleCategory = (typeof articleCategories)[number];

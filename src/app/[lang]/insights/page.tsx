@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
 import { getI18n } from "@/i18n/server";
-import { getArticlesSorted } from "@/content/articles";
-import { articleCategories } from "@/types/content";
+import { getPublishedArticles } from "@/lib/articles/public";
+import { articleCategoryInfo, articleCategorySlugs } from "@/lib/articles/categories";
+import { LocaleLink as Link } from "@/components/ui/LocaleLink";
 import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
 import { PageHero } from "@/components/sections/PageHero";
 import { ArticleCard } from "@/components/sections/ArticleCard";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { buildMetadata } from "@/lib/seo/metadata";
 
-const hasArticles = getArticlesSorted().length > 0;
+export const revalidate = 600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const { locale, t } = await getI18n();
+  const hasArticles = locale === "pt" && (await getPublishedArticles()).length > 0;
   return buildMetadata({
     locale,
     ...t.meta.insights,
@@ -23,8 +25,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function InsightsPage() {
-  const { t } = await getI18n();
-  const articles = getArticlesSorted();
+  const { locale, t } = await getI18n();
+  // Os artigos são em português; em inglês e espanhol a lista fica vazia.
+  const articles = locale === "pt" ? await getPublishedArticles() : [];
 
   return (
     <>
@@ -37,15 +40,18 @@ export default async function InsightsPage() {
             {t.ui.insights.categories}
           </h2>
           <ul className="flex flex-wrap gap-2 lg:col-span-9">
-            {articleCategories.map((category) => {
-              const count = articles.filter((a) => a.category === category).length;
+            {(locale === "pt" ? articleCategorySlugs : []).map((slug) => {
+              const info = articleCategoryInfo[slug];
+              const count = articles.filter((a) => a.category === slug).length;
               return (
-                <li
-                  key={category}
-                  className="inline-flex min-h-10 items-center gap-2 rounded-full border border-line-strong px-4 text-[0.95rem]"
-                >
-                  {t.articleCategories[category]}
-                  {count > 0 ? <span className="index-number text-xs">{count}</span> : null}
+                <li key={slug}>
+                  <Link
+                    href={`/insights/categoria/${slug}`}
+                    className="inline-flex min-h-10 items-center gap-2 rounded-full border border-line-strong px-4 text-[0.95rem] transition-colors hover:border-accent hover:text-accent"
+                  >
+                    {info.name}
+                    {count > 0 ? <span className="index-number text-xs">{count}</span> : null}
+                  </Link>
                 </li>
               );
             })}

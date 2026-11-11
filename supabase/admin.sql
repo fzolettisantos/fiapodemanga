@@ -97,3 +97,32 @@ alter table clients enable row level security;
 alter table payments enable row level security;
 alter table events enable row level security;
 -- Sem políticas: nada é legível com a chave pública (anon). Só a service_role, no servidor.
+
+-- =====================================================================
+-- Artigos (Insights) — editor em /admin/artigos
+-- =====================================================================
+create table if not exists articles (
+  id uuid primary key default gen_random_uuid(),
+  slug text not null unique,                 -- endereço: /insights/<slug>
+  title text not null,
+  summary text not null default '',
+  body text not null default '',             -- texto em Markdown (sem HTML)
+  category text not null default 'negocios',
+  cover_url text,                            -- endereço da capa (com #LxA no fim)
+  cover_alt text,
+  author_name text not null default 'Fiapo de Manga',
+  status text not null default 'draft' check (status in ('draft', 'published')),
+  published_at timestamptz,                  -- no futuro = agendado
+  seo_title text,
+  seo_description text,
+  focus_keyword text,
+  related_services text[] not null default '{}',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index if not exists articles_pub_idx on articles (status, published_at desc);
+alter table articles enable row level security;
+-- Sem políticas: leitura só pelo servidor (service_role), que entrega ao público apenas os publicados.
+
+-- Imagens dos artigos (bucket público para leitura; envio só pelo servidor)
+insert into storage.buckets (id, name, public) values ('articles', 'articles', true) on conflict (id) do nothing;

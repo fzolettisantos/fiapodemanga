@@ -1,3 +1,4 @@
+import type { ArticleCategory } from "@/types/content";
 import type { Method, Period, Proposal } from "@/lib/proposals/proposal";
 
 export type ProposalStatus = "sent" | "opened" | "accepted" | "expired" | "canceled";
@@ -93,6 +94,33 @@ export type PaymentInput = {
   note?: string | null;
 };
 
+export type ArticleStatus = "draft" | "published";
+
+/** Artigo como é guardado (texto em Markdown). */
+export type ArticleRecord = {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  body: string;
+  category: ArticleCategory;
+  /** Endereço da capa, com o tamanho no fim (`#1600x900`) */
+  coverUrl?: string | null;
+  coverAlt?: string | null;
+  authorName: string;
+  status: ArticleStatus;
+  /** Data de publicação; no futuro = agendado */
+  publishedAt?: string | null;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  focusKeyword?: string | null;
+  relatedServices: string[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ArticleInput = Omit<ArticleRecord, "id" | "createdAt" | "updatedAt"> & { id?: string };
+
 /** Operações de dados da área admin (Supabase ou demonstração). */
 export interface AdminRepo {
   readonly mode: "live" | "demo";
@@ -109,4 +137,11 @@ export interface AdminRepo {
   listPayments(filter?: { clientId?: string; from?: string; to?: string }): Promise<Payment[]>;
   addPayment(clientId: string, input: PaymentInput, actor: string): Promise<Payment>;
   listEvents(filter: { clientId?: string; proposalId?: string; limit?: number }): Promise<AdminEvent[]>;
+  listArticles(): Promise<ArticleRecord[]>;
+  getArticle(id: string): Promise<ArticleRecord | null>;
+  /** Cria ou atualiza. Falha se o endereço (slug) já existir em outro artigo. */
+  saveArticle(input: ArticleInput, actor: string): Promise<ArticleRecord>;
+  deleteArticle(id: string, actor: string): Promise<void>;
+  /** Envia uma imagem (só com o Supabase configurado). Devolve o endereço público. */
+  uploadArticleImage(file: { name: string; type: string; bytes: Uint8Array }): Promise<{ url: string; width: number; height: number }>;
 }

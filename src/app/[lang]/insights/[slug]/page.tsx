@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { LocaleLink as Link } from "@/components/ui/LocaleLink";
 import { getI18n } from "@/i18n/server";
 import { notFound } from "next/navigation";
-import { getArticle, getArticlesSorted } from "@/content/articles";
-import type { ArticleBlock } from "@/types/content";
+import { getPublishedArticle, getPublishedArticles } from "@/lib/articles/public";
+import { ArticleView } from "@/components/articles/ArticleView";
+import { articleCategoryInfo, isArticleCategory } from "@/lib/articles/categories";
 import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
 import { ArticleCard } from "@/components/sections/ArticleCard";
 import { ContactCta } from "@/components/sections/ContactCta";
@@ -15,15 +15,19 @@ import { formatDate } from "@/lib/utils/date";
 
 type Params = { slug: string };
 
-export function generateStaticParams(): Params[] {
-  return getArticlesSorted().map((a) => ({ slug: a.slug }));
+// Artigos novos entram sem precisar de novo deploy: renderizam na primeira visita e são atualizados a cada 10 minutos
+// (ou na hora, quando publicados pelo admin).
+export const revalidate = 600;
+
+export async function generateStaticParams(): Promise<Params[]> {
+  return (await getPublishedArticles()).map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticle(slug);
-  if (!article) return {};
   const { locale } = await getI18n();
+  const article = locale === "pt" ? await getPublishedArticle(slug) : null;
+  if (!article) return {};
   return buildMetadata({
     locale,
     title: article.seo.title,
@@ -39,59 +43,17 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   });
 }
 
-function Block({ block }: { block: ArticleBlock }) {
-  switch (block.type) {
-    case "paragraph":
-      return <p>{block.text}</p>;
-    case "heading":
-      return block.level === 3 ? <h3>{block.text}</h3> : <h2>{block.text}</h2>;
-    case "list":
-      return block.ordered ? (
-        <ol className="list-decimal pl-5">
-          {block.items.map((i) => (
-            <li key={i}>{i}</li>
-          ))}
-        </ol>
-      ) : (
-        <ul>
-          {block.items.map((i) => (
-            <li key={i}>{i}</li>
-          ))}
-        </ul>
-      );
-    case "quote":
-      return (
-        <blockquote className="callout border-l-2 border-accent pl-6">
-          <p>{block.text}</p>
-          {block.cite ? <cite className="mt-4 block text-sm not-italic text-muted">{block.cite}</cite> : null}
-        </blockquote>
-      );
-    case "image":
-      return (
-        <figure>
-          <Image
-            src={block.image.src}
-            alt={block.image.alt}
-            width={block.image.width}
-            height={block.image.height}
-            sizes="(min-width: 768px) 720px, 100vw"
-            className="h-auto w-full"
-          />
-          {block.image.caption ? (
-            <figcaption className="mt-3 text-sm text-muted">{block.image.caption}</figcaption>
-          ) : null}
-        </figure>
-      );
-  }
-}
-
 export default async function ArticlePage({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-  const article = getArticle(slug);
-  if (!article) notFound();
   const { locale, t } = await getI18n();
+  // Os artigos são em português.
+  const article = locale === "pt" ? await getPublishedArticle(slug) : null;
+  if (!article) notFound();
 
-  const related = (article.related ?? []).map(getArticle).filter((a) => a !== undefined);
+  const all = await getPublishedArticles();
+  const explicit = (article.related ?? []).map((s) => all.find((a) => a.slug === s)).filter((a) => a !== undefined);
+  const related = (explicit.length ? explicit : all.filter((a) => a.slug !== article.slug && a.category === article.category)).slice(0, 3);
+  const category = isArticleCategory(article.category) ? articleCategoryInfo[article.category] : null;
   const relatedServices = (article.relatedServices ?? []).map((r) => t.services.find((s) => s.slug === r)).filter((s) => s !== undefined);
 
   return (
@@ -99,40 +61,18 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
       <Breadcrumbs
         items={[
           { name: t.ui.footer.insights, path: "/insights" },
+          ...(category ? [{ name: category.name, path: `/insights/categoria/${category.slug}` }] : []),
           { name: article.title, path: `/insights/${article.slug}` },
         ]}
       />
       <JsonLd data={articleJsonLd(article, locale)} />
 
       <article className="container-site pt-10 pb-20 md:pt-16">
-        <header className="max-w-5xl">
-          <p className="eyebrow">{t.articleCategories[article.category]}</p>
-          <h1 className="type-title mt-8">{article.title}</h1>
-          <p className="type-lead mt-8 max-w-3xl">{article.summary}</p>
-          <p className="mt-8 font-mono text-xs tracking-[0.04em] text-muted uppercase">
-            {article.author.name}
-            {article.author.role ? `, ${article.author.role}` : ""} ·{" "}
-            <time dateTime={article.publishedAt}>{formatDate(article.publishedAt, locale)}</time>
-          </p>
-        </header>
-
-        {article.image ? (
-          <Image
-            src={article.image.src}
-            alt={article.image.alt}
-            width={article.image.width}
-            height={article.image.height}
-            sizes="(min-width: 1536px) 1408px, 100vw"
-            priority
-            className="mt-14 h-auto w-full"
-          />
-        ) : null}
-
-        <div className="prose-fm type-body mx-auto mt-16 max-w-[44rem] text-lg">
-          {article.content.map((block, i) => (
-            <Block key={i} block={block} />
-          ))}
-        </div>
+        <ArticleView
+          article={article}
+          categoryLabel={category ? category.name : t.articleCategories[article.category]}
+          dateLabel={formatDate(article.publishedAt, locale)}
+        />
 
         {relatedServices.length ? (
           <aside aria-labelledby="servicos-relacionados" className="mx-auto mt-20 max-w-[44rem] border-t border-line pt-8">

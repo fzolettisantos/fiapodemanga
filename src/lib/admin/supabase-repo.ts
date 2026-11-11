@@ -3,7 +3,7 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { parseProposal } from "@/lib/proposals/proposal";
 import { clientFromProposal, firstCharge } from "./core";
 import { adminEnv } from "./env";
-import type { Acceptance, AdminEvent, AdminRepo, Client, Payment, ProposalRecord } from "./types";
+import type { Acceptance, AdminEvent, AdminRepo, ArticleInput, ArticleRecord, Client, Payment, ProposalRecord } from "./types";
 import { proposalCode } from "./util";
 
 /** Repositório ligado ao Supabase. Usa a chave service_role: só roda no servidor. */
@@ -86,6 +86,48 @@ const toAcceptance = (r: Row): Acceptance => ({
   terms: (r.terms as Acceptance["terms"]) ?? [],
   contract: r.contract,
 });
+
+export const toArticle = (r: Row): ArticleRecord => ({
+  id: r.id as string,
+  slug: r.slug as string,
+  title: r.title as string,
+  summary: (r.summary as string) ?? "",
+  body: (r.body as string) ?? "",
+  category: r.category as ArticleRecord["category"],
+  coverUrl: (r.cover_url as string) ?? null,
+  coverAlt: (r.cover_alt as string) ?? null,
+  authorName: (r.author_name as string) ?? "Fiapo de Manga",
+  status: r.status as ArticleRecord["status"],
+  publishedAt: (r.published_at as string) ?? null,
+  seoTitle: (r.seo_title as string) ?? null,
+  seoDescription: (r.seo_description as string) ?? null,
+  focusKeyword: (r.focus_keyword as string) ?? null,
+  relatedServices: (r.related_services as string[]) ?? [],
+  createdAt: r.created_at as string,
+  updatedAt: r.updated_at as string,
+});
+
+const articleRow = (a: ArticleInput) => ({
+  slug: a.slug,
+  title: a.title,
+  summary: a.summary,
+  body: a.body,
+  category: a.category,
+  cover_url: a.coverUrl ?? null,
+  cover_alt: a.coverAlt ?? null,
+  author_name: a.authorName,
+  status: a.status,
+  published_at: a.publishedAt ?? null,
+  seo_title: a.seoTitle ?? null,
+  seo_description: a.seoDescription ?? null,
+  focus_keyword: a.focusKeyword ?? null,
+  related_services: a.relatedServices,
+  updated_at: new Date().toISOString(),
+});
+
+export function publicDb() {
+  return db();
+}
 
 async function log(e: Omit<AdminEvent, "id" | "createdAt">) {
   check(await db().from("events").insert({ proposal_id: e.proposalId ?? null, client_id: e.clientId ?? null, type: e.type, data: e.data, actor: e.actor ?? null }));
@@ -178,6 +220,41 @@ export const supabaseRepo: AdminRepo = {
     ) as Row;
     await log({ clientId, type: input.status === "paid" ? "payment.registered" : "payment.created", data: { amount: input.amount, method: input.method, note: input.note }, actor });
     return toPayment(r);
+  },
+  async listArticles() {
+    return (check(await db().from("articles").select("*").order("updated_at", { ascending: false })) as Row[]).map(toArticle);
+  },
+  async getArticle(id) {
+    const r = check(await db().from("articles").select("*").eq("id", id).maybeSingle()) as Row | null;
+    return r ? toArticle(r) : null;
+  },
+  async saveArticle(input, actor) {
+    const dup = check(await db().from("articles").select("id").eq("slug", input.slug)) as Row[];
+    if (dup.some((d) => d.id !== input.id)) throw new Error("Já existe um artigo com este endereço.");
+    const r = (
+      input.id
+        ? check(await db().from("articles").update(articleRow(input)).eq("id", input.id).select("*").single())
+        : check(await db().from("articles").insert(articleRow(input)).select("*").single())
+    ) as Row;
+    await log({ type: input.id ? "article.updated" : "article.created", data: { title: input.title, status: input.status }, actor });
+    return toArticle(r);
+  },
+  async deleteArticle(id, actor) {
+    const a = await this.getArticle(id);
+    check(await db().from("articles").delete().eq("id", id));
+    if (a) await log({ type: "article.deleted", data: { title: a.title }, actor });
+  },
+  async uploadArticleImage(file) {
+    const sharp = (await import("sharp")).default;
+    const img = sharp(file.bytes, { failOn: "error" }).rotate();
+    const meta = await img.metadata();
+    const resized = await img.resize({ width: 1600, withoutEnlargement: true }).webp({ quality: 82 }).toBuffer({ resolveWithObject: true });
+    const name = `${new Date().toISOString().slice(0, 7)}/${crypto.randomUUID()}.webp`;
+    const up = await db().storage.from("articles").upload(name, resized.data, { contentType: "image/webp", cacheControl: "31536000", upsert: false });
+    if (up.error) throw new Error(`Supabase: ${up.error.message}`);
+    const { data } = db().storage.from("articles").getPublicUrl(name);
+    void meta;
+    return { url: data.publicUrl, width: resized.info.width, height: resized.info.height };
   },
   async listEvents(filter) {
     let q = db().from("events").select("*").order("created_at", { ascending: false }).limit(filter.limit ?? 200);

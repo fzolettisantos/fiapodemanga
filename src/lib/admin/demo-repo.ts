@@ -1,7 +1,7 @@
 import { getSiteType } from "@/lib/proposals/catalog";
 import { demoProposal, proposalForType, type Proposal } from "@/lib/proposals/proposal";
 import { clientFromProposal, firstCharge } from "./core";
-import type { AcceptInput, AdminEvent, AdminRepo, Client, Payment, PaymentInput, ProposalRecord, Acceptance } from "./types";
+import type { AcceptInput, AdminEvent, AdminRepo, ArticleInput, ArticleRecord, Client, Payment, PaymentInput, ProposalRecord, Acceptance } from "./types";
 import { addMonths, proposalCode, today } from "./util";
 
 /**
@@ -14,6 +14,7 @@ type Store = {
   clients: Client[];
   payments: Payment[];
   events: AdminEvent[];
+  articles: ArticleRecord[];
 };
 
 const uid = () => crypto.randomUUID();
@@ -61,7 +62,29 @@ function seed(): Store {
   const acceptances: Acceptance[] = clients.map((c) => ({
     id: uid(), proposalId: c.proposalId!, acceptedAt: proposals.find((p) => p.id === c.proposalId)!.acceptedAt!, ip: "200.0.0.1 (exemplo)", userAgent: "Exemplo", email: c.email, contractVersion: "2026-11-v1", period: c.period, method: c.method, amount: c.amount, terms: [], contract: null,
   }));
-  return { proposals, acceptances, clients, payments, events };
+  const now = new Date().toISOString();
+  const articles: ArticleRecord[] = [
+    {
+      id: uid(),
+      slug: "exemplo-como-o-cliente-encontra-seu-negocio",
+      title: "[Exemplo] Como o cliente encontra o seu negócio no Google",
+      summary: "Rascunho de exemplo para mostrar o editor. Não vai ao ar: só existe no modo demonstração.",
+      body: "Quando alguém procura um serviço no Google, decide em poucos segundos em quem confiar.\n\n## O que o Google mostra primeiro\n\nUm título claro, uma descrição que explica o que você faz e um site que abre rápido no celular.\n\n- **Título:** o nome do negócio e o que ele faz\n- **Descrição:** uma frase sobre como você ajuda\n- **Velocidade:** o site precisa abrir em poucos segundos\n\n## Próximo passo\n\nEscreva o seu artigo aqui, troque o título e use a lista de verificação ao lado para revisar antes de publicar.",
+      category: "google-e-seo",
+      coverUrl: null,
+      coverAlt: null,
+      authorName: "Fiapo de Manga",
+      status: "draft",
+      publishedAt: null,
+      seoTitle: null,
+      seoDescription: null,
+      focusKeyword: "como ser encontrado no google",
+      relatedServices: ["criacao-de-sites"],
+      createdAt: now,
+      updatedAt: now,
+    },
+  ];
+  return { proposals, acceptances, clients, payments, events, articles };
 }
 
 const g = globalThis as unknown as { __fmDemoStore?: Store };
@@ -131,6 +154,31 @@ export const demoRepo: AdminRepo = {
     store().payments.push(pay);
     store().events.push({ id: uid(), clientId, type: input.status === "paid" ? "payment.registered" : "payment.created", data: { amount: input.amount, method: input.method, note: input.note }, actor, createdAt: pay.createdAt });
     return pay;
+  },
+  async listArticles() {
+    return [...store().articles].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  },
+  async getArticle(id) {
+    return store().articles.find((a) => a.id === id) ?? null;
+  },
+  async saveArticle(input: ArticleInput, actor) {
+    const s = store();
+    if (s.articles.some((a) => a.slug === input.slug && a.id !== input.id)) throw new Error("Já existe um artigo com este endereço.");
+    const now = new Date().toISOString();
+    const existing = input.id ? s.articles.find((a) => a.id === input.id) : undefined;
+    const rec: ArticleRecord = existing ? Object.assign(existing, input, { updatedAt: now }) : { ...input, id: uid(), createdAt: now, updatedAt: now };
+    if (!existing) s.articles.push(rec);
+    s.events.push({ id: uid(), type: existing ? "article.updated" : "article.created", data: { title: rec.title, status: rec.status }, actor, createdAt: now });
+    return rec;
+  },
+  async deleteArticle(id, actor) {
+    const s = store();
+    const a = s.articles.find((x) => x.id === id);
+    s.articles = s.articles.filter((x) => x.id !== id);
+    if (a) s.events.push({ id: uid(), type: "article.deleted", data: { title: a.title }, actor, createdAt: new Date().toISOString() });
+  },
+  async uploadArticleImage() {
+    throw new Error("O envio de imagens funciona depois que o Supabase estiver configurado.");
   },
   async listEvents(filter) {
     return store()

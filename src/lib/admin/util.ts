@@ -78,6 +78,9 @@ export const eventLabel: Record<string, string> = {
   "client.status": "Situação alterada",
   "payment.registered": "Pagamento registrado",
   "payment.created": "Cobrança criada",
+  "article.created": "Artigo criado",
+  "article.updated": "Artigo atualizado",
+  "article.deleted": "Artigo excluído",
 };
 
 export function eventText(e: AdminEvent): string {

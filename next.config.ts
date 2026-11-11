@@ -17,7 +17,11 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     qualities: [75, 85],
+    // Imagens dos artigos enviadas pelo admin ficam no Supabase Storage (bucket público "articles").
+    remotePatterns: [{ protocol: "https", hostname: "**.supabase.co", pathname: "/storage/v1/object/public/articles/**" }],
   },
+  // Envio de imagens dos artigos pelo admin.
+  experimental: { serverActions: { bodySizeLimit: "6mb" } },
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },

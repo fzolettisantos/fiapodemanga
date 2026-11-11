@@ -10,7 +10,7 @@ export const articleTemplate: Article = {
   summary: "Resumo de uma ou duas frases.",
   author: { name: "Nome da autora ou autor", role: "Cargo" },
   publishedAt: "2026-01-01",
-  category: "UX Research", // ver articleCategories em src/types/content.ts
+  category: "negocios", // ver articleCategories em src/types/content.ts
   content: [
     { type: "paragraph", text: "Primeiro parágrafo." },
     { type: "heading", text: "Intertítulo", level: 2 },

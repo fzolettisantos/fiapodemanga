@@ -251,14 +251,13 @@ export const en: SiteContent = {
     outro: "Other",
   },
   articleCategories: {
-    "UX Research": "UX Research",
-    "Product Design": "Product Design",
-    "UX/UI": "UX/UI",
-    "Estratégia de Produto": "Product Strategy",
-    "Desenvolvimento Digital": "Digital Development",
-    "Inteligência Artificial": "Artificial Intelligence",
-    "Sites e Plataformas": "Websites and Platforms",
-    "E-commerce": "E-commerce",
+    "negocios": "For your business",
+    "sites": "Websites and landing pages",
+    "lojas-virtuais": "Online stores",
+    "google-e-seo": "Google and SEO",
+    "whatsapp-e-vendas": "WhatsApp and sales",
+    "inteligencia-artificial": "Artificial Intelligence",
+    "design": "Design and experience",
   },
   home: {
     hero: {

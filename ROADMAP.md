@@ -57,3 +57,13 @@ Falta para usar com clientes reais:
 - Registro do aceite (data, hora, IP, e-mail, versão) e envio da cópia do contrato por e-mail.
 - Régua de cobrança automática, suspensão com 15 dias e reativação após pagamento.
 - Dados da empresa no contrato e revisão jurídica.
+
+### Relatório de clientes (área admin)
+
+Tela de relatório para ter tudo registrado em caso de problema (depois pode virar um dashboard):
+- Clientes: plano, valor, periodicidade, forma de pagamento, início, fim da fidelidade, próximo vencimento, situação (em dia, atrasado, suspenso, cancelado).
+- Pagamentos: cada cobrança com valor, vencimento, data do pagamento, forma, número da transação no Mercado Pago e status; filtros por mês, cliente e situação; exportar CSV/PDF.
+- Inadimplência: quem está atrasado, há quantos dias, total em aberto, multa e juros calculados.
+- Histórico por cliente (linha do tempo): proposta enviada e aberta, aceite (data, hora, IP, e-mail, versão do contrato), pagamentos, avisos de cobrança enviados, suspensões, reativações, alterações de valor (com o novo aceite, quando houver) e cancelamento.
+- Documentos: contrato aceito e Termo de cada cliente em PDF, sempre na versão aceita.
+- Registro de auditoria: quem mudou o quê no painel e quando.

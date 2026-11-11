@@ -70,3 +70,14 @@ Tela de relatório para ter tudo registrado em caso de problema (depois pode vir
 - Histórico por cliente (linha do tempo): proposta enviada e aberta, aceite (data, hora, IP, e-mail, versão do contrato), pagamentos, avisos de cobrança enviados, suspensões, reativações, alterações de valor (com o novo aceite, quando houver) e cancelamento.
 - Documentos: contrato aceito e Termo de cada cliente em PDF, sempre na versão aceita.
 - Registro de auditoria: quem mudou o quê no painel e quando.
+
+## SEO e blog (feito em 11/2026)
+
+Ver `docs/seo.md`: auditoria, mapa de palavras-chave, páginas por tipo de negócio (`/site-para/...`), perguntas
+frequentes, editor de artigos no admin (`/admin/artigos`), sitemap/hreflang corrigidos e `llms.txt`.
+
+Ideias para depois:
+- Imagem de compartilhamento (Open Graph) gerada por página/artigo.
+- Páginas por cidade, quando a região de atuação estiver confirmada.
+- Artigos em inglês e espanhol, se a consultoria internacional voltar a ser foco.
+- Avaliações reais no perfil do Google e marcação de avaliações (só com dados verdadeiros).

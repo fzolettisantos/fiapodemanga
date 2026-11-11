@@ -109,9 +109,9 @@ export const gedAi: Record<Locale, Project> = {
       ),
     ],
     seo: {
-      title: "Case ged.ai — Redesign de plataforma de GED com IA",
+      title: "Case ged.ai — Redesign de Plataforma de GED",
       description:
-        "Redesign da plataforma ged.ai de gestão eletrônica de documentos: controle de documentos, cadastro guiado, filtros dinâmicos, histórico e IA integrada ao fluxo.",
+        "Redesign da plataforma ged.ai de gestão eletrônica de documentos: controle, cadastro guiado, filtros dinâmicos, histórico e IA integrada ao fluxo.",
     },
   },
   en: {
@@ -197,7 +197,7 @@ export const gedAi: Record<Locale, Project> = {
       ),
     ],
     seo: {
-      title: "ged.ai case — Redesign of an AI-powered EDM platform",
+      title: "ged.ai Case — AI-Powered EDM Platform Redesign",
       description:
         "Redesign of the ged.ai electronic document management platform: document control, guided upload, dynamic filters, history and AI built into the workflow.",
     },
@@ -285,9 +285,9 @@ export const gedAi: Record<Locale, Project> = {
       ),
     ],
     seo: {
-      title: "Caso ged.ai — Rediseño de plataforma de GED con IA",
+      title: "Caso ged.ai — Rediseño de Plataforma de GED",
       description:
-        "Rediseño de la plataforma ged.ai de gestión electrónica de documentos: control de documentos, registro guiado, filtros dinámicos, historial e IA integrada al flujo.",
+        "Rediseño de la plataforma ged.ai de gestión electrónica de documentos: control, registro guiado, filtros dinámicos, historial e IA integrada al flujo.",
     },
   },
 };

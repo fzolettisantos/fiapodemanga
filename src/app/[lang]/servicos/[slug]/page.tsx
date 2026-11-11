@@ -11,10 +11,15 @@ import { ServiceIllustration } from "@/components/sections/ServiceIllustration";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { ButtonLink } from "@/components/ui/Button";
+import { serviceFaqs } from "@/content/faq";
+import { niches } from "@/content/niches";
+import { FaqList } from "@/components/sections/FaqList";
+import { faqJsonLd, brazilServiceJsonLd } from "@/lib/seo/jsonld";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { WordReveal } from "@/components/motion/WordReveal";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { serviceJsonLd } from "@/lib/seo/jsonld";
+import { localizePath } from "@/i18n/config";
 
 type Params = { slug: string };
 
@@ -51,6 +56,9 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
   // "Próxima" percorre só as especialidades listadas no idioma (em português: sites, lojas e sistemas).
   const listed = listedServices(locale, services);
   const ring = listed.some((s) => s.slug === service.slug) ? listed : services;
+  // Perguntas frequentes e atalhos por tipo de negócio: só em português
+  const faqs = locale === "pt" ? (serviceFaqs[service.slug] ?? []) : [];
+  const showNiches = locale === "pt" && ["criacao-de-sites", "ecommerce"].includes(service.slug);
   const index = ring.findIndex((s) => s.slug === service.slug);
   const next = ring[(index + 1) % ring.length]!;
 
@@ -62,7 +70,14 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
           { name: service.name, path: `/servicos/${service.slug}` },
         ]}
       />
-      <JsonLd data={serviceJsonLd(service, locale)} />
+      <JsonLd
+        data={[
+          locale === "pt"
+            ? brazilServiceJsonLd({ name: service.name, description: service.seo.description, path: localizePath(locale, `/servicos/${service.slug}`), serviceType: service.seo.title })
+            : serviceJsonLd(service, locale),
+          ...(faqs.length ? [faqJsonLd(faqs)] : []),
+        ]}
+      />
 
       <section aria-labelledby="page-title" className="container-site pt-10 pb-16 md:pt-16 md:pb-24">
         <p className="eyebrow flex items-baseline gap-2">
@@ -152,6 +167,46 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
         </div>
       </section>
       )}
+
+      {faqs.length ? (
+        <section aria-labelledby="faq-title" className="border-t border-line">
+          <div className="container-site grid gap-12 py-20 md:py-28 lg:grid-cols-12">
+            <h2 id="faq-title" className="type-heading lg:col-span-4">
+              Perguntas frequentes
+            </h2>
+            <div className="lg:col-span-8">
+              <FaqList items={faqs} headingId="faq-title" />
+              <p className="mt-8">
+                <Link href="/perguntas-frequentes" className="link-underline text-accent">
+                  Ver todas as perguntas
+                </Link>
+              </p>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {showNiches ? (
+        <section aria-labelledby="nichos-title" className="border-t border-line bg-surface">
+          <div className="container-site py-16 md:py-20">
+            <h2 id="nichos-title" className="type-heading max-w-3xl">
+              Veja o que o site do seu tipo de negócio precisa ter
+            </h2>
+            <ul className="mt-8 flex flex-wrap gap-2">
+              {niches.map((n) => (
+                <li key={n.slug}>
+                  <Link
+                    href={`/site-para/${n.slug}`}
+                    className="inline-flex min-h-10 items-center rounded-full border border-line-strong px-4 text-[0.95rem] transition-colors hover:border-accent hover:text-accent"
+                  >
+                    Site para {n.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
 
       <section aria-labelledby="relacionadas-title" className="border-t border-line">
         <div className="container-site py-20 md:py-28">

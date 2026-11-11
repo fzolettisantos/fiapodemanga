@@ -47,7 +47,7 @@ export const services: Service[] = [
     seo: {
       title: "UX Research e Discovery",
       description:
-        "Pesquisa UX e Discovery para entender comportamentos, validar hipóteses e apoiar decisões de produto com evidências. Entrevistas, testes de usabilidade e jornadas.",
+        "Pesquisa UX e Discovery para entender comportamentos, validar hipóteses e apoiar decisões de produto com evidências, entrevistas e testes.",
       keywords: ["pesquisa UX", "UX Research", "Discovery", "testes de usabilidade", "jornada do usuário"],
     },
   },
@@ -90,7 +90,7 @@ export const services: Service[] = [
     seo: {
       title: "Estratégia de Produto Digital",
       description:
-        "Consultoria em estratégia de produto: diagnóstico, priorização, definição de MVP, roadmap e métricas que conectam objetivos de negócio às necessidades das pessoas.",
+        "Consultoria em estratégia de produto: diagnóstico, priorização, MVP, roadmap e métricas que ligam objetivos de negócio às necessidades das pessoas.",
       keywords: ["estratégia de produto", "product strategy", "MVP", "roadmap de produto"],
     },
   },
@@ -133,7 +133,7 @@ export const services: Service[] = [
       related: ["pesquisa-ux-discovery", "aplicativos-sistemas-plataformas", "criacao-de-sites"],
     },
     seo: {
-      title: "Product Design e UX/UI — Design de Produtos Digitais",
+      title: "Product Design e UX/UI para Produtos Digitais",
       description:
         "Design de produtos digitais com UX e UI: arquitetura da informação, wireframes, prototipação, design systems e redesign de interfaces centrados em quem usa.",
       keywords: ["Product Design", "UX/UI", "design de interfaces", "design system", "prototipação"],
@@ -182,7 +182,7 @@ export const services: Service[] = [
     seo: {
       title: "Criação de Sites Profissionais e Landing Pages",
       description:
-        "Criação de sites institucionais, portfólios e landing pages modernos, rápidos e prontos para o celular e para o Google, com domínio, hospedagem e ajustes inclusos.",
+        "Criação de sites institucionais, portfólios e landing pages modernos, rápidos e prontos para o celular e o Google, com domínio e hospedagem inclusos.",
       keywords: ["criação de sites", "site para empresa", "sites institucionais", "landing pages"],
     },
   },
@@ -315,9 +315,9 @@ export const services: Service[] = [
       related: ["criacao-de-sites", "ecommerce", "aplicativos-sistemas-plataformas"],
     },
     seo: {
-      title: "Inteligência Artificial para Negócios: Assistentes e Automação",
+      title: "IA para Negócios: Assistente Virtual e Automação",
       description:
-        "Inteligência artificial para o seu negócio: assistente virtual no site, atendimento automático, descrições de produtos e automação de tarefas, com revisão humana.",
+        "Inteligência artificial para o seu negócio: assistente virtual no site, atendimento automático, descrições de produtos e automação, com revisão humana.",
       keywords: ["inteligência artificial para empresas", "chatbot para site", "assistente virtual", "automação com IA"],
     },
   },

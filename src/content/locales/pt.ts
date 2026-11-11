@@ -17,16 +17,16 @@ export const pt: SiteContent = {
     centralMessage: "Sites, lojas virtuais e IA para o seu negócio crescer no digital.",
     description:
       "Estúdio de design e tecnologia que cria sites, lojas virtuais e produtos digitais com cuidado de verdade e preço justo.",
-    ogAlt: "Fiapo de Manga — Boas experiências começam com boas perguntas.",
+    ogAlt: "Fiapo de Manga — Sites, lojas virtuais e IA para o seu negócio.",
     knowsAbout: [
-      "UX Research",
-      "Product Design",
-      "UX/UI Design",
-      "Estratégia de Produto",
-      "Criação de Sites",
-      "Design de Aplicativos",
+      "Criação de sites",
+      "Lojas virtuais",
+      "Landing pages",
       "E-commerce",
-      "Inteligência Artificial aplicada ao Design",
+      "SEO",
+      "Inteligência artificial para negócios",
+      "Aplicativos e sistemas",
+      "Product Design e UX/UI",
     ],
   },
   nav: {
@@ -41,17 +41,17 @@ export const pt: SiteContent = {
   },
   meta: {
     home: {
-      title: "Fiapo de Manga — Criação de sites e lojas virtuais com design de verdade",
+      title: "Criação de Sites e Lojas Virtuais para Empresas | Fiapo de Manga",
       description:
-        "Criamos sites, lojas virtuais e landing pages modernos e prontos para o celular, com inteligência artificial no processo e um preço que cabe no mês.",
+        "Criamos sites, lojas virtuais e landing pages modernos e prontos para o celular, com domínio e hospedagem inclusos e uma mensalidade que cabe no mês.",
     },
     services: {
-      title: "O que fazemos — Sites, lojas virtuais, sistemas e IA",
+      title: "Sites, Lojas Virtuais, Sistemas e IA",
       description:
-        "Criação de sites, landing pages, lojas virtuais, aplicativos e sistemas sob medida, e inteligência artificial para o seu negócio: assistentes virtuais e automação.",
+        "Criação de sites, landing pages, lojas virtuais, aplicativos e sistemas sob medida, mais IA para o seu negócio: assistente virtual e automação.",
     },
     about: {
-      title: "Sobre nós — Estúdio de sites, lojas virtuais e sistemas",
+      title: "Sobre Nós — Estúdio de Sites e Lojas Virtuais",
       description:
         "Conheça a Fiapo de Manga: um estúdio de design e tecnologia que cria sites, lojas virtuais e sistemas com cuidado, rapidez e preço justo.",
     },
@@ -61,14 +61,14 @@ export const pt: SiteContent = {
         "Projetos da Fiapo de Manga: plataformas, aplicativos e sistemas para empresas de diferentes segmentos, com o mesmo cuidado que vai para o site do seu negócio.",
     },
     insights: {
-      title: "Blog — Dicas de sites, lojas virtuais, Google e IA",
+      title: "Blog — Sites, Lojas Virtuais, Google e IA",
       description:
         "Guias simples para o seu negócio aparecer e vender mais na internet: sites, lojas virtuais, Google, WhatsApp e inteligência artificial.",
     },
     contact: {
-      title: "Contato — Vamos conversar sobre seu projeto",
+      title: "Contato — Peça uma Proposta de Site ou Loja",
       description:
-        "Conte seu desafio para a Fiapo de Manga: pesquisa, estratégia, Product Design, UX/UI, criação de sites, aplicativos, sistemas, e-commerce ou inteligência artificial.",
+        "Conte o que o seu negócio precisa: um site, uma loja virtual, um sistema ou IA. A gente responde com uma proposta clara e sem compromisso.",
     },
     privacy: {
       title: "Política de Privacidade",

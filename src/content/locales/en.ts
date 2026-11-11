@@ -37,24 +37,24 @@ export const en: SiteContent = {
         "A design and UX/UI consultancy that combines research, product strategy and technology to create websites, apps, systems and digital products that make sense.",
     },
     services: {
-      title: "What we do — Research, Product Design, UX/UI and Websites",
+      title: "What We Do — Research, Product Design and UX/UI",
       description:
         "Consultancy and digital product studio: UX research, product strategy, Product Design, UX/UI, websites, apps, systems, e-commerce and AI applied to design.",
     },
     about: {
-      title: "About us — Design and digital experience consultancy",
+      title: "About Us — Design and Digital Experience",
       description:
         "Meet Fiapo de Manga: a consultancy that connects research, strategy, design and technology to turn challenges into digital products and experiences.",
     },
     projects: {
-      title: "Work — Research, UX/UI and digital product projects",
+      title: "Work — UX/UI and Digital Product Projects",
       description:
         "Fiapo de Manga projects: how research, strategy and design come together to turn real problems into clearer, more functional digital experiences.",
     },
     insights: {
-      title: "Insights — UX Research, Product Design and digital experiences",
+      title: "Insights — UX Research and Product Design",
       description:
-        "Ideas, research and learnings on UX Research, Product Design, UX/UI, product strategy, digital development, e-commerce and artificial intelligence.",
+        "Ideas, research and learnings on UX Research, Product Design, UX/UI, product strategy, digital development, e-commerce and AI.",
     },
     contact: {
       title: "Contact — Let’s talk about your project",
@@ -539,9 +539,9 @@ export const en: SiteContent = {
         related: ["pesquisa-ux-discovery", "aplicativos-sistemas-plataformas", "criacao-de-sites"],
       },
       seo: {
-        title: "Product Design and UX/UI — Digital Product Design",
+        title: "Product Design and UX/UI for Digital Products",
         description:
-          "Digital product design with UX and UI: information architecture, wireframes, prototyping, design systems and interface redesign centered on the people who use them.",
+          "Digital product design with UX and UI: information architecture, wireframes, prototyping, design systems and interface redesign for the people who use them.",
         keywords: ["Product Design", "UX/UI", "interface design", "design system", "prototyping"],
       },
     },
@@ -587,7 +587,7 @@ export const en: SiteContent = {
       seo: {
         title: "Professional Website Design and Landing Pages",
         description:
-          "Design and development of corporate websites and landing pages with responsive design, technical SEO, accessibility and performance, from content to implementation.",
+          "Design and development of corporate websites and landing pages with responsive design, technical SEO, accessibility and performance, end to end.",
         keywords: ["website design", "web development", "corporate websites", "landing pages"],
       },
     },

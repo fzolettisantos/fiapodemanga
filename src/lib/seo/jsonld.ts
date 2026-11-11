@@ -38,6 +38,10 @@ export function organizationJsonLd(t: SiteContent) {
     description: t.site.description,
     slogan: t.site.tagline,
     ...(siteConfig.contactEmail ? { email: siteConfig.contactEmail } : {}),
+    // Só quando o WhatsApp estiver configurado (número real)
+    ...(siteConfig.whatsapp.length >= 12
+      ? { contactPoint: { "@type": "ContactPoint", contactType: "customer service", telephone: `+${siteConfig.whatsapp}`, availableLanguage: ["pt-BR"] } }
+      : {}),
     ...(siteConfig.social.length ? { sameAs: siteConfig.social.map((s) => s.href) } : {}),
     ...(areaServed() ? { areaServed: areaServed() } : {}),
     knowsAbout: t.site.knowsAbout,
@@ -95,18 +99,78 @@ export function breadcrumbJsonLd(items: Crumb[]) {
 }
 
 export function articleJsonLd(article: Article, locale: Locale) {
+  const url = absoluteUrl(localizePath(locale, `/insights/${article.slug}`));
+  const words = article.content
+    .map((b) => (b.type === "list" ? b.items.join(" ") : b.type === "image" ? "" : b.text))
+    .join(" ")
+    .split(/\s+/)
+    .filter(Boolean).length;
+  const authorIsOrg = article.author.name.trim().toLowerCase() === siteConfig.name.toLowerCase();
   return {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: article.title,
+    headline: article.title.slice(0, 110),
     description: article.summary,
     datePublished: article.publishedAt,
     dateModified: article.updatedAt ?? article.publishedAt,
-    author: { "@type": "Person", name: article.author.name },
+    author: authorIsOrg ? { "@id": orgId() } : { "@type": "Person", name: article.author.name },
     publisher: { "@id": orgId() },
-    mainEntityOfPage: absoluteUrl(localizePath(locale, `/insights/${article.slug}`)),
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    url,
     articleSection: article.category,
+    wordCount: words,
     inLanguage: localeInfo[locale].htmlLang,
-    ...(article.image ? { image: absoluteUrl(article.image.src) } : {}),
+    image: [absoluteUrl(article.image ? article.image.src : brandAssets.ogImage.src)],
+  };
+}
+
+/** Case/projeto como obra criativa (sem avaliações nem resultados inventados). */
+export function caseJsonLd(input: { name: string; description: string; path: string; image?: string; publishedAt: string; locale: Locale }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: input.name,
+    description: input.description,
+    url: absoluteUrl(input.path),
+    datePublished: input.publishedAt,
+    inLanguage: localeInfo[input.locale].htmlLang,
+    creator: { "@id": orgId() },
+    ...(input.image ? { image: absoluteUrl(input.image) } : {}),
+  };
+}
+
+/** Perguntas e respostas visíveis na página (FAQPage). */
+export function faqJsonLd(items: readonly { q: string; a: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((i) => ({
+      "@type": "Question",
+      name: i.q,
+      acceptedAnswer: { "@type": "Answer", text: i.a },
+    })),
+  };
+}
+
+/** Serviço oferecido em todo o Brasil (atendimento remoto, sem endereço físico). */
+export function brazilServiceJsonLd(input: { name: string; description: string; path: string; serviceType: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: input.name,
+    serviceType: input.serviceType,
+    description: input.description,
+    url: absoluteUrl(input.path),
+    inLanguage: "pt-BR",
+    provider: { "@id": orgId() },
+    areaServed: { "@type": "Country", name: "Brasil" },
+  };
+}
+
+export function itemListJsonLd(items: { name: string; path: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: items.map((it, i) => ({ "@type": "ListItem", position: i + 1, name: it.name, url: absoluteUrl(it.path) })),
   };
 }

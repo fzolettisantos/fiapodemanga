@@ -17,6 +17,16 @@ import { Marquee } from "@/components/motion/Marquee";
 import { ViewTransition } from "react";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { listedServices } from "@/content/services";
+import { homeFaqs } from "@/content/faq";
+import { niches } from "@/content/niches";
+import { FaqList } from "@/components/sections/FaqList";
+import { ArticleCard } from "@/components/sections/ArticleCard";
+import { JsonLd } from "@/components/ui/JsonLd";
+import { faqJsonLd } from "@/lib/seo/jsonld";
+import { getPublishedArticles } from "@/lib/articles/public";
+
+// Artigos novos aparecem na Home sem precisar de novo deploy.
+export const revalidate = 600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const { locale, t } = await getI18n();
@@ -39,6 +49,8 @@ function splitAccent(title: string): { text: string; accent?: boolean }[] {
 export default async function HomePage() {
   const { locale, t, href } = await getI18n();
   const c = t.home;
+  const isPt = locale === "pt";
+  const latest = isPt ? (await getPublishedArticles()).slice(0, 3) : [];
   const services = listedServices(locale, t.services);
   const marqueeItems =
     locale === "pt" ? [...new Set(services.flatMap((s) => s.skills))].slice(0, 12) : services.map((s) => s.name);
@@ -267,6 +279,74 @@ export default async function HomePage() {
           />
         </div>
       </section>
+
+      {isPt ? (
+        <section aria-labelledby="nichos-title" className="border-t border-line">
+          <div className="container-site py-20 md:py-28">
+            <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+              <SectionHeading
+                eyebrow="Para cada negócio"
+                title="Site para o seu tipo de negócio."
+                id="nichos-title"
+                size="title"
+                className="lg:col-span-7"
+              />
+              <p className="type-body self-end lg:col-span-5">
+                O que um salão precisa mostrar não é o que uma loja ou um consultório precisa. Veja o que o site do seu negócio tem que ter.
+              </p>
+            </div>
+            <ul className="mt-12 flex flex-wrap gap-2">
+              {niches.map((n) => (
+                <li key={n.slug}>
+                  <Link
+                    href={`/site-para/${n.slug}`}
+                    className="inline-flex min-h-11 items-center rounded-full border border-line-strong px-5 text-[0.98rem] transition-colors hover:border-accent hover:text-accent"
+                  >
+                    Site para {n.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
+
+      {isPt ? (
+        <section aria-labelledby="faq-home-title" className="border-t border-line">
+          <JsonLd data={faqJsonLd(homeFaqs)} />
+          <div className="container-site grid gap-12 py-20 md:py-28 lg:grid-cols-12">
+            <div className="lg:col-span-4">
+              <SectionHeading eyebrow="Perguntas frequentes" title="Antes de começar." id="faq-home-title" size="title" />
+              <div className="mt-8">
+                <ButtonLink href="/perguntas-frequentes" variant="outline">
+                  Ver todas as perguntas
+                </ButtonLink>
+              </div>
+            </div>
+            <div className="lg:col-span-8">
+              <FaqList items={homeFaqs} headingId="faq-home-title" />
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {latest.length ? (
+        <section aria-labelledby="blog-title" className="border-t border-line">
+          <div className="container-site py-20 md:py-28">
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <SectionHeading eyebrow="Blog" title="Dicas para o seu negócio." id="blog-title" size="title" />
+              <ButtonLink href="/insights" variant="outline">
+                Ver todos os artigos
+              </ButtonLink>
+            </div>
+            <div className="mt-12 grid gap-x-12 md:grid-cols-3">
+              {latest.map((a) => (
+                <ArticleCard key={a.slug} article={a} />
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <ContactCta />
     </>

@@ -1,3 +1,4 @@
+import { niches } from "@/content/niches";
 import { listedServices } from "@/content/services";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
@@ -40,10 +41,17 @@ export async function Footer() {
   const year = new Date().getFullYear();
   const local = (links: { label: string; href: string }[]) =>
     links.map((l) => ({ label: l.label, href: href(l.href) }));
+  const pt = locale === "pt";
   const institutional = local([
     { label: t.ui.footer.insights, href: "/insights" },
+    ...(pt ? [{ label: "Perguntas frequentes", href: "/perguntas-frequentes" }] : []),
     { label: t.nav.contact.label, href: t.nav.contact.href },
     { label: t.ui.footer.privacy, href: "/politica-de-privacidade" },
+  ]);
+  // Atalhos por tipo de negócio em todas as páginas (só em português): links internos que ajudam a ser encontrado
+  const nicheLinks = local([
+    { label: "Todos os tipos de negócio", href: "/site-para" },
+    ...niches.slice(0, 7).map((n) => ({ label: `Site para ${n.name}`, href: `/site-para/${n.slug}` })),
   ]);
 
   return (
@@ -70,7 +78,7 @@ export async function Footer() {
             </div>
           </div>
 
-          <div className="grid gap-10 sm:grid-cols-3 lg:col-span-7">
+          <div className={pt ? "grid gap-10 sm:grid-cols-2 lg:col-span-7 lg:grid-cols-2 xl:grid-cols-4" : "grid gap-10 sm:grid-cols-3 lg:col-span-7"}>
             <FooterColumn id="footer-navegacao" title={t.ui.footer.navigation} links={local(t.nav.items)} />
             <FooterColumn
               id="footer-especialidades"
@@ -82,6 +90,7 @@ export async function Footer() {
               title={t.ui.footer.institutional}
               links={[...institutional, ...siteConfig.social]}
             />
+            {pt ? <FooterColumn id="footer-nichos" title="Sites para" links={nicheLinks} /> : null}
           </div>
         </div>
 

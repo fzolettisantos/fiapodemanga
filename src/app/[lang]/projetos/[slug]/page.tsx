@@ -6,6 +6,9 @@ import { CaseTemplate } from "@/components/sections/CaseTemplate";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { ButtonLink } from "@/components/ui/Button";
 import { buildMetadata } from "@/lib/seo/metadata";
+import { caseJsonLd } from "@/lib/seo/jsonld";
+import { JsonLd } from "@/components/ui/JsonLd";
+import { localizePath } from "@/i18n/config";
 import { getI18n } from "@/i18n/server";
 
 type Params = { slug: string };
@@ -45,6 +48,16 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
           { name: t.nav.items[2]!.label, path: "/projetos" },
           { name: project.name, path: `/projetos/${project.slug}` },
         ]}
+      />
+      <JsonLd
+        data={caseJsonLd({
+          name: project.name,
+          description: project.seo.description,
+          path: localizePath(locale, `/projetos/${project.slug}`),
+          image: project.cover?.src,
+          publishedAt: project.publishedAt,
+          locale,
+        })}
       />
       <CaseTemplate project={project} />
       <div className="container-site pb-16">

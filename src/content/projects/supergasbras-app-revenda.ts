@@ -331,7 +331,7 @@ export const supergasbrasAppRevenda: Record<Locale, Project> = {
       ),
     ],
     seo: {
-      title: "Caso Supergasbras — Rediseño de la App de Reventa",
+      title: "Caso Supergasbras — App de Reventa",
       description:
         "Rediseño de la aplicación de reventa de Supergasbras: condiciones comerciales, centro financiero, negociaciones, segunda vía de boleta y seguimiento de pedidos.",
     },

@@ -32,39 +32,39 @@ export const es: SiteContent = {
   },
   meta: {
     home: {
-      title: "Fiapo de Manga — Consultora de Diseño, Investigación y UX/UI",
+      title: "Consultora de Diseño, Investigación y UX/UI | Fiapo de Manga",
       description:
-        "Consultora de diseño y UX/UI que une investigación, estrategia de producto y tecnología para crear sitios web, aplicaciones, sistemas y productos digitales con sentido.",
+        "Consultora de diseño y UX/UI que une investigación, estrategia y tecnología para crear sitios web, apps, sistemas y productos digitales con sentido.",
     },
     services: {
-      title: "Qué hacemos — Investigación, Product Design, UX/UI y Sitios Web",
+      title: "Qué Hacemos — Investigación y UX/UI",
       description:
-        "Consultoría y estudio de productos digitales: investigación UX, estrategia de producto, Product Design, UX/UI, sitios web, aplicaciones, sistemas, e-commerce e IA aplicada al diseño.",
+        "Consultoría y estudio de productos digitales: investigación UX, estrategia, Product Design, UX/UI, sitios web, apps, sistemas, e-commerce e IA.",
     },
     about: {
-      title: "Nosotros — Consultora de diseño y experiencia digital",
+      title: "Nosotros — Diseño y Experiencia Digital",
       description:
-        "Conoce Fiapo de Manga: una consultora que conecta investigación, estrategia, diseño y tecnología para transformar desafíos en productos y experiencias digitales.",
+        "Conoce Fiapo de Manga: una consultora que conecta investigación, estrategia, diseño y tecnología para crear productos y experiencias digitales.",
     },
     projects: {
-      title: "Casos — Proyectos de investigación, UX/UI y productos digitales",
+      title: "Casos — Proyectos de UX/UI y Productos Digitales",
       description:
-        "Proyectos de Fiapo de Manga: cómo la investigación, la estrategia y el diseño se conectan para transformar problemas reales en experiencias digitales más claras y funcionales.",
+        "Proyectos de Fiapo de Manga: cómo investigación, estrategia y diseño se conectan para convertir problemas reales en experiencias digitales más claras.",
     },
     insights: {
-      title: "Insights — UX Research, Product Design y experiencias digitales",
+      title: "Insights — UX Research y Product Design",
       description:
-        "Ideas, investigaciones y aprendizajes sobre UX Research, Product Design, UX/UI, estrategia de producto, desarrollo digital, e-commerce e inteligencia artificial.",
+        "Ideas, investigaciones y aprendizajes sobre UX Research, Product Design, UX/UI, estrategia de producto, desarrollo digital, e-commerce e IA.",
     },
     contact: {
       title: "Contacto — Hablemos de tu proyecto",
       description:
-        "Cuéntale tu desafío a Fiapo de Manga: investigación, estrategia, Product Design, UX/UI, sitios web, aplicaciones, sistemas, e-commerce o inteligencia artificial.",
+        "Cuéntale tu desafío a Fiapo de Manga: investigación, estrategia, Product Design, UX/UI, sitios web, apps, sistemas, e-commerce o inteligencia artificial.",
     },
     privacy: {
       title: "Política de Privacidad",
       description:
-        "Cómo Fiapo de Manga trata los datos personales enviados a través del sitio, de acuerdo con la Ley General de Protección de Datos de Brasil (LGPD — Ley n.º 13.709/2018).",
+        "Cómo Fiapo de Manga trata los datos personales enviados por el sitio, conforme a la Ley General de Protección de Datos de Brasil (LGPD, Ley 13.709/2018).",
     },
     notFound: { title: "Página no encontrada" },
   },
@@ -453,7 +453,7 @@ export const es: SiteContent = {
       seo: {
         title: "UX Research y Discovery",
         description:
-          "Investigación UX y Discovery para entender comportamientos, validar hipótesis y respaldar decisiones de producto con evidencias. Entrevistas, pruebas de usabilidad y recorridos.",
+          "Investigación UX y Discovery para entender comportamientos, validar hipótesis y respaldar decisiones de producto con evidencias y entrevistas.",
         keywords: ["investigación UX", "UX Research", "Discovery", "pruebas de usabilidad", "recorrido del usuario"],
       },
     },
@@ -496,7 +496,7 @@ export const es: SiteContent = {
       seo: {
         title: "Estrategia de Producto Digital",
         description:
-          "Consultoría en estrategia de producto: diagnóstico, priorización, definición de MVP, roadmap y métricas que conectan los objetivos de negocio con las necesidades de las personas.",
+          "Consultoría en estrategia de producto: diagnóstico, priorización, MVP, roadmap y métricas que conectan el negocio con las necesidades de las personas.",
         keywords: ["estrategia de producto", "product strategy", "MVP", "roadmap de producto"],
       },
     },
@@ -539,9 +539,9 @@ export const es: SiteContent = {
         related: ["pesquisa-ux-discovery", "aplicativos-sistemas-plataformas", "criacao-de-sites"],
       },
       seo: {
-        title: "Product Design y UX/UI — Diseño de Productos Digitales",
+        title: "Product Design y UX/UI para Productos Digitales",
         description:
-          "Diseño de productos digitales con UX y UI: arquitectura de la información, wireframes, prototipado, design systems y rediseño de interfaces centrados en quienes las usan.",
+          "Diseño de productos digitales con UX y UI: arquitectura de la información, wireframes, prototipado, design systems y rediseño de interfaces.",
         keywords: ["Product Design", "UX/UI", "diseño de interfaces", "design system", "prototipado"],
       },
     },
@@ -585,9 +585,9 @@ export const es: SiteContent = {
         related: ["product-design-ux-ui", "design-tecnologia-ia", "ecommerce"],
       },
       seo: {
-        title: "Creación de Sitios Web Profesionales y Landing Pages",
+        title: "Sitios Web Profesionales y Landing Pages",
         description:
-          "Diseño y desarrollo de sitios institucionales y landing pages con diseño responsivo, SEO técnico, accesibilidad y rendimiento, del contenido a la implementación.",
+          "Diseño y desarrollo de sitios institucionales y landing pages con diseño responsivo, SEO técnico, accesibilidad y rendimiento.",
         keywords: ["creación de sitios web", "desarrollo web", "sitios institucionales", "landing pages"],
       },
     },
@@ -628,7 +628,7 @@ export const es: SiteContent = {
         related: ["product-design-ux-ui", "estrategia-de-produto", "pesquisa-ux-discovery"],
       },
       seo: {
-        title: "Diseño de Aplicaciones, Sistemas Corporativos y SaaS",
+        title: "Diseño de Apps, Sistemas Corporativos y SaaS",
         description:
           "UX/UI para aplicaciones, sistemas corporativos, SaaS, dashboards y plataformas B2B/B2C. Organizamos la información y reducimos la complejidad de uso.",
         keywords: ["diseño de aplicaciones", "UX para sistemas corporativos", "SaaS", "dashboards", "plataformas digitales"],
@@ -719,7 +719,7 @@ export const es: SiteContent = {
       seo: {
         title: "Inteligencia Artificial aplicada al Diseño",
         description:
-          "IA aplicada al diseño y al desarrollo: prototipado acelerado, exploración de interfaces, automatización y desarrollo asistido, con decisiones orientadas por la investigación.",
+          "IA aplicada al diseño y al desarrollo: prototipado acelerado, exploración de interfaces, automatización y desarrollo asistido, guiado por investigación.",
         keywords: ["IA aplicada al diseño", "inteligencia artificial", "prototipado acelerado", "desarrollo asistido por IA"],
       },
     },

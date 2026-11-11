@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: t.meta.home.title, template: `%s | ${siteConfig.name}` },
     description: t.site.description,
     applicationName: siteConfig.name,
-    alternates: { canonical: absoluteUrl(localizePath(locale, "/")), languages: languageAlternates("/") },
+    alternates: { canonical: absoluteUrl(localizePath(locale, "/")), languages: languageAlternates("/", locale) },
     openGraph: {
       type: "website",
       locale: localeInfo[locale].ogLocale,
@@ -37,6 +37,11 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: { card: "summary_large_image", images: [og.url] },
     formatDetection: { telephone: false, email: false, address: false },
+    // Verificação do Search Console e do Bing Webmaster (preencha as variáveis na Vercel; ver docs/seo.md)
+    verification: {
+      ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } : {}),
+      ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ? { other: { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } } : {}),
+    },
   };
 }
 

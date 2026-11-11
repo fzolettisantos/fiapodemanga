@@ -7,6 +7,7 @@ Endereço: `/admin` (fora do Google e sem link no site).
 | Visão geral | Clientes ativos, receita mensal estimada, recebido no mês, atrasados, propostas em aberto, o que precisa de atenção e a atividade recente |
 | Propostas | Lista com situação (enviada, aberta, aceita, expirada); criar nova; detalhe com link, Termo e **prova do aceite** (data, hora, IP, navegador, versão do contrato) |
 | Clientes | Lista com plano, valor, próximo vencimento, fidelidade e situação pela régua (aviso com 10 dias, suspensão com 15, rescisão com 60); detalhe com cobranças, registro manual de pagamento, mudança de situação e histórico completo |
+| Artigos | Editor de artigos do blog (texto simples com pré-visualização, capa e imagens, categorias, agendamento, rascunho/publicação e **lista de verificação de SEO** com o resultado no Google); só os publicados aparecem em `/insights` |
 | Relatório | Cobranças filtradas por mês e situação, totais (recebido, em atraso, a vencer) e exportação em planilha (CSV para Excel) |
 
 Tudo o que acontece fica registrado na tabela `events` (quem fez, o quê e quando).
@@ -32,6 +33,14 @@ os dados somem quando o servidor reinicia.
 
 O envio do link usa o e-mail do próprio Supabase (limite baixo por hora). Para volume maior, configure um SMTP
 (por exemplo, o Resend do formulário de contato) em **Authentication → SMTP Settings**.
+
+## Artigos (blog)
+
+- Escreva em **Markdown simples** (`## Subtítulo`, `- lista`, `**negrito**`, `[texto](/servico)`); o botão de cada recurso fica acima do texto.
+- Rascunhos nunca aparecem no site. Publique ou **agende** uma data: entra no ar na data escolhida (a lista pode levar até 10 minutos para atualizar).
+- Imagens: o envio funciona depois que o Supabase estiver configurado (elas são redimensionadas e guardadas no Storage).
+- Em modo demonstração, os artigos de exemplo **não aparecem no site público**.
+- O endereço de cada artigo é `/insights/<endereço>`; as categorias ficam em `/insights/categoria/<categoria>`.
 
 ## Segurança
 

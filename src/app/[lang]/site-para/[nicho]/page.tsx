@@ -40,7 +40,7 @@ export default async function NichePage({ params }: { params: Promise<Params> })
   const plan = plans[type.plan];
   // 3 perguntas do segmento + 2 gerais (prazo e domínio) que todo cliente faz
   const faqs = [...niche.faqs, generalFaqs[0]!, generalFaqs[1]!];
-  const others = niches.filter((n) => n.slug !== niche.slug).slice(0, 6);
+  const others = niches.filter((n) => n.slug !== niche.slug).slice(0, 8);
   const path = localizePath(locale, `/site-para/${niche.slug}`);
 
   return (
@@ -151,6 +151,11 @@ export default async function NichePage({ params }: { params: Promise<Params> })
             <li>
               <Link href="/site-para" className="inline-flex min-h-10 items-center px-2 text-[0.95rem] text-accent link-underline">
                 Ver todos
+              </Link>
+            </li>
+            <li>
+              <Link href="/contato" className="inline-flex min-h-10 items-center px-2 text-[0.95rem] text-accent link-underline">
+                Outro tipo de negócio? Fale com a gente
               </Link>
             </li>
           </ul>

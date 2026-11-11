@@ -367,6 +367,316 @@ export const niches: Niche[] = [
       { q: "As minhas fotos ficam protegidas?", a: "As imagens são suas. Podemos aplicar marca d’água se você quiser e deixamos os arquivos em tamanho de exibição, sem os originais." },
     ],
   },
+  {
+    slug: "oficina-mecanica",
+    name: "oficina mecânica",
+    h1: "Site para oficina mecânica: serviços e orçamento pelo WhatsApp",
+    title: "Site para Oficina Mecânica com Orçamento",
+    description:
+      "Site para oficina mecânica com serviços, marcas atendidas, horários e pedido de orçamento pelo WhatsApp. Domínio e hospedagem inclusos, com mensalidade.",
+    siteTypeId: "institucional",
+    contactType: "site",
+    intro: [
+      "Quem tem o carro parado ou com um barulho estranho pesquisa rápido: quer saber se a oficina resolve o problema, onde fica e quanto tempo leva para ser atendido. Um site claro dá confiança antes de o cliente ligar.",
+      "Para a oficina, o site também reduz o vai e vem de mensagens, porque explica os serviços, as marcas atendidas e como pedir um orçamento já com as informações do carro.",
+    ],
+    features: [
+      { title: "Serviços explicados", text: "Revisão, freios, suspensão, elétrica, ar-condicionado e o que mais a oficina faz, cada um em linguagem simples." },
+      { title: "Marcas e modelos atendidos", text: "O cliente descobre logo se a oficina atende o carro dele." },
+      { title: "Orçamento pelo WhatsApp", text: "Botão com mensagem pronta para o cliente enviar modelo, ano e o problema." },
+      { title: "Fotos da oficina e da equipe", text: "Mostrar o espaço e quem cuida do carro passa segurança." },
+      { title: "Horários, mapa e como chegar", text: "Endereço, horário de atendimento e referência de localização." },
+      { title: "Perguntas frequentes", text: "Prazo médio, formas de pagamento e garantia do serviço, respondidos em um só lugar." },
+    ],
+    discovery:
+      "Quem procura mecânico pesquisa o serviço com a cidade ou o bairro, e quase sempre olha o mapa do Google. O site escreve o nome da oficina, os serviços e a localização de forma clara e ajuda o Google a mostrar o negócio para quem precisa de atendimento por perto. O perfil no Google Meu Negócio, com fotos e horário, complementa o site.",
+    format:
+      "Indicamos o site institucional de até cinco páginas: apresentação, serviços, marcas atendidas, contato e mapa, com botão de WhatsApp em destaque.",
+    faqs: [
+      { q: "O site pode mostrar os preços dos serviços?", a: "Se você quiser. Muitas oficinas preferem orçar caso a caso, porque cada carro é diferente. O botão de orçamento leva o cliente ao WhatsApp com as informações do veículo." },
+      { q: "Posso colocar fotos de serviços feitos?", a: "Pode, desde que você tenha a autorização do dono do carro quando a placa ou o rosto aparecerem. Fotos da oficina e da equipe são sempre uma boa escolha." },
+      { q: "O cliente consegue agendar horário pelo site?", a: "Pelo WhatsApp, que é o jeito mais simples. Se a oficina usar uma agenda on-line, dá para integrá-la." },
+    ],
+  },
+  {
+    slug: "imobiliaria",
+    name: "imobiliária",
+    h1: "Site para imobiliária e corretor de imóveis",
+    title: "Site para Imobiliária e Corretor de Imóveis",
+    description:
+      "Site para imobiliária ou corretor com vitrine de imóveis, busca por filtros, fotos e contato pelo WhatsApp. Domínio e hospedagem inclusos, com mensalidade.",
+    siteTypeId: "vitrine-filtros",
+    contactType: "site",
+    intro: [
+      "Quem procura um imóvel quer comparar rápido: filtra por bairro, tipo e faixa de valor, olha as fotos e só então fala com alguém. Um site com vitrine organizada e filtros simples tira o cliente do emaranhado de anúncios e leva direto ao seu contato.",
+      "Ter o próprio site também dá à imobiliária ou ao corretor um endereço que é seu, em vez de depender só de portais e redes sociais.",
+    ],
+    features: [
+      { title: "Vitrine de imóveis", text: "Cada imóvel com fotos, descrição, valor, metragem, quartos e localização." },
+      { title: "Busca com filtros", text: "Por tipo, bairro, valor e número de quartos, para o cliente achar o que combina com ele." },
+      { title: "Contato em cada imóvel", text: "Botão de WhatsApp que já informa qual imóvel despertou o interesse." },
+      { title: "Sobre você e a equipe", text: "Apresentação com foto e o número do CRECI, como as regras da profissão pedem." },
+      { title: "Bairros e regiões", text: "Páginas que explicam as regiões onde você atua e ajudam a ser encontrado." },
+      { title: "Fotos leves e nítidas", text: "Imagens tratadas para abrir rápido no celular sem perder a qualidade." },
+    ],
+    discovery:
+      "As buscas por imóvel misturam o tipo (casa, apartamento), a ação (comprar, alugar) e a região. Páginas bem descritas por imóvel e por região dão ao Google o que ele precisa para mostrar o seu site nessas buscas, que são muito concorridas. Por isso a vitrine precisa estar sempre atualizada e o endereço do imóvel descrito de forma clara.",
+    format:
+      "Indicamos a vitrine com filtros, para até 200 imóveis: busca, filtros, fotos e contato direto. Cadastramos os imóveis iniciais e, depois, as atualizações entram nos ajustes do plano.",
+    faqs: [
+      { q: "Quantos imóveis cabem na vitrine?", a: "O formato indicado atende até 200 itens. Para operações maiores, avaliamos uma solução sob medida." },
+      { q: "Como atualizo os imóveis vendidos ou alugados?", a: "Você envia a atualização e a gente ajusta. Retirar um imóvel ou trocar um valor faz parte dos ajustes mensais do plano." },
+      { q: "O site precisa mostrar o CRECI?", a: "A divulgação de imóveis segue regras da profissão, e o número do registro costuma ser exigido. A revisão final das informações é sempre sua." },
+    ],
+  },
+  {
+    slug: "contador",
+    name: "escritório de contabilidade",
+    h1: "Site para contador e escritório de contabilidade",
+    title: "Site para Contador e Escritório de Contabilidade",
+    description:
+      "Site para contador e escritórios de contabilidade com serviços, abertura de empresa, blog e contato. Domínio e hospedagem inclusos, com mensalidade.",
+    siteTypeId: "institucional",
+    contactType: "site",
+    intro: [
+      "Quem procura um contador quer segurança: saber se o escritório resolve abertura de empresa, impostos e rotina do MEI ou da empresa, e se é fácil falar com alguém. O site é a primeira impressão do escritório e precisa passar organização e clareza.",
+      "Contabilidade é uma área em que as pessoas pesquisam dúvidas antes de contratar. Um site com serviços bem explicados e artigos que respondem a essas dúvidas atrai clientes que já estão decidindo.",
+    ],
+    features: [
+      { title: "Serviços por perfil de cliente", text: "MEI, microempresa, profissional liberal e empresas maiores, cada um com o que o escritório oferece." },
+      { title: "Abertura de empresa", text: "Uma página que explica como funciona, os documentos e o que o escritório cuida." },
+      { title: "Blog com dúvidas comuns", text: "Artigos sobre impostos, obrigações e prazos, que ajudam a ser encontrado e mostram conhecimento." },
+      { title: "Contato fácil", text: "WhatsApp, telefone e formulário, com horário de atendimento." },
+      { title: "Equipe e registro no CRC", text: "Apresentação dos contadores, com o número do registro profissional." },
+      { title: "Perguntas frequentes", text: "Como funciona o atendimento, o que enviar todo mês e como é feita a troca de contador." },
+    ],
+    discovery:
+      "As buscas por contabilidade vêm muito em forma de pergunta, como “como abrir MEI” ou “como trocar de contador”. Artigos claros sobre essas dúvidas, ligados às páginas de serviço, são uma das formas mais confiáveis de ser encontrado. O site entrega a base técnica; o conteúdo, escrito por você, constrói o resultado ao longo do tempo.",
+    format:
+      "Indicamos o site institucional de até cinco páginas, com espaço para o blog, onde você publica artigos pelo painel.",
+    faqs: [
+      { q: "Posso publicar artigos sobre impostos e obrigações?", a: "Pode, e é uma das melhores formas de ser encontrado. Você escreve e publica pelo painel, com uma lista de verificação de SEO para cada artigo." },
+      { q: "O site pode ter área para o cliente enviar documentos?", a: "Isso é um sistema à parte, não faz parte do site institucional. Podemos avaliar uma área do cliente sob medida, dentro de aplicativos e sistemas." },
+      { q: "Preciso colocar o número do CRC?", a: "As normas da profissão pedem identificação do responsável. A revisão final das informações do site é sempre sua." },
+    ],
+  },
+  {
+    slug: "arquiteto",
+    name: "arquiteto",
+    h1: "Site de portfólio para arquiteto e designer de interiores",
+    title: "Site de Portfólio para Arquiteto e Interiores",
+    description:
+      "Portfólio para arquiteto e designer de interiores com projetos em destaque, fotos grandes e pedido de orçamento pelo WhatsApp. Domínio e hospedagem inclusos.",
+    siteTypeId: "portfolio",
+    contactType: "site",
+    intro: [
+      "Quem contrata um arquiteto compra confiança e estilo. O portfólio é onde o cliente vê se o seu olhar combina com o que ele imagina para a casa, o escritório ou a loja.",
+      "Por isso as fotos precisam aparecer grandes e nítidas, sem pesar, e cada projeto precisa contar o que foi feito, para quem e com que desafio.",
+    ],
+    features: [
+      { title: "Projetos em destaque", text: "Os trabalhos que melhor mostram o seu estilo, com fotos grandes e legendas." },
+      { title: "História de cada projeto", text: "O briefing, a solução e o resultado, em texto curto e objetivo." },
+      { title: "Tipos de serviço", text: "Residencial, comercial, interiores e reforma, cada um com sua explicação." },
+      { title: "Sobre você", text: "Formação, registro no CAU e a sua forma de trabalhar." },
+      { title: "Pedido de orçamento", text: "Botão de WhatsApp e formulário simples, com o tipo de projeto já escolhido." },
+      { title: "Imagens leves", text: "Fotos tratadas para carregar rápido no celular sem perder qualidade." },
+    ],
+    discovery:
+      "Quem procura arquiteto costuma pesquisar o tipo de projeto com a cidade ou a região. Um portfólio com projetos bem descritos, nomes de ambientes e localizações escritos de forma clara ajuda o Google a entender o seu trabalho. Redes sociais e Google Meu Negócio completam a presença.",
+    format:
+      "Indicamos o portfólio: galeria de projetos, apresentação e contato, com o visual da sua marca. Se quiser publicar artigos sobre projetos e tendências, o blog entra junto.",
+    faqs: [
+      { q: "Posso mostrar projetos de clientes?", a: "Pode, com a autorização do cliente e cuidado com informações pessoais, como endereço e fotos de pessoas. A revisão final do que aparece é sua." },
+      { q: "Quantos projetos posso colocar?", a: "O suficiente para mostrar o seu melhor trabalho. Recomendamos poucos projetos bem contados em vez de uma lista enorme." },
+      { q: "Dá para ter uma página por projeto?", a: "Dá. Cada projeto pode ter a sua página com fotos, texto e ficha técnica, e isso também ajuda nas buscas." },
+    ],
+  },
+  {
+    slug: "nutricionista",
+    name: "nutricionista",
+    h1: "Site para nutricionista: atendimento e primeiro contato",
+    title: "Site para Nutricionista: Atendimento Online",
+    description:
+      "Site para nutricionista com apresentação, forma de atendimento, perguntas frequentes e agendamento pelo WhatsApp. Domínio e hospedagem inclusos.",
+    siteTypeId: "landing-page",
+    contactType: "site",
+    intro: [
+      "Quem procura um nutricionista quer entender como é o acompanhamento, se o atendimento é online ou presencial e como dar o primeiro passo. Uma página acolhedora e objetiva já responde a isso.",
+      "A publicidade da área tem regras próprias, como evitar promessas de resultado e comparações de antes e depois. A gente organiza o site; a revisão final do conteúdo, de acordo com as normas do seu conselho, é sempre sua.",
+    ],
+    features: [
+      { title: "Quem é você", text: "Apresentação com formação e número do registro no conselho." },
+      { title: "Como é o atendimento", text: "Consulta, retorno e acompanhamento, de forma clara e sem jargão." },
+      { title: "Online ou presencial", text: "Como funcionam as consultas, plataforma usada e duração." },
+      { title: "Agendar a primeira consulta", text: "Botão de WhatsApp com mensagem pronta, sem formulário longo." },
+      { title: "Perguntas frequentes", text: "Planos, retornos, formas de pagamento e como se preparar para a primeira consulta." },
+      { title: "Conteúdo informativo", text: "Um espaço para artigos curtos sobre alimentação, que ajudam a ser encontrado." },
+    ],
+    discovery:
+      "As buscas por nutricionista misturam a especialidade (esportiva, emagrecimento, infantil) com a cidade ou o atendimento online. Uma página bem escrita, com artigos curtos que respondem a dúvidas comuns, fortalece a presença no Google ao longo do tempo. A base técnica o site entrega; o conteúdo é construído por você.",
+    format:
+      "Indicamos a página única (landing page): uma página completa, leve e com o botão de contato em destaque. Quando quiser crescer, evoluímos para um site com blog.",
+    faqs: [
+      { q: "Posso mostrar fotos de antes e depois?", a: "Recomendamos não mostrar. As normas de publicidade da profissão restringem esse tipo de conteúdo. Priorize conteúdo informativo e a sua forma de atender." },
+      { q: "O site precisa mostrar o valor da consulta?", a: "Não precisa. Alguns profissionais combinam o valor no primeiro contato; outros mostram. A escolha é sua." },
+      { q: "Posso ter um blog?", a: "Pode, e ajuda muito a ser encontrado. Você escreve e publica pelo painel, com orientação de SEO." },
+    ],
+  },
+  {
+    slug: "clinica-de-estetica",
+    name: "clínica de estética",
+    h1: "Site para clínica de estética e espaço de beleza",
+    title: "Site para Clínica de Estética com Agenda",
+    description:
+      "Site para clínica de estética com tratamentos explicados, equipe, perguntas frequentes e agendamento pelo WhatsApp. Domínio e hospedagem inclusos.",
+    siteTypeId: "agendamento",
+    contactType: "site",
+    intro: [
+      "Quem procura um tratamento estético pesquisa muito antes de agendar: quer entender o que cada procedimento faz, quem atende e se o ambiente passa segurança. O site é onde a clínica explica com calma e conquista a confiança.",
+      "O conteúdo precisa ser informativo e seguir as normas dos conselhos de cada profissional. A gente organiza e publica; a revisão final do texto é sua.",
+    ],
+    features: [
+      { title: "Tratamentos explicados", text: "Cada procedimento com o que é, para quem serve e como funciona, sem promessas exageradas." },
+      { title: "Equipe e formação", text: "Quem atende, com formação e registro no conselho, quando você quiser divulgar." },
+      { title: "Fotos do espaço", text: "Mostrar o ambiente ajuda a pessoa a se sentir segura antes da primeira visita." },
+      { title: "Agendamento", text: "Botão de WhatsApp com mensagem pronta ou agenda on-line." },
+      { title: "Cuidados e perguntas frequentes", text: "Preparo, tempo de recuperação e contraindicações, em linguagem simples." },
+      { title: "Mapa e horários", text: "Endereço, como chegar e horário de atendimento." },
+    ],
+    discovery:
+      "Quem procura estética pesquisa o tratamento com a cidade ou o bairro e confere o mapa e as avaliações. O site descreve os tratamentos e a localização em texto claro, no formato que o Google entende, e conversa com o perfil no Google Meu Negócio. É a base técnica; a constância de conteúdo faz o resto.",
+    format:
+      "Indicamos o site com agendamento: páginas de tratamentos, equipe e contato, agenda on-line ou WhatsApp e mapa.",
+    faqs: [
+      { q: "Posso mostrar fotos de antes e depois?", a: "Depende das normas do conselho de cada profissional e exige autorização por escrito da cliente. Recomendamos confirmar a regra da sua profissão antes de publicar." },
+      { q: "O site mostra os preços dos procedimentos?", a: "Se você quiser. Muitas clínicas preferem avaliar cada caso antes de passar o valor." },
+      { q: "Dá para vender pacotes e produtos pelo site?", a: "Pacotes podem ser vendidos pelo WhatsApp. Se quiser vender produtos com pagamento on-line, o formato indicado é a loja virtual." },
+    ],
+  },
+  {
+    slug: "floricultura",
+    name: "floricultura",
+    h1: "Site para floricultura: catálogo e pedidos pelo WhatsApp",
+    title: "Site para Floricultura: Catálogo e Pedidos",
+    description:
+      "Site para floricultura com catálogo de arranjos e buquês, datas especiais, entrega e pedido pelo WhatsApp. Domínio e hospedagem inclusos, com mensalidade.",
+    siteTypeId: "catalogo-50",
+    contactType: "site",
+    intro: [
+      "Quem compra flores quase sempre tem pressa e uma data para cumprir. Quer ver o arranjo, saber se chega a tempo e resolver tudo em uma conversa. Um catálogo organizado, com fotos e entrega explicada, faz essa venda acontecer mais rápido.",
+      "Nas datas fortes, como Dia das Mães e Dia dos Namorados, o site também ajuda a organizar o fluxo de pedidos, em vez de depender de mensagens soltas.",
+    ],
+    features: [
+      { title: "Catálogo de arranjos e buquês", text: "Fotos, nomes e descrição de cada opção, organizadas por ocasião." },
+      { title: "Pedido pelo WhatsApp", text: "Cada produto com botão que abre a conversa com o item já escolhido." },
+      { title: "Entrega explicada", text: "Regiões atendidas, horários e prazos, antes de o cliente perguntar." },
+      { title: "Datas especiais", text: "Páginas de temporada para Dia das Mães, Natal e outras datas." },
+      { title: "Cartão e mensagem", text: "Como incluir um recado, para o presente chegar completo." },
+      { title: "Mapa e horário da loja", text: "Endereço, horário e retirada na loja, quando existir." },
+    ],
+    discovery:
+      "As buscas por flores vêm quase sempre com a cidade ou o bairro e com a ocasião, como “buquê de rosas” ou “flores para aniversário”. Um catálogo com produtos bem nomeados e descritos, e uma área de entrega clara, ajuda o Google a mostrar a floricultura para quem precisa na sua região.",
+    format:
+      "Indicamos o catálogo de produtos: até 50 itens com fotos e pedido pelo WhatsApp. Para vender com pagamento on-line e frete, o próximo passo é a loja virtual.",
+    faqs: [
+      { q: "Posso trocar o catálogo conforme a temporada?", a: "Pode. Você envia as fotos e os itens e a gente atualiza dentro dos ajustes mensais do plano." },
+      { q: "O cliente paga pelo site?", a: "No catálogo, o pedido segue pelo WhatsApp e o pagamento é combinado ali. Para pagamento direto no site, o formato indicado é a loja virtual." },
+      { q: "Dá para mostrar a área de entrega?", a: "Dá. Descrevemos os bairros ou cidades atendidos e os prazos, e podemos incluir um mapa." },
+    ],
+  },
+  {
+    slug: "pousada",
+    name: "pousada ou hotel",
+    h1: "Site para pousada e hotel com reservas pelo WhatsApp",
+    title: "Site para Pousada e Hotel com Reservas",
+    description:
+      "Site para pousada ou hotel com fotos dos quartos, comodidades, localização e reservas pelo WhatsApp. Domínio e hospedagem inclusos, com mensalidade.",
+    siteTypeId: "institucional",
+    contactType: "site",
+    intro: [
+      "Quem planeja uma viagem vê fotos, compara quartos e pesquisa a região antes de decidir. O site da pousada é a vitrine que mostra o ambiente com calma e leva o hóspede a falar direto com você, sem comissão de plataforma.",
+      "Reservas diretas ficam com a pousada o valor que, de outra forma, iria para intermediários. O site também reúne o que costuma gerar dúvida: regras, horários de entrada e saída e como chegar.",
+    ],
+    features: [
+      { title: "Fotos dos quartos e áreas", text: "Galeria grande e nítida, para o hóspede imaginar a estadia." },
+      { title: "Comodidades", text: "Café da manhã, estacionamento, piscina, Wi-Fi e o que mais a pousada oferece." },
+      { title: "Reserva pelo WhatsApp", text: "Botão com mensagem pronta para pedir datas e consultar disponibilidade." },
+      { title: "Localização e como chegar", text: "Mapa, pontos de referência e atrações próximas." },
+      { title: "Regras e políticas", text: "Entrada e saída, pets, crianças e cancelamento, explicados com clareza." },
+      { title: "Perguntas frequentes", text: "Dúvidas comuns respondidas antes de o hóspede perguntar." },
+    ],
+    discovery:
+      "As buscas por hospedagem misturam o destino com o tipo de estadia, como “pousada em [cidade]” ou “hotel perto de [atração]”. Páginas bem descritas, com a região e as comodidades escritas de forma clara, ajudam o Google a mostrar a pousada. As plataformas de reserva têm muita força nas buscas, então o site precisa se destacar pela experiência direta e pelo perfil no Google Meu Negócio.",
+    format:
+      "Indicamos o site institucional de até cinco páginas: apresentação, quartos, comodidades, localização e contato, com reservas pelo WhatsApp.",
+    faqs: [
+      { q: "O site faz reserva e cobrança on-line?", a: "O formato indicado leva a reserva ao WhatsApp, onde você confirma as datas e combina o pagamento. Para um sistema de reservas com pagamento, avaliamos uma solução sob medida." },
+      { q: "Posso mostrar o valor das diárias?", a: "Pode. Muitas pousadas mostram um valor “a partir de” e confirmam o preço final conforme as datas." },
+      { q: "O site funciona em outros idiomas?", a: "Podemos avaliar uma versão em inglês ou espanhol, se o seu público incluir turistas estrangeiros." },
+    ],
+  },
+  {
+    slug: "prestador-de-servicos",
+    name: "prestador de serviços",
+    h1: "Site para prestador de serviços: eletricista, encanador e outros",
+    title: "Site para Prestador de Serviços e Autônomo",
+    description:
+      "Site para prestador de serviços e autônomos, como eletricista, encanador, pintor e diarista, com orçamento pelo WhatsApp. Domínio e hospedagem inclusos.",
+    siteTypeId: "landing-page",
+    contactType: "site",
+    intro: [
+      "Quem precisa de um eletricista, encanador, pintor ou diarista quer alguém confiável e perto. Antes de chamar, a pessoa pesquisa, olha o que o profissional faz e confere se atende a região dela.",
+      "Uma página simples e profissional, com os serviços, a região atendida e um botão de orçamento pelo WhatsApp, já faz o autônomo parecer mais confiável do que quem depende só de indicação.",
+    ],
+    features: [
+      { title: "Serviços que você faz", text: "Lista clara do que você atende, para o cliente saber se você resolve o problema dele." },
+      { title: "Região atendida", text: "Bairros e cidades onde você trabalha, para ser encontrado por quem está perto." },
+      { title: "Orçamento pelo WhatsApp", text: "Botão com mensagem pronta para o cliente descrever o serviço." },
+      { title: "Fotos de trabalhos feitos", text: "Imagens reais de serviços concluídos, que mostram qualidade e passam confiança." },
+      { title: "Como funciona", text: "Visita, orçamento, prazo e forma de pagamento, explicados em poucas linhas." },
+      { title: "Perguntas frequentes", text: "Garantia do serviço, emergências e horários de atendimento." },
+    ],
+    discovery:
+      "As buscas por serviços locais vêm com a cidade ou o bairro, como “eletricista em [bairro]”. Uma página com o seu nome, os serviços e a região escritos de forma clara, junto com um perfil bem preenchido no Google Meu Negócio, é o que mais ajuda a aparecer para quem precisa de atendimento por perto.",
+    format:
+      "Indicamos a página única (landing page): leve, rápida no celular e com o botão de WhatsApp em destaque. É o jeito mais simples e econômico de ter presença profissional.",
+    faqs: [
+      { q: "Preciso de CNPJ para ter um site?", a: "Para o site em si, não. Para contratar o nosso plano, é necessário um documento do contratante, que pode ser CPF ou CNPJ." },
+      { q: "Posso mostrar o antes e depois dos serviços?", a: "Pode, com cuidado para não mostrar o rosto de pessoas nem informações da casa do cliente sem autorização." },
+      { q: "Funciona para quem atende em várias cidades?", a: "Sim. Listamos as cidades e bairros atendidos, e o Google entende melhor onde você atua." },
+    ],
+  },
+  {
+    slug: "artesanato",
+    name: "loja de artesanato",
+    h1: "Loja virtual para artesanato e produtos feitos à mão",
+    title: "Loja Virtual para Artesanato e Feito à Mão",
+    description:
+      "Loja virtual para artesanato com catálogo, produtos personalizados, pagamento por cartão, Pix e boleto, frete e painel. Sem comissão sobre as vendas.",
+    siteTypeId: "loja-50",
+    contactType: "ecommerce",
+    intro: [
+      "Artesanato vende pela história e pelo cuidado. O cliente quer ver os detalhes da peça, entender o material, saber o prazo de produção e sentir que está comprando de uma pessoa, não de uma prateleira.",
+      "Uma loja virtual própria permite contar essa história, vender peças prontas e por encomenda, e receber pelo Mercado Pago sem pagar comissão sobre cada venda.",
+    ],
+    features: [
+      { title: "Catálogo com fotos de detalhe", text: "Cada peça com várias fotos, medidas, materiais e cuidados." },
+      { title: "Peças prontas e por encomenda", text: "Prazo de produção e opções de personalização explicados em cada produto." },
+      { title: "Pagamento pelo Mercado Pago", text: "Cartão, Pix e boleto. As taxas do Mercado Pago ficam na sua própria conta." },
+      { title: "Frete", text: "Cálculo no carrinho, com cuidado de embalagem descrito para peças frágeis." },
+      { title: "Sua história", text: "Uma página sobre quem faz, como faz e por que faz, que gera confiança." },
+      { title: "Painel de pedidos", text: "Acompanhe pedidos, pagamentos e encomendas em um só lugar." },
+    ],
+    discovery:
+      "As buscas por artesanato misturam o tipo de peça, o material e a ocasião, como “presente personalizado de crochê”. Páginas de produto com bons textos, fotos reais e nomes claros ajudam a loja a ser encontrada. A concorrência com grandes marketplaces é alta, então vale investir na identidade e na história da marca, que é o que o artesanato tem de único.",
+    format:
+      "Indicamos a loja virtual de até 50 produtos: catálogo, pagamento, frete e painel. Para um catálogo maior, com variações e cupons, o formato de até 200 produtos.",
+    faqs: [
+      { q: "Vocês cobram comissão sobre as vendas?", a: "Não. Você paga só a mensalidade. As taxas do Mercado Pago são cobradas direto na sua conta." },
+      { q: "Consigo vender peças por encomenda?", a: "Consegue. Cada produto pode informar o prazo de produção, e o pedido personalizado pode seguir pelo WhatsApp." },
+      { q: "E se eu vender também em marketplaces?", a: "Sem problema. A loja própria complementa os marketplaces, deixa a margem com você e fortalece a sua marca." },
+    ],
+  },
 ];
 
 export function getNiche(slug: string): Niche | undefined {

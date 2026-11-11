@@ -33,7 +33,7 @@ export default async function NichesPage() {
         eyebrow="Sites para cada negócio"
         title="Cada negócio precisa de um site diferente."
         paragraphs={[
-          "O que um salão precisa mostrar não é o que uma loja de roupas ou um consultório precisa. Escolha o seu tipo de negócio e veja o que o site tem que ter e qual formato indicamos.",
+          "O que um salão precisa mostrar não é o que uma loja de roupas ou um consultório precisa. Escolha o seu tipo de negócio e veja o que o site tem que ter e qual formato indicamos. Se o seu não estiver na lista, a gente cria para qualquer negócio.",
         ]}
       />
       <section aria-labelledby="lista-title" className="border-t border-line">
@@ -56,10 +56,21 @@ export default async function NichesPage() {
                 </Link>
               </li>
             ))}
+            <li className="border-b border-line">
+              <Link
+                href="/contato"
+                className="sweep-row group flex h-full flex-col justify-between gap-6 py-8 sm:pr-8"
+              >
+                <span>
+                  <span className="type-subheading block transition-colors group-hover:text-accent">E qualquer outro negócio</span>
+                  <span className="type-body mt-3 block text-muted">
+                    Não achou o seu? Cada site é feito sob medida. Conte o que você faz e a gente responde com uma proposta.
+                  </span>
+                </span>
+                <ArrowUpRight aria-hidden="true" className="size-6 text-accent" strokeWidth={1.5} />
+              </Link>
+            </li>
           </ul>
-          <p className="type-body mt-12 max-w-2xl text-muted">
-            Não achou o seu tipo de negócio? A gente também cria sites, lojas virtuais e sistemas sob medida. Conte o que você faz e responderemos com uma proposta.
-          </p>
         </div>
       </section>
       <ContactCta />

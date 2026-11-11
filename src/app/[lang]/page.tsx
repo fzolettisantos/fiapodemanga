@@ -285,18 +285,18 @@ export default async function HomePage() {
           <div className="container-site py-20 md:py-28">
             <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
               <SectionHeading
-                eyebrow="Para cada negócio"
+                eyebrow="Para qualquer negócio"
                 title="Site para o seu tipo de negócio."
                 id="nichos-title"
                 size="title"
                 className="lg:col-span-7"
               />
               <p className="type-body self-end lg:col-span-5">
-                O que um salão precisa mostrar não é o que uma loja ou um consultório precisa. Veja o que o site do seu negócio tem que ter.
+                Salão, loja, consultório, restaurante, escritório ou qualquer outro negócio: cada um precisa mostrar coisas diferentes. Veja o que o site do seu tem que ter.
               </p>
             </div>
             <ul className="mt-12 flex flex-wrap gap-2">
-              {niches.map((n) => (
+              {niches.slice(0, 14).map((n) => (
                 <li key={n.slug}>
                   <Link
                     href={`/site-para/${n.slug}`}
@@ -306,7 +306,22 @@ export default async function HomePage() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link
+                  href="/site-para"
+                  className="inline-flex min-h-11 items-center rounded-full border border-accent px-5 text-[0.98rem] font-medium text-heading transition-colors hover:bg-accent-fill hover:text-ink"
+                >
+                  E muito mais: ver todos os tipos
+                </Link>
+              </li>
             </ul>
+            <p className="type-body mt-8 max-w-2xl text-muted">
+              Não achou o seu? A gente cria para qualquer negócio.{" "}
+              <Link href="/contato" className="link-underline text-accent">
+                Conte o que você faz
+              </Link>
+              .
+            </p>
           </div>
         </section>
       ) : null}

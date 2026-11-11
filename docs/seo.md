@@ -40,6 +40,16 @@
 | `/site-para/pet-shop` | site para pet shop |
 | `/site-para/loja-de-roupas` | loja virtual para roupas / moda |
 | `/site-para/fotografo` | portfólio para fotógrafo |
+| `/site-para/oficina-mecanica` | site para oficina mecânica |
+| `/site-para/imobiliaria` | site para imobiliária / corretor de imóveis |
+| `/site-para/contador` | site para contador / escritório de contabilidade |
+| `/site-para/arquiteto` | portfólio para arquiteto e designer de interiores |
+| `/site-para/nutricionista` | site para nutricionista |
+| `/site-para/clinica-de-estetica` | site para clínica de estética |
+| `/site-para/floricultura` | site para floricultura |
+| `/site-para/pousada` | site para pousada / hotel |
+| `/site-para/prestador-de-servicos` | site para eletricista, encanador, pintor, diarista (autônomos) |
+| `/site-para/artesanato` | loja virtual para artesanato |
 | `/perguntas-frequentes` | site tem fidelidade? domínio incluso? quanto tempo leva? |
 | `/insights` e `/insights/categoria/*` | busca informacional (guias), ver pauta abaixo |
 

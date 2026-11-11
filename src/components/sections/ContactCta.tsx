@@ -1,3 +1,4 @@
+import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { ButtonLink } from "@/components/ui/Button";
 import { FiberLine } from "@/components/brand/FiberLine";
 import { ConversationBadge } from "@/components/brand/ConversationBadge";
@@ -27,9 +28,12 @@ export async function ContactCta({ ctaHref }: ContactCtaProps = {}) {
         <div className="mt-12 grid items-center gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="space-y-10 lg:col-span-6 lg:col-start-6 lg:row-start-1">
             <p className="type-lead max-w-xl">{description}</p>
-            <ButtonLink href={cta.href} variant="primary" size="lg">
-              {cta.label}
-            </ButtonLink>
+            <div className="flex flex-wrap gap-3">
+              <ButtonLink href={cta.href} variant="primary" size="lg">
+                {cta.label}
+              </ButtonLink>
+              <WhatsAppButton label={t.ui.whatsapp.label} message={t.ui.whatsapp.message} size="lg" />
+            </div>
           </div>
           <ConversationBadge
             src="/brand/vamos-conversar-sentada.svg"

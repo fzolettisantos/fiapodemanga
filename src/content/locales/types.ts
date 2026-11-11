@@ -144,6 +144,8 @@ export type SiteContent = {
       readAlso: string;
     };
     contact: { orWrite: string; formRegion: string };
+    /** Botão de WhatsApp (aparece só com NEXT_PUBLIC_WHATSAPP_NUMBER configurado) */
+    whatsapp: { label: string; message: string; orChat: string };
     badgeAria: string;
     /** Balão de fala da Luli no hero */
     mascot: {

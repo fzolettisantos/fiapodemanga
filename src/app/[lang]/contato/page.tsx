@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/config/site";
+import { siteConfig, whatsappHref } from "@/config/site";
+import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { projectTypes } from "@/content/contact";
 import { getI18n } from "@/i18n/server";
 import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
@@ -31,6 +32,12 @@ export default async function ContactPage() {
               </p>
             ))}
           </div>
+          {whatsappHref(t.ui.whatsapp.message) ? (
+            <div className="mt-10">
+              <p className="mb-4 text-[0.98rem]">{t.ui.whatsapp.orChat}</p>
+              <WhatsAppButton label={t.ui.whatsapp.label} message={t.ui.whatsapp.message} variant="primary" />
+            </div>
+          ) : null}
           {siteConfig.contactEmail ? (
             <p className="mt-10 text-[0.98rem]">
               {t.ui.contact.orWrite}{" "}

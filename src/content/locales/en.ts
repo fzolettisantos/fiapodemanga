@@ -166,6 +166,7 @@ export const en: SiteContent = {
       readAlso: "Read next",
     },
     contact: { orWrite: "If you prefer, write to", formRegion: "Contact form" },
+    whatsapp: { label: "Chat on WhatsApp", message: "Hi! I found Fiapo de Manga on the website and would like to talk about a project.", orChat: "Prefer to chat now?" },
     badgeAria: "Let’s talk — get in touch with Fiapo de Manga",
     mascot: {
       label: "Luli, Fiapo de Manga’s mascot",

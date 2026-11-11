@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { LocaleLink as Link } from "@/components/ui/LocaleLink";
 import { getI18n } from "@/i18n/server";
 import { ButtonLink } from "@/components/ui/Button";
+import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { ProjectSlider } from "@/components/sections/ProjectSlider";
@@ -49,7 +50,11 @@ export default async function HomePage() {
             <p className="eyebrow">{c.hero.eyebrow}</p>
             <WordReveal
               id="hero-title"
-              className="type-display mt-8 max-w-[14ch] md:mt-10"
+              className={
+                c.hero.title.length > 48
+                  ? "type-display type-display--long mt-8 max-w-[18ch] md:mt-10"
+                  : "type-display mt-8 max-w-[14ch] md:mt-10"
+              }
               parts={splitAccent(c.hero.title)}
             />
             <div className="hero-enter mt-10 max-w-xl md:mt-12">
@@ -61,6 +66,7 @@ export default async function HomePage() {
                 <ButtonLink href={c.hero.secondaryCta.href} variant="secondary" size="lg">
                   {c.hero.secondaryCta.label}
                 </ButtonLink>
+                <WhatsAppButton label={t.ui.whatsapp.label} message={t.ui.whatsapp.message} size="lg" />
               </div>
             </div>
           </div>

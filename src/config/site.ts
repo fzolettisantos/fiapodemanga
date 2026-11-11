@@ -24,6 +24,8 @@ export const siteConfig = {
   description:
     "Consultoria de design, pesquisa e experiência digital. Unimos pesquisa, estratégia e design para criar produtos digitais que fazem sentido para as pessoas e geram valor para os negócios.",
   contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() || "",
+  /** WhatsApp com DDI e DDD, só números (ex.: 5513999999999). Vazio = botão escondido. */
+  whatsapp: (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "").replace(/\D/g, ""),
   /**
    * SEO local: preencher somente com informações comerciais confirmadas.
    * Ex.: { city: "Santos", region: "SP", country: "BR", remote: true }
@@ -35,6 +37,12 @@ export const siteConfig = {
 } as const;
 
 /** Navegação e textos por idioma: src/content/locales/{pt,en,es}.ts */
+
+/** Link para abrir conversa no WhatsApp com mensagem pronta (ou null sem número configurado). */
+export function whatsappHref(message: string): string | null {
+  if (siteConfig.whatsapp.length < 12) return null;
+  return `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(message)}`;
+}
 
 export function absoluteUrl(path = "/"): string {
   if (/^https?:\/\//.test(path)) return path;

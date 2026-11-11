@@ -75,9 +75,9 @@ export const insightsPageContent = {
 
 export const contactPageContent = {
   eyebrow: "Contato",
-  title: "Vamos conversar sobre o que sua empresa precisa resolver.",
+  title: "Vamos colocar o seu negócio no digital.",
   paragraphs: [
-    "Conte um pouco sobre seu desafio.",
-    "Seja uma pesquisa, um novo produto digital, um site ou a evolução de uma experiência existente, queremos entender como podemos ajudar.",
+    "Conte um pouco sobre o seu negócio e o que você precisa.",
+    "Um site, uma loja virtual, uma landing page ou um projeto maior: a gente responde com uma proposta clara e sem compromisso.",
   ],
 } as const;

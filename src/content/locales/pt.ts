@@ -16,7 +16,7 @@ export const pt: SiteContent = {
     tagline: "Boas experiências começam com boas perguntas.",
     centralMessage: "Entendemos problemas, desenhamos experiências e ajudamos negócios a evoluir.",
     description:
-      "Consultoria de design, pesquisa e experiência digital. Unimos pesquisa, estratégia e design para criar produtos digitais que fazem sentido para as pessoas e geram valor para os negócios.",
+      "Estúdio de design e tecnologia que cria sites, lojas virtuais e produtos digitais com cuidado de verdade e preço justo.",
     ogAlt: "Fiapo de Manga — Boas experiências começam com boas perguntas.",
     knowsAbout: [
       "UX Research",
@@ -33,7 +33,7 @@ export const pt: SiteContent = {
     items: [
       { label: "Início", href: "/" },
       { label: "O que fazemos", href: "/servicos" },
-      { label: "Cases", href: "/projetos" },
+      { label: "Projetos", href: "/projetos" },
       { label: "Sobre nós", href: "/sobre" },
     ],
     contact: { label: "Vamos conversar", href: "/contato" },
@@ -41,9 +41,9 @@ export const pt: SiteContent = {
   },
   meta: {
     home: {
-      title: "Fiapo de Manga — Consultoria de Design, Pesquisa e UX/UI",
+      title: "Fiapo de Manga — Criação de sites e lojas virtuais com design de verdade",
       description:
-        "Consultoria de design e UX/UI que une pesquisa, estratégia de produto e tecnologia para criar sites, aplicativos, sistemas e produtos digitais que fazem sentido.",
+        "Criamos sites, lojas virtuais e landing pages modernos, rápidos e prontos para o celular, com o cuidado de quem faz design de produto e um preço que cabe no mês.",
     },
     services: {
       title: "O que fazemos — Pesquisa, Product Design, UX/UI e Sites",
@@ -175,14 +175,15 @@ export const pt: SiteContent = {
       readAlso: "Leia também",
     },
     contact: { orWrite: "Se preferir, escreva para", formRegion: "Formulário de contato" },
+    whatsapp: { label: "Chamar no WhatsApp", message: "Olá! Vim pelo site da Fiapo de Manga e quero conversar sobre um site.", orChat: "Prefere conversar agora?" },
     badgeAria: "Vamos conversar — fale com a Fiapo de Manga",
     mascot: {
       label: "Luli, a mascote da Fiapo de Manga",
       next: "Outra frase",
       phrases: [
-        { line1: "Uma boa pergunta?", line2: "Eu farejo." },
-        { line1: "Problema complexo?", line2: "Vamos destrinchar." },
-        { line1: "Produto novo?", line2: "Começa pela pesquisa." },
+        { line1: "Site novo?", line2: "Eu farejo o caminho." },
+        { line1: "Loja virtual?", line2: "Bora vender." },
+        { line1: "No celular?", line2: "Fica lindo." },
         { line1: "O café tá pronto.", line2: "Vamos conversar?" },
       ],
     },
@@ -245,10 +246,10 @@ export const pt: SiteContent = {
     pesquisa: "Pesquisa e Discovery",
     estrategia: "Estratégia de Produto",
     "product-design": "Product Design e UX/UI",
-    site: "Site ou Landing Page",
+    site: "Site para o meu negócio ou landing page",
     aplicativo: "Aplicativo",
     sistema: "Sistema ou Plataforma",
-    ecommerce: "E-commerce",
+    ecommerce: "Loja virtual (e-commerce)",
     ia: "Inteligência Artificial",
     outro: "Outro",
   },

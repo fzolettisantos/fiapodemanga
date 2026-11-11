@@ -168,6 +168,11 @@
     color: var(--color-heading);
     text-wrap: balance;
   }
+  /* Títulos de hero mais longos: um pouco menores para caber na primeira dobra */
+  .type-display--long {
+    font-size: clamp(2.5rem, 1.4rem + 4.2vw, 5.75rem);
+    line-height: 1;
+  }
 
   .type-title {
     font-size: clamp(2.125rem, 1.4rem + 3.4vw, 5rem);

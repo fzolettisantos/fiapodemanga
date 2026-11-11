@@ -63,7 +63,7 @@ export const homeContent = {
   },
   cases: {
     eyebrow: "Projetos",
-    title: "Feito por quem desenha produtos digitais.",
+    title: "Projetos reais, feitos com cuidado.",
     description:
       "Plataformas, aplicativos e sistemas que já desenhamos. O mesmo cuidado com a experiência vai para o site do seu negócio.",
     cta: { label: "Ver projetos", href: "/projetos" },

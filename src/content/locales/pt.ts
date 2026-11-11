@@ -14,7 +14,7 @@ export const pt: SiteContent = {
   site: {
     name: "Fiapo de Manga",
     tagline: "Boas experiências começam com boas perguntas.",
-    centralMessage: "Entendemos problemas, desenhamos experiências e ajudamos negócios a evoluir.",
+    centralMessage: "Sites, lojas virtuais e sistemas para o seu negócio crescer no digital.",
     description:
       "Estúdio de design e tecnologia que cria sites, lojas virtuais e produtos digitais com cuidado de verdade e preço justo.",
     ogAlt: "Fiapo de Manga — Boas experiências começam com boas perguntas.",
@@ -51,14 +51,14 @@ export const pt: SiteContent = {
         "Criação de sites, landing pages, lojas virtuais, aplicativos e sistemas sob medida, modernos e prontos para o celular, com domínio, hospedagem e ajustes inclusos.",
     },
     about: {
-      title: "Sobre nós — Consultoria de design e experiência digital",
+      title: "Sobre nós — Estúdio de sites, lojas virtuais e sistemas",
       description:
-        "Conheça a Fiapo de Manga: uma consultoria que conecta pesquisa, estratégia, design e tecnologia para transformar desafios em produtos e experiências digitais.",
+        "Conheça a Fiapo de Manga: um estúdio de design e tecnologia que cria sites, lojas virtuais e sistemas com cuidado, rapidez e preço justo.",
     },
     projects: {
-      title: "Cases — Projetos de pesquisa, UX/UI e produtos digitais",
+      title: "Projetos — Plataformas, aplicativos e sistemas",
       description:
-        "Projetos da Fiapo de Manga: como pesquisa, estratégia e design se conectam para transformar problemas reais em experiências digitais mais claras e funcionais.",
+        "Projetos da Fiapo de Manga: plataformas, aplicativos e sistemas para empresas de diferentes segmentos, com o mesmo cuidado que vai para o site do seu negócio.",
     },
     insights: {
       title: "Insights — UX Research, Product Design e experiências digitais",
@@ -118,21 +118,15 @@ export const pt: SiteContent = {
       ctaDefault: "Vamos conversar",
     },
     home: { aiApplications: "Aplicações", aiLink: "Design, Tecnologia e IA" },
-    about: { principles: "Princípios", guides: "O que nos orienta" },
+    about: { principles: "O que a gente valoriza", guides: "Por que a Fiapo" },
     projects: {
       selected: "Projetos selecionados",
       list: "Projetos",
-      narrativeEyebrow: "Como contamos cada projeto",
+      narrativeEyebrow: "Em cada projeto",
       narrative: [
-        { title: "Contexto", description: "O negócio, o produto e o momento em que o projeto começa." },
-        { title: "Desafio", description: "O problema que precisava ser compreendido e resolvido." },
-        { title: "Objetivo", description: "O que o projeto buscava alcançar." },
-        { title: "Pesquisa", description: "Como investigamos pessoas, dados e contexto." },
-        { title: "Hipóteses", description: "O que os aprendizados indicaram como caminhos possíveis." },
-        { title: "Processo", description: "As etapas de criação, validação e ajuste." },
-        { title: "Solução", description: "O que foi desenhado e construído." },
-        { title: "Resultados", description: "Somente resultados comprovados e autorizados para divulgação." },
-        { title: "Aprendizados", description: "O que o projeto ensinou para os próximos passos." },
+        { title: "O negócio", description: "Quem é o cliente e o que ele precisava." },
+        { title: "O desafio", description: "O que não funcionava bem ou ainda faltava." },
+        { title: "A solução", description: "O que criamos e como ficou." },
       ],
       viewAll: "Ver todos os projetos",
       viewCase: "Ver case",

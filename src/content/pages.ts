@@ -24,44 +24,44 @@ export const servicesPageContent = {
 export const aboutPageContent = {
   hero: {
     eyebrow: "Sobre a Fiapo de Manga",
-    title: "Design começa com curiosidade. Evolui com entendimento.",
+    title: "A gente coloca negócios no digital, do jeito certo.",
     paragraphs: [
-      "Acreditamos que experiências digitais relevantes nascem da combinação entre escuta, investigação e boas decisões.",
-      "A Fiapo de Manga existe para ajudar empresas a compreender desafios e transformar aprendizados em produtos e experiências digitais.",
+      "A Fiapo de Manga é um estúdio de design e tecnologia que cria sites, lojas virtuais e sistemas para empresas de todos os tamanhos.",
+      "Juntamos a experiência de quem já criou plataformas e aplicativos com ferramentas atuais, para entregar rápido e com preço justo.",
     ],
   },
   vision: {
     eyebrow: "Nossa visão",
-    title: "Design não é apenas o que aparece na tela.",
+    title: "Todo negócio merece uma boa presença na internet.",
     paragraphs: [
-      "Uma boa experiência começa muito antes da interface.",
-      "Está na forma como investigamos problemas, compreendemos comportamentos, organizamos informações e tomamos decisões.",
-      "Por isso, trabalhamos com uma abordagem que conecta pessoas, negócios e tecnologia.",
+      "Ter um site bom não deveria ser caro, demorado nem complicado.",
+      "Por isso, a gente cuida de tudo: da primeira conversa ao domínio, da publicação aos ajustes do dia a dia.",
+      "Você foca no seu negócio. A gente cuida para ele aparecer bem.",
     ],
   },
   principles: [
-    { title: "Pesquisa", description: "Entender pessoas e contextos." },
-    { title: "Estratégia", description: "Conectar decisões aos objetivos de negócio." },
-    { title: "Colaboração", description: "Construir soluções em conjunto." },
-    { title: "Experimentação", description: "Testar, aprender e ajustar." },
-    { title: "Evolução", description: "Melhorar continuamente." },
+    { title: "Simplicidade", description: "Sem termo técnico e sem letras miúdas." },
+    { title: "Cuidado", description: "Cada detalhe pensado para o seu cliente." },
+    { title: "Agilidade", description: "Tecnologia atual para entregar mais rápido." },
+    { title: "Transparência", description: "Proposta clara e combinado por escrito." },
+    { title: "Parceria", description: "A gente continua por perto depois que o site vai ao ar." },
   ],
   differentials: [
-    "Pesquisa como ponto de partida.",
-    "Visão estratégica de produto.",
-    "Design centrado nas pessoas.",
-    "Tecnologia integrada ao processo.",
-    "Inteligência artificial para acelerar a execução.",
-    "Atuação consultiva e colaborativa.",
+    "Sites bonitos, rápidos e feitos para o celular.",
+    "Domínio, hospedagem e segurança inclusos.",
+    "Sem comissão sobre as suas vendas.",
+    "Ajustes todo mês, sem precisar pedir orçamento.",
+    "Inteligência artificial para entregar mais rápido.",
+    "Gente de verdade no atendimento.",
   ],
 } as const;
 
 export const projectsPageContent = {
   eyebrow: "Projetos",
-  title: "Problemas reais. Decisões conscientes. Experiências melhores.",
+  title: "Projetos que já passaram pelas nossas mãos.",
   paragraphs: [
-    "Cada projeto tem seus desafios, contextos e oportunidades.",
-    "Aqui apresentamos como pesquisa, estratégia e design se conectam para construir soluções digitais.",
+    "Plataformas, aplicativos e sistemas para empresas de diferentes segmentos.",
+    "O mesmo cuidado vai para o site ou a loja virtual do seu negócio.",
   ],
 } as const;
 

@@ -16,6 +16,7 @@ import { ScrollFillText } from "@/components/motion/ScrollFillText";
 import { Marquee } from "@/components/motion/Marquee";
 import { ViewTransition } from "react";
 import { buildMetadata } from "@/lib/seo/metadata";
+import { listedServices } from "@/content/services";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { locale, t } = await getI18n();
@@ -36,9 +37,11 @@ function splitAccent(title: string): { text: string; accent?: boolean }[] {
 }
 
 export default async function HomePage() {
-  const { t, href } = await getI18n();
+  const { locale, t, href } = await getI18n();
   const c = t.home;
-  const services = t.services;
+  const services = listedServices(locale, t.services);
+  const marqueeItems =
+    locale === "pt" ? [...new Set(services.flatMap((s) => s.skills))].slice(0, 12) : services.map((s) => s.name);
 
   return (
     <>
@@ -79,7 +82,7 @@ export default async function HomePage() {
       <div className="bg-[#E1FF00]">
         <Marquee
           label={t.ui.marquee.specialties}
-          items={services.map((s) => s.name)}
+          items={marqueeItems}
           className="marquee--highlight type-heading py-8 md:py-10"
         />
       </div>

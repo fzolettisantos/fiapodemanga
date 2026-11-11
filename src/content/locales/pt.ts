@@ -46,9 +46,9 @@ export const pt: SiteContent = {
         "Criamos sites, lojas virtuais e landing pages modernos, rápidos e prontos para o celular, com o cuidado de quem faz design de produto e um preço que cabe no mês.",
     },
     services: {
-      title: "O que fazemos — Pesquisa, Product Design, UX/UI e Sites",
+      title: "O que fazemos — Sites, lojas virtuais e sistemas",
       description:
-        "Consultoria e estúdio de produtos digitais: pesquisa UX, estratégia de produto, Product Design, UX/UI, criação de sites, aplicativos, sistemas, e-commerce e IA aplicada ao design.",
+        "Criação de sites, landing pages, lojas virtuais, aplicativos e sistemas sob medida, modernos e prontos para o celular, com domínio, hospedagem e ajustes inclusos.",
     },
     about: {
       title: "Sobre nós — Consultoria de design e experiência digital",
@@ -105,7 +105,7 @@ export const pt: SiteContent = {
       specialtiesNav: "Especialidades nesta página",
       skillsLabel: "Especialidades",
       learnMore: "Saiba mais sobre {name}",
-      skillsCount: "{n} competências",
+      skillsCount: "{n} soluções",
     },
     serviceDetail: {
       skills: "Especialidades",

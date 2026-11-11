@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 import { ViewTransition } from "react";
-import { services as baseServices } from "@/content/services";
+import { services as baseServices, listedServices } from "@/content/services";
 import { format, getI18n } from "@/i18n/server";
 import { LocaleLink as Link } from "@/components/ui/LocaleLink";
 import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
@@ -48,8 +48,11 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
   const related = service.page.related
     .map((r) => services.find((s) => s.slug === r))
     .filter((s) => s !== undefined);
-  const index = services.findIndex((s) => s.slug === service.slug);
-  const next = services[(index + 1) % services.length]!;
+  // "Próxima" percorre só as especialidades listadas no idioma (em português: sites, lojas e sistemas).
+  const listed = listedServices(locale, services);
+  const ring = listed.some((s) => s.slug === service.slug) ? listed : services;
+  const index = ring.findIndex((s) => s.slug === service.slug);
+  const next = ring[(index + 1) % ring.length]!;
 
   return (
     <>
@@ -135,6 +138,8 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
         </div>
       </section>
 
+      {/* Etapas do processo: só em inglês e espanhol (em português o foco é o resultado, não o método) */}
+      {locale === "pt" ? null : (
       <section aria-labelledby="processo-title" className="border-t border-line">
         <div className="container-site py-20 md:py-28">
           <p className="eyebrow">{t.home.process.eyebrow}</p>
@@ -146,6 +151,7 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
           </div>
         </div>
       </section>
+      )}
 
       <section aria-labelledby="relacionadas-title" className="border-t border-line">
         <div className="container-site py-20 md:py-28">

@@ -3,24 +3,21 @@
 export const servicesPageContent = {
   intro: {
     eyebrow: "O que fazemos",
-    title:
-      "Conectamos pesquisa, design e tecnologia para criar experiências digitais que fazem sentido.",
+    title: "Sites, lojas virtuais e sistemas que colocam o seu negócio para funcionar no digital.",
     paragraphs: [
-      "Trabalhamos com empresas que precisam entender melhor seus desafios, encontrar oportunidades e transformar ideias em produtos digitais relevantes.",
-      "Da investigação à implementação, combinamos diferentes especialidades para construir soluções alinhadas às necessidades das pessoas e aos objetivos de cada negócio.",
+      "Do site da sua empresa à loja virtual completa, a gente cria, publica e cuida de tudo para você.",
+      "Antes da primeira tela, entendemos quem é o seu cliente e o que ele procura. É por isso que os nossos sites não são só bonitos: eles funcionam.",
     ],
   },
   practicesTitle: "Diferentes desafios pedem diferentes formas de pensar.",
   aiHighlight: {
-    eyebrow: "Inteligência aplicada ao design",
-    title: "Criar mais rápido não significa pensar menos.",
+    eyebrow: "Tecnologia a seu favor",
+    title: "Mais rápido, sem perder a qualidade.",
     paragraphs: [
-      "Utilizamos inteligência artificial para tornar processos de design e desenvolvimento mais ágeis, sem perder o olhar crítico sobre o problema que precisamos resolver.",
-      "A tecnologia nos ajuda a organizar informações, experimentar alternativas e reduzir o tempo dedicado a tarefas repetitivas.",
-      "Isso permite investir mais atenção na estratégia, na validação e na qualidade das experiências.",
+      "Usamos inteligência artificial e ferramentas atuais para criar e publicar o seu site em menos tempo.",
+      "O tempo que a tecnologia economiza vai para o que importa: deixar tudo claro e fácil para o seu cliente.",
     ],
-    highlight:
-      "Porque fazer mais rápido só faz sentido quando sabemos o que precisa ser feito.",
+    highlight: "Feito rápido, feito bem.",
   },
 } as const;
 

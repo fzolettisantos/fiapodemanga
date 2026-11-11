@@ -21,10 +21,10 @@ export const homeContent = {
   },
   services: {
     eyebrow: "O que fazemos",
-    title: "Sites, lojas virtuais e produtos digitais feitos do jeito certo.",
+    title: "Sites, lojas virtuais e sistemas feitos do jeito certo.",
     paragraphs: [
       "Do site da sua empresa à loja virtual completa, com pagamento, frete e painel.",
-      "E, quando o desafio é maior, também fazemos pesquisa, UX e produtos digitais sob medida.",
+      "E, quando o seu negócio pede algo sob medida, também criamos aplicativos e sistemas.",
     ],
     cta: { label: "Veja tudo o que fazemos", href: "/servicos" },
   },
@@ -50,14 +50,13 @@ export const homeContent = {
     paragraphs: [
       "Usamos inteligência artificial no dia a dia para acelerar a criação, explorar alternativas e automatizar o que é repetitivo.",
       "É assim que um site com qualidade de estúdio chega com um preço justo.",
-      "A IA acelera o trabalho. As decisões de design continuam com pessoas.",
+      "A IA acelera o trabalho. As decisões continuam com pessoas.",
     ],
     highlight: "A tecnologia acelera o processo. O design dá direção.",
     applications: [
       "Desenvolvimento de sites assistido por IA.",
-      "Exploração rápida de layouts.",
+      "Criação mais rápida de páginas.",
       "Apoio na escrita dos textos do site.",
-      "Prototipação acelerada.",
       "Automação de tarefas repetitivas.",
       "Testes e revisões técnicas.",
     ],

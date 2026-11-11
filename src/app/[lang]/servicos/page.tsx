@@ -9,6 +9,7 @@ import { ContactCta } from "@/components/sections/ContactCta";
 import { ScrollFillText } from "@/components/motion/ScrollFillText";
 import { Marquee } from "@/components/motion/Marquee";
 import { buildMetadata } from "@/lib/seo/metadata";
+import { listedServices } from "@/content/services";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { locale, t } = await getI18n();
@@ -16,15 +17,18 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ServicesPage() {
-  const { t } = await getI18n();
+  const { locale, t } = await getI18n();
   const c = t.servicesPage;
-  const services = t.services;
+  const services = listedServices(locale, t.services);
+  // Em português o foco é sites e lojas virtuais: sem a lista de competências de design e sem as frentes de atuação.
+  const simple = locale === "pt";
 
   return (
     <>
       <Breadcrumbs items={[{ name: t.nav.items[1]!.label, path: "/servicos" }]} />
       <PageHero eyebrow={c.intro.eyebrow} title={c.intro.title} paragraphs={c.intro.paragraphs} />
 
+      {simple ? null : (
       <Marquee
         label={t.ui.marquee.skills}
         items={[...new Set(services.flatMap((s) => s.skills))].slice(0, 18)}
@@ -32,8 +36,10 @@ export default async function ServicesPage() {
         reverse
         className="type-subheading border-t border-line py-6 text-muted"
       />
+      )}
 
       {/* COMO ATUAMOS */}
+      {simple ? null : (
       <section aria-labelledby="como-atuamos-title" className="border-t border-line">
         <div className="container-site py-20 md:py-28">
           <p className="eyebrow">{t.ui.servicesPage.practicesEyebrow}</p>
@@ -52,6 +58,7 @@ export default async function ServicesPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ESPECIALIDADES */}
       <section aria-labelledby="especialidades-title" className="border-t border-line">

@@ -8,10 +8,11 @@ import { ServiceIllustration } from "./ServiceIllustration";
  * painel com ilustração isométrica + etiqueta, e o texto ao lado.
  */
 export async function ServiceBlock({ service, total }: { service: Service; total: number }) {
-  const { t } = await getI18n();
+  const { locale, t } = await getI18n();
   const index = t.services.findIndex((s) => s.slug === service.slug);
-  // 01–02 pertencem a "Consultoria e Estratégia"; as demais ao "Estúdio de Produtos Digitais"
-  const practice = t.practices[index < 2 ? 0 : 1]?.title ?? "";
+  // 01–02 pertencem a "Consultoria e Estratégia"; as demais ao "Estúdio de Produtos Digitais".
+  // Em português (foco em sites e lojas) a frente de atuação não é exibida.
+  const practice = locale === "pt" ? "" : (t.practices[index < 2 ? 0 : 1]?.title ?? "");
   const headingId = `especialidade-${service.slug}`;
 
   return (
@@ -29,13 +30,14 @@ export async function ServiceBlock({ service, total }: { service: Service; total
             <p className="text-sm leading-tight tracking-[-0.01em] sm:text-lg md:text-xl">
               {format(t.ui.servicesPage.skillsCount, { n: service.skills.length })}
             </p>
-            <p className="mt-1 hidden text-xs text-white/75 sm:block">{practice}</p>
+            {practice ? <p className="mt-1 hidden text-xs text-white/75 sm:block">{practice}</p> : null}
           </div>
         </div>
 
         <div>
           <p className="font-mono text-xs tracking-[0.08em] text-muted uppercase">
-            <span className="text-accent">{service.number}</span> / {String(total).padStart(2, "0")} · {practice}
+            <span className="text-accent">{service.number}</span> / {String(total).padStart(2, "0")}
+            {practice ? ` · ${practice}` : null}
           </p>
           <h3 id={headingId} className="type-heading mt-5">
             {service.name}

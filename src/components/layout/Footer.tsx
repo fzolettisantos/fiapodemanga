@@ -1,3 +1,4 @@
+import { listedServices } from "@/content/services";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { getI18n } from "@/i18n/server";
@@ -35,7 +36,7 @@ function FooterColumn({
 }
 
 export async function Footer() {
-  const { t, href } = await getI18n();
+  const { locale, t, href } = await getI18n();
   const year = new Date().getFullYear();
   const local = (links: { label: string; href: string }[]) =>
     links.map((l) => ({ label: l.label, href: href(l.href) }));
@@ -74,7 +75,7 @@ export async function Footer() {
             <FooterColumn
               id="footer-especialidades"
               title={t.ui.footer.specialties}
-              links={local(t.services.map((s) => ({ label: s.name, href: `/servicos/${s.slug}` })))}
+              links={local(listedServices(locale, t.services).map((s) => ({ label: s.name, href: `/servicos/${s.slug}` })))}
             />
             <FooterColumn
               id="footer-institucional"

@@ -1,0 +1,34 @@
+/*
+ * Ponte tokens → Tailwind CSS 4 (@theme). Gera utilitários como bg-brand-primary,
+ * text-ink, border-border, rounded-card, font-heading, etc.
+ * `inline` faz o Tailwind referenciar var(--mk-*) em vez de copiar o valor.
+ */
+@theme inline {
+  --color-brand-primary: var(--mk-brand-primary);
+  --color-brand-primary-hover: var(--mk-brand-primary-hover);
+  --color-brand-ink: var(--mk-brand-ink);
+  --color-surface: var(--mk-surface);
+  --color-surface-muted: var(--mk-surface-muted);
+  --color-border: var(--mk-border);
+  --color-text-secondary: var(--mk-text-secondary);
+  --color-neutral-mid: var(--mk-neutral-mid);
+  --color-success: var(--mk-success);
+  --color-error: var(--mk-error);
+  --color-focus: var(--mk-focus);
+
+  --font-heading: var(--mk-font-heading);
+  --font-body: var(--mk-font-body);
+
+  --radius-input: var(--mk-radius-input);
+  --radius-button: var(--mk-radius-button);
+  --radius-card: var(--mk-radius-card);
+  --radius-modal: var(--mk-radius-modal);
+
+  --shadow-sm: var(--mk-shadow-sm);
+  --shadow-md: var(--mk-shadow-md);
+
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1200px;
+}
